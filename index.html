@@ -8,34 +8,27 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap"
         rel="stylesheet">
     <!-- Custom CSS -->
     <style>
-        /* Estilos personalizados */
         body {
             font-family: 'Lato', sans-serif;
             background-color: #fefefe;
-            /* Casi blanco */
             color: #333;
         }
 
-        /* Hero Section Styles */
         .hero-section {
             background: linear-gradient(rgba(70, 60, 100, 0.6), rgba(70, 60, 100, 0.6)), url('https://images.unsplash.com/photo-1587287048589-df598b8b05c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
             color: white;
             padding: 120px 0;
             text-align: center;
             position: relative;
-            /* Añadido para el efecto degradado */
         }
 
-        /* Pseudo-elemento para el degradado */
         .hero-section::before {
             content: "";
             position: absolute;
@@ -44,12 +37,9 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
-            /* Degradado más sutil */
             z-index: 1;
-            /* Asegura que esté detrás del contenido */
         }
 
-        /* Asegurar que el contenido esté por encima del degradado */
         .hero-section>* {
             position: relative;
             z-index: 2;
@@ -68,7 +58,6 @@
             margin-bottom: 30px;
         }
 
-        /* General Section Styles */
         .section {
             padding: 80px 0;
         }
@@ -81,7 +70,6 @@
             color: #555;
         }
 
-        /* Card Styles */
         .card {
             border: none;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -99,10 +87,10 @@
             color: #555;
         }
 
-        /* Contact Form Styles */
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
+            text-align: center;
         }
 
         .form-label {
@@ -112,7 +100,6 @@
 
         .btn-primary {
             background-color: #a38ed4;
-            /* Un morado más suave */
             border-color: #a38ed4;
             transition: all 0.3s ease;
         }
@@ -124,7 +111,6 @@
 
         .social-icons a {
             color: #775c8d;
-            /* Morado más vibrante */
             font-size: 28px;
             margin: 0 15px;
             text-decoration: none;
@@ -135,31 +121,25 @@
             color: #a38ed4;
         }
 
-        /* Footer Styles */
         .footer {
             background-color: #f8f9fa;
             color: #775c8d;
-            /* Morado más vibrante */
             text-align: center;
             padding: 30px 0;
             border-top: 1px solid #eee;
         }
 
-        /* Navbar Styles */
         .navbar-light .navbar-brand,
         .navbar-light .navbar-nav .nav-link {
             color: #463c68;
-            /* Navbar text color */
         }
 
         .navbar-light .navbar-nav .nav-link:hover {
             color: #463c68;
-            /* Navbar hover text color */
         }
 
         .navbar-light .navbar-toggler {
             border-color: #463c68;
-            /* Navbar border color */
         }
 
         /* Estilo para el icono del toggler */
@@ -171,177 +151,7 @@
             content: "";
             background: no-repeat center center;
             background-size: 100%;
-            /* Reemplaza con tu imagen codificada en Base64 */
             background-image: url("imagenes/3.png");
-        }
-
-        /* Estilos personalizados */
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: #fefefe;
-            /* Casi blanco */
-            color: #333;
-        }
-
-        .hero-section {
-            background: linear-gradient(rgba(70, 60, 100, 0.6), rgba(70, 60, 100, 0.6)), url('https://images.unsplash.com/photo-1587287048589-df598b8b05c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
-            color: white;
-            padding: 120px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
-            z-index: 1;
-        }
-
-        .hero-section>* {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            margin-bottom: 30px;
-        }
-
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            text-align: center;
-            margin-bottom: 50px;
-            font-size: 3rem;
-            color: #555;
-        }
-
-        .card {
-            border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: #555;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #555;
-        }
-
-        .btn-primary {
-            background-color: #a38ed4;
-            border-color: #a38ed4;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #8a64b0;
-            border-color: #8a64b0;
-        }
-
-        .social-icons a {
-            color: #775c8d;
-            font-size: 28px;
-            margin: 0 15px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #a38ed4;
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            color: #775c8d;
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #eee;
-        }
-
-        .navbar-light .navbar-brand,
-        .navbar-light .navbar-nav .nav-link {
-            color: #463c68;
-        }
-
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #463c68;
-        }
-
-        .navbar-light .navbar-toggler {
-            border-color: #463c68;
-        }
-
-        .navbar-toggler-icon {
-            display: inline-block;
-            width: 1.5em;
-            height: 1.5em;
-            vertical-align: middle;
-            content: "";
-            background: no-repeat center center;
-            background-size: 100%;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        /* Estilos para los controles del carrusel */
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 5%;
-            /* Ajustar el ancho del botón */
-            opacity: 0.7;
-            /* Hacerlos semi-transparentes */
-            transition: opacity 0.3s ease;
-            /* Transición suave al pasar el mouse */
-        }
-
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            opacity: 1;
-            /* Hacerlos completamente opacos al pasar el mouse */
-        }
-
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            background-color: rgba(0, 0, 0, 0.3);
-            /* Fondo semi-transparente */
-            border-radius: 50%;
-            /* Hacerlos redondos */
-            padding: 10px;
-            /* Espacio alrededor del icono */
-            width: 30px;
-            /* Ajustar el tamaño del icono */
-            height: 30px;
         }
     </style>
 </head>
@@ -379,15 +189,15 @@
     <section id="inicio" class="hero-section">
         <div class="container">
             <h1>Aylén Martínez <br> Piano & Música</h1>
-            <p>Descubre la magia de la música y despierta tu talento con nosotros.</p>
-            <a href="#contacto" class="btn btn-light btn-lg">¡Inicia tu Aventura Musical!</a>
+            <p>Descubre la magia de la música y despierta tu talento conmigo.</p>
+            <a href="#contacto" class="btn btn-light btn-lg">¡Inicia Tu Aventura Musical!</a>
         </div>
     </section>
 
     <!-- About Us Section -->
     <section id="nosotros" class="section">
         <div class="container">
-            <h2 class="section-title">Sobre Nosotros</h2>
+            <h2 class="section-title">Sobre Mí</h2>
             <div class="card shadow-sm border-0">
                 <div class="row g-0 align-items-center">
                     <div class="col-md-6">
@@ -398,23 +208,18 @@
                     </div>
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="card-body">
-                            <p class="card-text" style="text-align: justify;">En Aylén Martínez Piano & Música, creemos
-                                en el poder transformador de
-                                la
-                                música. Nuestra misión es proporcionar una educación musical integral y personalizada,
-                                que
-                                inspire a nuestros estudiantes a descubrir y desarrollar su potencial artístico. Con una
-                                metodología innovadora y un ambiente de aprendizaje estimulante, te acompañamos en cada
-                                paso
-                                de tu camino musical.</p>
-                            <p class="card-text" style="text-align: justify;">Ofrecemos clases de piano para todas las
-                                edades y niveles, adaptándonos
-                                a tus
-                                necesidades y objetivos individuales. Ya sea que estés comenzando tu viaje musical o
-                                buscando
-                                perfeccionar tu técnica, te brindamos las herramientas y el apoyo necesarios para
-                                alcanzar
-                                tus sueños.</p>
+                            <p class="card-text" style="text-align: justify;">¡Hola! Soy Aylén Martínez, y mi pasión es
+                                compartir el poder transformador de la música. Mi misión es brindarte una educación
+                                musical
+                                integral y totalmente personalizada, que te inspire a descubrir y desarrollar tu propio
+                                potencial artístico. Con una metodología innovadora y en un ambiente de aprendizaje
+                                estimulante, te acompañaré en cada paso de tu camino musical.</p>
+                            <p class="card-text" style="text-align: justify;">Ofrezco clases de piano para todas las
+                                edades y niveles, adaptándome a tus necesidades y objetivos individuales. Ya sea que
+                                estés
+                                comenzando tu viaje musical o buscando perfeccionar tu técnica, te brindo las
+                                herramientas
+                                y el apoyo necesarios para alcanzar tus sueños.</p>
                         </div>
                     </div>
                 </div>
@@ -423,78 +228,9 @@
     </section>
 
     <!-- Classes Section -->
-    <!-- <section id="clases" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title">Nuestras Clases</h2>
-            <div id="clasesCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="imagenes/iniciacionmusical.jpg" class="card-img-top"
-                                        alt="Iniciación Musical">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Iniciación Musical</h5>
-                                        <p class="card-text">Explora el mundo de la música desde cero. ¡Un viaje
-                                            emocionante te
-                                            espera!</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="imagenes/niños.jpg" class="card-img-top" alt="Clases para Niños">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Clases para Niños</h5>
-                                        <p class="card-text">Desarrolla tu talento musical a temprana edad. ¡Aprende
-                                            jugando!</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="imagenes/jovenes.jpg" class="card-img-top" alt="Clases para Jóvenes">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Clases para Jóvenes</h5>
-                                        <p class="card-text">Eleva tu pasión musical a otro nivel. ¡Desafía tus límites!
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="imagenes/adultos.jpg" class="card-img-top" alt="Clases para Adultos">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Clases para Adultos</h5>
-                                        <p class="card-text">Cumple tu sueño de tocar el piano. ¡Nunca es tarde para
-                                            empezar!</p>
-                                    </div>
-                                </div>
-                            </div>                            
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#clasesCarousel"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#clasesCarousel"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-        </div>
-    </section> -->
     <section id="clases" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Nuestras Clases</h2>
+            <h2 class="section-title">Mis Clases</h2>
             <div class="row">
                 <div class="col-md-3">
                     <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalIniciacionMusical">
@@ -502,7 +238,9 @@
                             style="height: 250px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">Iniciación Musical</h5>
-                            <p class="card-text">Explora el mundo de la música desde cero.</p>
+                            <p class="card-text">Explora el fascinante mundo de la música conmigo, ¡sin importar tu edad
+                                o
+                                experiencia!</p>
                         </div>
                     </div>
                 </div>
@@ -512,7 +250,8 @@
                             style="height: 250px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Niños</h5>
-                            <p class="card-text">Desarrolla tu talento musical a temprana edad.</p>
+                            <p class="card-text">¡Aprender música es divertido! Clases personalizadas para despertar el
+                                talento de los más pequeños.</p>
                         </div>
                     </div>
                 </div>
@@ -522,7 +261,8 @@
                             style="height: 250px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Jóvenes</h5>
-                            <p class="card-text">Eleva tu pasión musical a otro nivel.</p>
+                            <p class="card-text">Llevá tu pasión musical al siguiente nivel con clases diseñadas
+                                especialmente para vos.</p>
                         </div>
                     </div>
                 </div>
@@ -532,7 +272,9 @@
                             style="height: 250px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Adultos</h5>
-                            <p class="card-text">Cumple tu sueño de tocar el piano.</p>
+                            <p class="card-text">¡Nunca es tarde para cumplir tu sueño! Descubrí el placer de tocar el
+                                piano
+                                conmigo.</p>
                         </div>
                     </div>
                 </div>
@@ -550,9 +292,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Descripción detallada de las clases de iniciación musical...</p>
-                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20de%20iniciación%20musical."
-                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                    <p>¿Siempre quisiste aprender música pero no sabés por dónde empezar? En mis clases de Iniciación
+                        Musical, te guiaré desde cero, con un método divertido y efectivo. ¡Descubrí todo tu potencial!
+                    </p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Quisiera%20saber%20más%20sobre%20las%20clases%20de%20Iniciación%20Musical."
+                        class="btn btn-success" target="_blank">¡Preguntame por WhatsApp!</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -571,9 +315,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Descripción detallada de las clases para niños...</p>
-                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20niños."
-                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                    <p>¿Querés que tus hijos exploren su creatividad y desarrollen su sensibilidad musical? En mis
+                        clases
+                        para niños, creo un ambiente divertido y estimulante donde aprenderán jugando. ¡Contactame y
+                        empecemos juntos esta aventura!</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20las%20clases%20de%20música%20para%20niños."
+                        class="btn btn-success" target="_blank">¡Preguntame por WhatsApp!</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -591,9 +338,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Descripción detallada de las clases para jóvenes...</p>
-                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20jóvenes."
-                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                    <p>¿Buscás un espacio para expresar tu pasión por la música y perfeccionar tu técnica? En mis clases
+                        para jóvenes, te ofrezco un programa personalizado para que explores todo tu potencial y
+                        alcances
+                        tus metas musicales. ¡Contactame hoy mismo!</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Me%20gustaría%20saber%20más%20sobre%20las%20clases%20de%20música%20para%20jóvenes."
+                        class="btn btn-success" target="_blank">¡Preguntame por WhatsApp!</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -611,9 +361,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Descripción detallada de las clases para adultos...</p>
-                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20adultos."
-                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                    <p>¿Creés que es demasiado tarde para aprender a tocar el piano? ¡Nunca lo es! En mis clases para
+                        adultos, te guiaré paso a paso, adaptándome a tu ritmo y a tus intereses. ¡Descubrí el placer de
+                        hacer música!
+                    </p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20tomar%20clases%20de%20piano%20para%20adultos."
+                        class="btn btn-success" target="_blank">¡Preguntame por WhatsApp!</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -627,8 +380,8 @@
             <h2 class="section-title">Contacto</h2>
             <div class="row">
                 <div class="col-md-12" style="text-align: center;">
-                    <h4>Déjanos tu mensaje</h4>
-                    <p>Estaremos encantados de responder a tus preguntas:</p>
+                    <h4>Comienza tu camino musical hoy!</h4>
+                    <p>Estoy encantada de responder a tus preguntas:</p>
                     <form class="contact-form">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
