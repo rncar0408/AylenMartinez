@@ -15,18 +15,33 @@
         rel="stylesheet">
     <!-- Custom CSS -->
     <style>
+        /* Estilos personalizados */
         body {
             font-family: 'Lato', sans-serif;
             background-color: #fefefe;
             color: #333;
         }
 
+        /* Hero Section Styles */
         .hero-section {
-            background: linear-gradient(rgba(70, 60, 100, 0.6), rgba(70, 60, 100, 0.6)), url('imagenes/3.png') center/cover no-repeat;
-            color: white;
-            padding: 120px 0;
-            text-align: center;
             position: relative;
+            height: 500px;
+            /* Ajusta la altura según tus preferencias */
+            overflow: hidden;
+            /* Recorta la imagen si es necesario */
+            background: url('imagenes/3.png') center/cover no-repeat;
+            /* Asegura la visualización */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Distribuye el espacio verticalmente */
+            align-items: center;
+            /* Centra horizontalmente */
+            padding: 20px;
+            /* Espacio alrededor del contenido */
+            text-align: center;
+            /* Alinea el texto al centro */
         }
 
         .hero-section::before {
@@ -37,6 +52,7 @@
             width: 100%;
             height: 100%;
             /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)); */
+            /* Degradado opcional */
             z-index: 1;
         }
 
@@ -45,17 +61,151 @@
             z-index: 2;
         }
 
-        .hero-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .hero-section p {
+        /* Estilo específico para el texto */
+        .hero-text-custom {
             font-size: 1.2rem;
             font-weight: 300;
-            margin-bottom: 30px;
+            margin-top: 0;
+            /* Elimina el margen superior */
+            align-self: flex-start;
+            /* Alinea el texto a la izquierda */
+            text-align: left;
+            /* Forzar alineación a la izquierda */
+        }
+
+        /* Estilo específico para el botón */
+        .hero-button-custom {
+            margin-top: 28%;
+            /* Elimina el margen inferior */
+        }
+
+        /* Ajustes para móviles */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 400px;
+                /* Ajusta la altura para móviles si es necesario */
+                padding: 10px;
+                /* Reduce el padding en móviles */
+            }
+
+            .hero-text-custom {
+                font-size: 1rem;
+                /* Reduce el tamaño del texto en móviles */
+            }
+
+            .hero-button-custom {
+                margin-top: 65%;
+                /* Elimina el margen inferior */
+            }
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 3rem;
+            color: #555;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .btn-primary {
+            background-color: #a38ed4;
+            border-color: #a38ed4;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #8a64b0;
+            border-color: #8a64b0;
+        }
+
+        .social-icons a {
+            color: #775c8d;
+            font-size: 28px;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #a38ed4;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            color: #775c8d;
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .navbar-light .navbar-brand,
+        .navbar-light .navbar-nav .nav-link {
+            color: #463c68;
+        }
+
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #463c68;
+        }
+
+        .navbar-light .navbar-toggler {
+            border-color: #463c68;
+        }
+
+        /* Estilo para el icono del toggler */
+        .navbar-toggler-icon {
+            display: inline-block;
+            width: 1.5em;
+            height: 1.5em;
+            vertical-align: middle;
+            content: "";
+            background: no-repeat center center;
+            background-size: 100%;
+            background-image: url("imagenes/3.png");
+        }
+
+        /* Sección "Sobre Mí" */
+        .about-image-container {
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         .section {
@@ -188,9 +338,11 @@
     <!-- Hero Section -->
     <section id="inicio" class="hero-section">
         <div class="container">
-            <h1><br><br><br></h1>
-            <p>Descubre la magia de la música y despierta tu talento conmigo.</p>
-            <a href="#contacto" class="btn btn-light btn-lg">¡Inicia Tu Aventura Musical!</a>
+            <p class="hero-text-custom" style="font-weight: bold; color: black;">
+                Descubre la magia de la música y despierta tu talento conmigo.
+            </p>
+            <a href="#contacto" class="btn btn-primary btn-lg hero-button-custom">¡Inicia Tu
+                Aventura Musical!</a>
         </div>
     </section>
 
