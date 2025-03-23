@@ -421,7 +421,7 @@
     </section>
 
     <!-- Classes Section -->
-    <section id="clases" class="section bg-light">
+    <!-- <section id="clases" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Nuestras Clases</h2>
             <div id="clasesCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -430,7 +430,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card h-100">
-                                    <img src="imagenes/iniciacion musical.webp" class="card-img-top"
+                                    <img src="imagenes/iniciacionmusical.jpg" class="card-img-top"
                                         alt="Iniciación Musical">
                                     <div class="card-body">
                                         <h5 class="card-title">Iniciación Musical</h5>
@@ -442,7 +442,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="card h-100">
-                                    <img src="imagenes/niños.webp" class="card-img-top" alt="Clases para Niños">
+                                    <img src="imagenes/niños.jpg" class="card-img-top" alt="Clases para Niños">
                                     <div class="card-body">
                                         <h5 class="card-title">Clases para Niños</h5>
                                         <p class="card-text">Desarrolla tu talento musical a temprana edad. ¡Aprende
@@ -452,8 +452,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1557149049-749e6f903a7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        class="card-img-top" alt="Clases para Jóvenes">
+                                    <img src="imagenes/jovenes.jpg" class="card-img-top" alt="Clases para Jóvenes">
                                     <div class="card-body">
                                         <h5 class="card-title">Clases para Jóvenes</h5>
                                         <p class="card-text">Eleva tu pasión musical a otro nivel. ¡Desafía tus límites!
@@ -467,38 +466,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1550547264-b01418ef6053?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        class="card-img-top" alt="Clases para Adultos">
+                                    <img src="imagenes/adultos.jpg" class="card-img-top" alt="Clases para Adultos">
                                     <div class="card-body">
                                         <h5 class="card-title">Clases para Adultos</h5>
                                         <p class="card-text">Cumple tu sueño de tocar el piano. ¡Nunca es tarde para
                                             empezar!</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        class="card-img-top" alt="Iniciación Musical">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Iniciación Musical</h5>
-                                        <p class="card-text">Explora el mundo de la música desde cero. ¡Un viaje
-                                            emocionante te
-                                            espera!</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1505628353041-45213d3a0f86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        class="card-img-top" alt="Clases para Niños">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Clases para Niños</h5>
-                                        <p class="card-text">Desarrolla tu talento musical a temprana edad. ¡Aprende
-                                            jugando!</p>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -514,7 +489,136 @@
                 </button>
             </div>
         </div>
+    </section> -->
+    <section id="clases" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Nuestras Clases</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalIniciacionMusical">
+                        <img src="imagenes/iniciacionmusical.jpg" class="card-img-top" alt="Iniciación Musical"
+                            style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Iniciación Musical</h5>
+                            <p class="card-text">Explora el mundo de la música desde cero.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesNinos">
+                        <img src="imagenes/niños.jpg" class="card-img-top" alt="Clases para Niños"
+                            style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Clases para Niños</h5>
+                            <p class="card-text">Desarrolla tu talento musical a temprana edad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesJovenes">
+                        <img src="imagenes/jovenes.jpg" class="card-img-top" alt="Clases para Jóvenes"
+                            style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Clases para Jóvenes</h5>
+                            <p class="card-text">Eleva tu pasión musical a otro nivel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesAdultos">
+                        <img src="imagenes/adultos.jpg" class="card-img-top" alt="Clases para Adultos"
+                            style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Clases para Adultos</h5>
+                            <p class="card-text">Cumple tu sueño de tocar el piano.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+
+    <!-- Modals -->
+    <div class="modal fade" id="modalIniciacionMusical" tabindex="-1" aria-labelledby="modalIniciacionMusicalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIniciacionMusicalLabel">Iniciación Musical</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Descripción detallada de las clases de iniciación musical...</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20de%20iniciación%20musical."
+                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals para las otras clases (Clases para Niños, Clases para Jóvenes, Clases para Adultos) -->
+    <div class="modal fade" id="modalClasesNinos" tabindex="-1" aria-labelledby="modalClasesNinosLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClasesNinosLabel">Clases para Niños</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Descripción detallada de las clases para niños...</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20niños."
+                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalClasesJovenes" tabindex="-1" aria-labelledby="modalClasesJovenesLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClasesJovenesLabel">Clases para Jóvenes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Descripción detallada de las clases para jóvenes...</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20jóvenes."
+                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalClasesAdultos" tabindex="-1" aria-labelledby="modalClasesAdultosLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClasesAdultosLabel">Clases para Adultos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Descripción detallada de las clases para adultos...</p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20estoy%20interesado%20en%20las%20clases%20para%20adultos."
+                        class="btn btn-success" target="_blank">¡Pregunta por WhatsApp!</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Contact Section -->
     <section id="contacto" class="section">
         <div class="container">
