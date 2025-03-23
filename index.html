@@ -79,7 +79,10 @@
             /* Elimina el margen inferior */
         }
 
+        /* Ajustes para móviles */
         @media (max-width: 992px) {
+
+            /* Reglas específicas para pantallas de hasta 992px de ancho */
             .hero-section {
                 height: 450px;
                 /* Ajusta la altura */
@@ -98,7 +101,6 @@
             }
         }
 
-        /* Ajustes para móviles */
         @media (max-width: 768px) {
             .hero-section {
                 height: 400px;
@@ -115,6 +117,12 @@
             .hero-button-custom {
                 margin-top: 60%;
                 /* Elimina el margen inferior */
+            }
+
+            /* Ocultar la imagen en el Navbar Toggler en móviles */
+            .navbar-toggler-icon {
+                background-image: none;
+                /* Elimina la imagen de fondo */
             }
         }
 
@@ -211,7 +219,7 @@
             content: "";
             background: no-repeat center center;
             background-size: 100%;
-            background-image: url("imagenes/3.png");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         /* Sección "Sobre Mí" */
@@ -320,9 +328,12 @@
             content: "";
             background: no-repeat center center;
             background-size: 100%;
-            background-image: url("imagenes/3.png");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
@@ -358,7 +369,7 @@
     <section id="inicio" class="hero-section">
         <div class="container">
             <p class="hero-text-custom"
-                style="font-weight: bold; color: black; font-family: 'Monterchi Serif', sans-serif;">
+                style="font-weight: bold; color: black; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
                 Descubre la magia de la música y despierta tu talento conmigo.
             </p>
             <a href="#contacto" class="btn btn-primary btn-lg hero-button-custom">¡Inicia Tu
@@ -464,6 +475,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
+                    <audio id="audioClasesIniciacion" src="audios/audioIniciacion.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">¿Siempre quisiste aprender música pero no sabés por dónde empezar?
                         En mis clases de Iniciación
                         Musical, te guiaré desde cero, con un método divertido y efectivo. ¡Descubrí todo tu potencial!
@@ -485,9 +497,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalClasesNinosLabel">Clases para Niños</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">Cerrar</button>
                 </div>
                 <div class="modal-body">
+                    <audio id="audioClasesNinios" src="audios/audioNinios.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">¿Querés que tus hijos exploren su creatividad y desarrollen su
                         sensibilidad musical? En mis
                         clases
@@ -512,6 +525,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
+                    <audio id="audioClasesJovenes" src="audios/audioJovenes.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">¿Buscás un espacio para expresar tu pasión por la música y
                         perfeccionar tu técnica? En mis clases
                         para jóvenes, te ofrezco un programa personalizado para que explores todo tu potencial y
@@ -536,6 +550,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- <center><img src="imagenes/gato+piano.gif" title="piano"></center> -->
                     <audio id="audioClasesAdultos" src="audios/audioAdultos.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">¿Creés que es demasiado tarde para aprender a tocar el piano? ¡Nunca
                         lo es! En mis clases para
@@ -556,17 +571,51 @@
     <script>
         // Obtener el elemento de audio
         const audioClasesAdultos = document.getElementById('audioClasesAdultos');
-
         // Evento al mostrar el modal
         $('#modalClasesAdultos').on('show.bs.modal', function (e) {
             audioClasesAdultos.muted = false; // Desmutear
             audioClasesAdultos.play(); // Reproducir el audio
         });
-
         // Evento al ocultar el modal
         $('#modalClasesAdultos').on('hide.bs.modal', function (e) {
             audioClasesAdultos.pause(); // Pausar el audio
             audioClasesAdultos.currentTime = 0; // Reiniciar el audio al principio
+        });
+
+        const audioClasesJovenes = document.getElementById('audioClasesJovenes');
+        // Evento al mostrar el modal
+        $('#modalClasesJovenes').on('show.bs.modal', function (e) {
+            audioClasesJovenes.muted = false; // Desmutear
+            audioClasesJovenes.play(); // Reproducir el audio
+        });
+        // Evento al ocultar el modal
+        $('#modalClasesJovenes').on('hide.bs.modal', function (e) {
+            audioClasesJovenes.pause(); // Pausar el audio
+            audioClasesJovenes.currentTime = 0; // Reiniciar el audio al principio
+        });
+
+        const audioClasesNinios = document.getElementById('audioClasesNinios');
+        // Evento al mostrar el modal
+        $('#modalClasesNinos').on('show.bs.modal', function (e) {
+            audioClasesNinios.muted = false; // Desmutear
+            audioClasesNinios.play(); // Reproducir el audio
+        });
+        // Evento al ocultar el modal
+        $('#modalClasesNinos').on('hide.bs.modal', function (e) {
+            audioClasesNinios.pause(); // Pausar el audio
+            audioClasesNinios.currentTime = 0; // Reiniciar el audio al principio
+        });
+
+        const audioClasesIniciacion = document.getElementById('audioClasesIniciacion');
+        // Evento al mostrar el modal
+        $('#modalIniciacionMusical').on('show.bs.modal', function (e) {
+            audioClasesIniciacion.muted = false; // Desmutear
+            audioClasesIniciacion.play(); // Reproducir el audio
+        });
+        // Evento al ocultar el modal
+        $('#modalIniciacionMusical').on('hide.bs.modal', function (e) {
+            audioClasesIniciacion.pause(); // Pausar el audio
+            audioClasesIniciacion.currentTime = 0; // Reiniciar el audio al principio
         });
     </script>
     <!-- Contact Section -->
@@ -589,7 +638,8 @@
 
                                 this.href = "mailto:aylenmartinezq@gmail.com?subject=" + subject + "&body=" + body;
                             });
-                        </script> <!-- Agregado un ID al formulario -->
+                        </script>
+                        <!-- Agregado un ID al formulario -->
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu Nombre"
@@ -613,7 +663,7 @@
     </section>
 
     <!-- SweetAlert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- <script>
         document.getElementById('contactForm').addEventListener('submit', function (event) {
@@ -657,19 +707,16 @@
                         icon: 'error',
                         title: '¡Error!',
                         text: 'Hubo un problema al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.',
-                    });
+                        });
                 });
-        });
-    </script> -->
+            });
+            </script> -->
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <p>© 2025 Aylén Martínez Piano & Música</p>
         </div>
     </footer>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
