@@ -202,7 +202,7 @@
                 <div class="row g-0 align-items-center">
                     <div class="col-md-6">
                         <div style="height: 400px; overflow: hidden;">
-                            <img src="imagenes/AM.jpg" alt="Aylén Martínez" class="img-fluid"
+                            <img src="imagenes/AM2.jpg" alt="Aylén Martínez" class="img-fluid"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     </div>
@@ -292,7 +292,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Siempre quisiste aprender música pero no sabés por dónde empezar? En mis clases de Iniciación
+                    <p style="text-align: justify;">¿Siempre quisiste aprender música pero no sabés por dónde empezar?
+                        En mis clases de Iniciación
                         Musical, te guiaré desde cero, con un método divertido y efectivo. ¡Descubrí todo tu potencial!
                     </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Quisiera%20saber%20más%20sobre%20las%20clases%20de%20Iniciación%20Musical."
@@ -315,7 +316,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Querés que tus hijos exploren su creatividad y desarrollen su sensibilidad musical? En mis
+                    <p style="text-align: justify;">¿Querés que tus hijos exploren su creatividad y desarrollen su
+                        sensibilidad musical? En mis
                         clases
                         para niños, creo un ambiente divertido y estimulante donde aprenderán jugando. ¡Contactame y
                         empecemos juntos esta aventura!</p>
@@ -338,7 +340,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Buscás un espacio para expresar tu pasión por la música y perfeccionar tu técnica? En mis clases
+                    <p style="text-align: justify;">¿Buscás un espacio para expresar tu pasión por la música y
+                        perfeccionar tu técnica? En mis clases
                         para jóvenes, te ofrezco un programa personalizado para que explores todo tu potencial y
                         alcances
                         tus metas musicales. ¡Contactame hoy mismo!</p>
@@ -361,7 +364,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Creés que es demasiado tarde para aprender a tocar el piano? ¡Nunca lo es! En mis clases para
+                    <audio id="audioClasesAdultos" src="audios/audioAdultos.mp3" preload="auto" muted></audio>
+                    <p style="text-align: justify;">¿Creés que es demasiado tarde para aprender a tocar el piano? ¡Nunca
+                        lo es! En mis clases para
                         adultos, te guiaré paso a paso, adaptándome a tu ritmo y a tus intereses. ¡Descubrí el placer de
                         hacer música!
                     </p>
@@ -374,6 +379,24 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Obtener el elemento de audio
+        const audioClasesAdultos = document.getElementById('audioClasesAdultos');
+
+        // Evento al mostrar el modal
+        $('#modalClasesAdultos').on('show.bs.modal', function (e) {
+            audioClasesAdultos.muted = false; // Desmutear
+            audioClasesAdultos.play(); // Reproducir el audio
+        });
+
+        // Evento al ocultar el modal
+        $('#modalClasesAdultos').on('hide.bs.modal', function (e) {
+            audioClasesAdultos.pause(); // Pausar el audio
+            audioClasesAdultos.currentTime = 0; // Reiniciar el audio al principio
+        });
+    </script>
     <!-- Contact Section -->
     <section id="contacto" class="section">
         <div class="container">
