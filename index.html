@@ -79,6 +79,25 @@
             /* Elimina el margen inferior */
         }
 
+        @media (max-width: 992px) {
+            .hero-section {
+                height: 450px;
+                /* Ajusta la altura */
+                padding: 15px;
+                /* Ajusta el padding */
+            }
+
+            .hero-text-custom {
+                font-size: 1.1rem;
+                /* Ajusta el tamaño del texto */
+            }
+
+            .hero-button-custom {
+                margin-top: 45%;
+                /* Ajusta la posición del botón */
+            }
+        }
+
         /* Ajustes para móviles */
         @media (max-width: 768px) {
             .hero-section {
@@ -94,7 +113,7 @@
             }
 
             .hero-button-custom {
-                margin-top: 65%;
+                margin-top: 60%;
                 /* Elimina el margen inferior */
             }
         }
@@ -558,18 +577,33 @@
                 <div class="col-md-12" style="text-align: center;">
                     <h4>Comienza tu camino musical hoy!</h4>
                     <p>Estoy encantada de responder a tus preguntas:</p>
-                    <form class="contact-form">
+                    <form class="contact-form" id="contactForm">
+                        <script>
+                            document.getElementById('enviarCorreo').addEventListener('click', function () {
+                                var nombre = document.getElementById('nombre').value;
+                                var email = document.getElementById('email').value;
+                                var mensaje = document.getElementById('mensaje').value;
+
+                                var subject = "Consulta desde el sitio web";
+                                var body = "Nombre: " + nombre + "%0AEmail: " + email + "%0AMensaje: " + mensaje;
+
+                                this.href = "mailto:aylenmartinezq@gmail.com?subject=" + subject + "&body=" + body;
+                            });
+                        </script> <!-- Agregado un ID al formulario -->
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" placeholder="Tu Nombre" required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu Nombre"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Tu Email" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Tu Email"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="mensaje" class="form-label">Mensaje</label>
-                            <textarea class="form-control" id="mensaje" rows="4" placeholder="Tu Mensaje"></textarea>
+                            <textarea class="form-control" id="mensaje" name="mensaje" rows="4"
+                                placeholder="Tu Mensaje"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                     </form>
@@ -578,6 +612,55 @@
         </div>
     </section>
 
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- <script>
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evitar el envío normal del formulario
+
+            // Obtener los valores del formulario
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const mensaje = document.getElementById('mensaje').value;
+
+            // Construir los datos del formulario
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('email', email);
+            formData.append('mensaje', mensaje);
+
+            // Enviar los datos al script de Google Apps Script
+            fetch('URL_DE_TU_API_WEB', {   // Reemplaza con la URL de tu API
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Tu consulta fue enviada!',
+                            text: 'A la brevedad me comunicaré con vos!',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: 'Hubo un problema al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: 'Hubo un problema al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.',
+                    });
+                });
+        });
+    </script> -->
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
