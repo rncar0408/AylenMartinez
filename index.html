@@ -500,7 +500,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalClasesNinosLabel">Clases para Niños</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">Cerrar</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
                     <audio id="audioClasesNinios" src="audios/audioNinios.mp3" preload="auto" muted></audio>
@@ -717,10 +717,12 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2025 Aylén Martínez Piano & Música</p>
+            <p id="copyright" style="font-weight: bold;"></p>
         </div>
     </footer>
-
+    <script>
+        document.getElementById('copyright').innerHTML = '© ' + new Date().getFullYear() + ' Aylén Martínez Piano & Música';
+    </script>
 </body>
 
 </html>
