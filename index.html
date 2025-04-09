@@ -164,6 +164,10 @@
         .form-label {
             font-weight: 500;
             color: #555;
+            text-align: left;
+            /* <-- Esta línea alinea el texto a la izquierda */
+            display: block;
+            /* Asegura que el label ocupe todo el ancho disponible */
         }
 
         .btn-primary {
@@ -658,7 +662,7 @@
 
     <script>
         (function () {
-            emailjs.init("VeY3vHwsOZrOOSsKI"); // Reemplaza con tu User ID de EmailJS
+            emailjs.init("qOfrwmjiPJNVT91sk"); // Reemplaza con tu User ID de EmailJS qOfrwmjiPJNVT91sk
         })();
 
         document.getElementById("contactForm").addEventListener("submit", function (event) {
@@ -674,7 +678,7 @@
             };
 
             // Enviar el correo con EmailJS
-            emailjs.send("service_h2fm824", "template_lclym1g", templateParams)
+            emailjs.send("service_93zs6up", "template_fh5nn4h", templateParams) //service id: service_93zs6up / template id: template_fh5nn4h
                 .then(response => {
                     // Mostrar mensaje de éxito con SweetAlert
                     Swal.fire({
@@ -706,8 +710,8 @@
             <div class="social-icons">
                 <a href="https://wa.me/5493543300004?text=Hola%20Aylén!%20Me%20gustaría%20me%20brindaras%20más%20información%20sobre%20las%20clases%20de%20piano"
                     target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.instagram.com/aylenmartinez29?igsh=MTkzaTVmYml4ZGt3Nw==" target="_blank"><i
-                        class="fab fa-instagram"></i></a>
+                <a href="https://www.instagram.com/aylenmartinezpianoymusica?igsh=MWVjZjlxOGdtMWV1Zw=="
+                    target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </footer>
