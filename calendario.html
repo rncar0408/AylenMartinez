@@ -18,6 +18,16 @@
             gap: 1rem;
         }
 
+        @media (max-width: 768px) {
+            .calendar {
+                grid-template-columns: 1fr;
+            }
+
+            .day h5 {
+                text-align: center;
+            }
+        }
+
         .day {
             background: #fff;
             border-radius: 10px;
@@ -44,6 +54,11 @@
             background-color: #51c2d5;
             color: white;
         }
+
+        .swal2-container {
+            justify-content: center !important;
+            align-items: center !important;
+        }
     </style>
 </head>
 
@@ -67,11 +82,11 @@
                         <input type="hidden" id="reservaHora" />
                         <div class="mb-3">
                             <label class="form-label">Hora de inicio</label>
-                            <input type="text" class="form-control" id="horaInicio" readonly />
+                            <input type="time" class="form-control" id="horaInicio" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Hora fin</label>
-                            <input type="text" class="form-control" id="horaFin" readonly />
+                            <input type="time" class="form-control" id="horaFin" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nombre</label>
@@ -110,7 +125,14 @@
         const calendar = document.getElementById('calendar');
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         const slotMinutes = 40;
-        const hours = [...Array(13)].map((_, i) => 15 * 60 + i * slotMinutes);
+        const startHour = 15 * 60;
+        const endHour = 21 * 60;
+        const hours = [];
+
+        for (let min = startHour; min + slotMinutes <= endHour; min += slotMinutes) {
+            hours.push(min);
+        }
+
         const localKey = 'reservasV2';
         let reservas = JSON.parse(localStorage.getItem(localKey) || '{}');
 
@@ -135,8 +157,12 @@
 
                     if (reserva && reserva.inicio === hora) {
                         hourDiv.classList.add('reserved');
-                        const horaFin = formatHora(min + reserva.duracion);
-                        hourDiv.textContent = `${reserva.nombre} ${hora} - ${horaFin}`;
+                        const horaFin = formatHora(reserva.duracion);
+                        hourDiv.innerHTML = `
+                            <strong>${reserva.nombre}</strong><br>
+                            ${hora} - ${horaFin} (${reserva.duracion} min)<br>
+                            <small>${reserva.tipo}</small>
+                        `;
                         hourDiv.onclick = () => abrirModal(day, hora, reserva);
                         div.appendChild(hourDiv);
                     } else if (!estaEnReserva(day, min)) {
@@ -165,7 +191,6 @@
                 const resInicio = rh * 60 + rm;
                 const resFin = resInicio + reservas[key].duracion;
                 if (minutos >= resInicio && minutos < resFin) return true;
-                if (minutos === resFin) return false;
             }
             return false;
         }
@@ -196,17 +221,30 @@
             const inicioMin = h * 60 + m;
             const finMin = inicioMin + duracion;
 
-            for (let t = inicioMin; t < finMin; t += slotMinutes) {
-                if (estaEnReserva(dia, t)) {
-                    Swal.fire('Error', 'Ya existe una reserva en ese rango de horario.', 'error');
-                    return;
-                }
+            if (!nombre) {
+                Swal.fire({ icon: 'warning', title: 'Faltan datos', text: 'El nombre es obligatorio.' });
+                return;
             }
 
             for (const key in reservas) {
                 const [resDia, resHora] = key.split('-');
-                if (resDia === dia && reservas[key].nombre === nombre) {
-                    delete reservas[key];
+                if (resDia !== dia) continue;
+                const [rh, rm] = resHora.split(':').map(Number);
+                const resInicio = rh * 60 + rm;
+                const resFin = resInicio + reservas[key].duracion;
+                const esMismaReserva = key === `${dia}-${hora}`;
+
+                if (!esMismaReserva && (
+                    (inicioMin >= resInicio && inicioMin < resFin) ||
+                    (finMin > resInicio && finMin <= resFin) ||
+                    (inicioMin <= resInicio && finMin >= resFin)
+                )) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Conflicto de horario',
+                        text: `Ya hay una reserva en ese horario: ${reservas[key].nombre} de ${formatHora(resInicio)} a ${formatHora(resFin)}.`,
+                    });
+                    return;
                 }
             }
 
@@ -229,14 +267,7 @@
             const reserva = reservas[key];
             if (!reserva) return;
 
-            const [h, m] = hora.split(':').map(Number);
-            const inicioMin = h * 60 + m;
-            const finMin = inicioMin + reserva.duracion;
-
-            for (let t = inicioMin; t < finMin; t += slotMinutes) {
-                delete reservas[`${dia}-${formatHora(t)}`];
-            }
-
+            delete reservas[key];
             localStorage.setItem(localKey, JSON.stringify(reservas));
             document.querySelector('.btn-close').click();
             renderCalendar();
