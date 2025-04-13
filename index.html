@@ -392,33 +392,56 @@
         <div class="container">
             <h2 class="section-title">Sobre Mí</h2>
             <div class="card shadow-sm border-0">
-                <div class="row g-0 align-items-center">
+                <div class="row g-0" style="min-height: 100%;">
                     <div class="col-md-6">
-                        <div style="height: 400px; overflow: hidden;">
-                            <img src="imagenes/AM2.jpg" alt="Aylén Martínez" class="img-fluid"
-                                style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="h-100 w-100" style="height: 100%;">
+                            <img src="imagenes/AM2.jpg" alt="Aylén Martínez" class="img-fluid h-100 w-100"
+                                style="object-fit: cover;">
                         </div>
                     </div>
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="card-body">
-                            <p class="card-text" style="text-align: justify;">¡Hola! Soy Aylén Martínez, y mi pasión es
-                                compartir el poder transformador de la música. Mi misión es brindarte una educación
-                                musical
-                                integral y totalmente personalizada, que te inspire a descubrir y desarrollar tu propio
-                                potencial artístico. Con una metodología innovadora y en un ambiente de aprendizaje
-                                estimulante, te acompañaré en cada paso de tu camino musical.</p>
-                            <p class="card-text" style="text-align: justify;">Ofrezco clases de piano para todas las
-                                edades y niveles, adaptándome a tus necesidades y objetivos individuales. Ya sea que
-                                estés
-                                comenzando tu viaje musical o buscando perfeccionar tu técnica, te brindo las
-                                herramientas
-                                y el apoyo necesarios para alcanzar tus sueños.</p>
+                            <p class="card-text" style="text-align: justify;">
+                                ¡Hola! Soy Aylén Martínez, y mi pasión es compartir el poder transformador de la música.
+                            </p>
+                            <p class="card-text" style="text-align: justify;">
+                                Creo profundamente en la música como un camino de expresión personal, bienestar y
+                                crecimiento.
+                                Por eso, mi propuesta va mucho más allá de aprender un instrumento: te invito a vivir la
+                                música
+                                como una filosofía de vida, como un lenguaje que te acompañe, te sostenga y te inspire.
+                            </p>
+                            <p class="card-text" style="text-align: justify;">
+                                Mi misión es brindarte una educación musical integral y personalizada, en un espacio
+                                cálido, de
+                                confianza y cuidado, donde cada alumno se sienta cómodo, contenido y motivado para
+                                aprender.
+                                Trabajo con programas adaptados no solo a tus necesidades y nivel, sino también a tus
+                                gustos e
+                                intereses, porque creo que aprender música tiene que ser una experiencia significativa y
+                                disfrutable.
+                            </p>
+                            <p class="card-text" style="text-align: justify;">
+                                Ofrezco clases de piano para personas desde los 3 años en adelante, sin límite de edad.
+                                Ya sea
+                                que estés dando tus primeros pasos o buscando perfeccionar tu técnica, te acompañaré con
+                                las
+                                herramientas necesarias para que puedas alcanzar tus objetivos, ya sea disfrutar tocando
+                                en casa
+                                o formarte profesionalmente.
+                            </p>
+                            <p class="card-text" style="text-align: justify;">
+                                Más que formar grandes músicos, mi propósito es que la música forme parte de tu vida de
+                                una
+                                manera auténtica, sensible y transformadora.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Classes Section -->
     <section id="clases" class="section bg-light">
@@ -475,26 +498,83 @@
         </div>
     </section>
 
+    <style>
+        @media (max-width: 576px) {
+            #modalIniciacionMusical .modal-dialog {
+                margin: auto !important;
+                width: 90% !important;
+            }
+        }
+    </style>
+
     <!-- Modals -->
     <div class="modal fade" id="modalIniciacionMusical" tabindex="-1" aria-labelledby="modalIniciacionMusicalLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalIniciacionMusicalLabel">Iniciación Musical</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <div class="modal-dialog modal-dialog-centered"
+            style="max-width: 80%; width: 80%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+            <div class="modal-content" style="border-radius: 12px; background-color: #f8f9fa; padding: 0;">
+                <div class="modal-header"
+                    style="background-color: #4e73df; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 20px;">
+                    <h5 class="modal-title" id="modalIniciacionMusicalLabel"
+                        style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.5rem; font-weight: 600;">
+                        Iniciación Musical</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
+                        style="color: white; font-size: 1.4rem; opacity: 1; transition: opacity 0.3s;"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"
+                    style="padding: 30px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #555; line-height: 1.6;">
                     <audio id="audioClasesIniciacion" src="audios/audioIniciacion.mp3" preload="auto" muted></audio>
-                    <p style="text-align: justify;">¿Siempre quisiste aprender música pero no sabés por dónde empezar?
-                        En mis clases de Iniciación
-                        Musical, te guiaré desde cero, con un método divertido y efectivo. ¡Descubrí todo tu potencial!
-                    </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Quisiera%20saber%20más%20sobre%20las%20clases%20de%20Iniciación%20Musical."
-                        class="btn btn-success" target="_blank">¡Preguntame por WhatsApp!</a>
+                        class="btn btn-success" target="_blank"
+                        style="background-color: #28a745; border-color: #28a745; font-weight: 600; padding: 12px 25px; font-size: 1.1rem; border-radius: 8px; text-transform: uppercase; transition: background-color 0.3s, transform 0.3s;">
+                        ¡Preguntame por WhatsApp!
+                    </a>
+                    <p style="text-align: justify; font-size: 1.1rem;">
+                        <strong>Descubrí el mundo de la música a través del cuerpo, el ritmo y el
+                            juego.</strong><br><br>
+
+                        La música es mucho más que notas y canciones: es una experiencia que se siente, se mueve y se
+                        vive. En nuestras clases de Iniciación Sensorial y Musical (3 a 5 años), los niños exploran la
+                        música con el cuerpo, desarrollando habilidades esenciales a través del ritmo, el movimiento y
+                        la creatividad.<br><br>
+
+                        🎵 <strong>¿Cómo aprenden los niños música?</strong><br>
+                        A esta edad, el aprendizaje es vivencial: los niños no solo escuchan, sino que experimentan la
+                        música a través del juego, el desplazamiento, la percusión corporal y la improvisación. Así,
+                        fortalecen su coordinación, percepción auditiva y capacidad expresiva de manera natural y
+                        divertida.<br><br>
+
+                        🌀 <strong>Beneficios de nuestras clases:</strong><br>
+                        ✅ Desarrollo del sentido rítmico y musical.<br>
+                        ✅ Mejora de la coordinación motriz y la lateralidad.<br>
+                        ✅ Estimulación de la creatividad y la imaginación.<br>
+                        ✅ Refuerzo de la atención, la memoria y la concentración.<br>
+                        ✅ Expresión de emociones a través de la música y el movimiento.<br>
+                        ✅ Una base sólida para elegir un instrumento en el futuro.<br><br>
+
+                        🎹🥁 <strong>Un primer paso hacia el aprendizaje instrumental</strong><br>
+                        Estas clases no solo enriquecen la sensibilidad musical de los niños, sino que también los
+                        preparan, si en el futuro desean aprender un instrumento. A través del ritmo, el canto y la
+                        exploración sonora, los niños descubren sus preferencias musicales con mayor claridad,
+                        permitiéndoles elegir su instrumento con más seguridad y entrando a ese nuevo mundo con un
+                        importante bagaje musical.<br><br>
+
+                        👨‍👩‍👧‍👦 <strong>El rol de las familias</strong><br>
+                        Acompañar a los niños en su aprendizaje es clave. La constancia y el estímulo en casa refuerzan
+                        todo lo que trabajamos en clase. Cada pequeño avance es un paso más en su desarrollo musical y
+                        personal.<br><br>
+
+                        🎶 <strong>¿Listos para embarcarse en esta aventura musical?</strong><br>
+                        Las inscripciones están abiertas. ¡Sumate y descubrí junto a tu hijo el maravilloso mundo de la
+                        música!
+                    </p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <div class="modal-footer"
+                    style="background-color: #f1f1f1; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; padding: 20px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="border-radius: 8px; padding: 12px 25px; font-weight: 500; font-size: 1rem; transition: background-color 0.3s, transform 0.3s;">
+                        Cerrar
+                    </button>
                 </div>
             </div>
         </div>
