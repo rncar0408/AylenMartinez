@@ -64,7 +64,7 @@
 
 <body>
     <div class="container py-4">
-        <h2 class="text-center mb-4">Calendario de Reservas Semanal</h2>
+        <h2 class="text-center mb-4">Calendario de Clases Semanal</h2>
         <div class="calendar" id="calendar"></div>
     </div>
 
@@ -73,7 +73,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Reserva</h5>
+                    <h5 class="modal-title">Clase</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -89,11 +89,11 @@
                             <input type="time" class="form-control" id="horaFin" />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nombre</label>
+                            <label class="form-label">Nombre alumno</label>
                             <input type="text" id="nombre" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Tipo de reserva</label>
+                            <label class="form-label">Tipo de clase</label>
                             <select id="tipo" class="form-select" required>
                                 <option value="Individual">Individual</option>
                                 <option value="Grupal">Grupal</option>
