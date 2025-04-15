@@ -5,276 +5,577 @@
     <meta charset="UTF-8" />
     <title>Calendario de Reservas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- SweetAlert2 Theme -->
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <!-- Incluir jsPDF y html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
+        /* Estilos (sin cambios) */
         body {
             background: #f4f6f9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            line-height: 1.6;
+        }
+
+        .calendar-container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
         .calendar {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 1rem;
+            gap: 1.2rem;
+            margin-top: 20px;
+            overflow: hidden;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
+            .calendar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
             .calendar {
                 grid-template-columns: 1fr;
-            }
-
-            .day h5 {
-                text-align: center;
+                gap: 0.8rem;
             }
         }
 
         .day {
             background: #fff;
+            border: 1px solid #e9ecef;
             border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+            min-height: 350px;
+        }
+
+        .day h5 {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #343a40;
+            text-align: center;
         }
 
         .hour {
-            background: #e9ecef;
-            margin-bottom: 6px;
-            padding: 8px;
-            border-radius: 6px;
+            background: #f8f9fa;
+            color: #495057;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
             font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .hour:hover {
+            background-color: #e9ecef;
+            transform: translateY(-1px);
         }
 
         .reserved {
             background: #51c2d5;
             color: #fff;
+            cursor: pointer;
+            border: 1px solid #40a7b8;
+            font-weight: bold;
+            padding: 10px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .reserved strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .reserved small {
+            font-weight: normal;
+            font-style: italic;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .reserved:hover {
+            background-color: #40a7b8;
+            transform: translateY(-1px);
         }
 
         .modal-header {
             background-color: #51c2d5;
             color: white;
+            border-bottom: none;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
         }
 
         .swal2-container {
+            z-index: 1060;
             justify-content: center !important;
             align-items: center !important;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons .btn {
+            margin: 5px 8px;
         }
     </style>
 </head>
 
 <body>
     <div class="container py-4">
-        <h2 class="text-center mb-4">Calendario de Clases Semanal</h2>
-        <div class="calendar" id="calendar"></div>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="reservaModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Clase</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="reservaForm">
-                        <input type="hidden" id="reservaDia" />
-                        <input type="hidden" id="reservaHora" />
-                        <div class="mb-3">
-                            <label class="form-label">Hora de inicio</label>
-                            <input type="time" class="form-control" id="horaInicio" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Hora fin</label>
-                            <input type="time" class="form-control" id="horaFin" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nombre alumno</label>
-                            <input type="text" id="nombre" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tipo de clase</label>
-                            <select id="tipo" class="form-select" required>
-                                <option value="Individual">Individual</option>
-                                <option value="Grupal">Grupal</option>
-                                <option value="Ayuda Ingreso">Ayuda Ingreso</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Duración</label>
-                            <select id="duracion" class="form-select" required>
-                                <option value="40">40 minutos</option>
-                                <option value="60">1 hora</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="eliminarBtn"
-                        style="display: none">Eliminar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="guardarBtn">Guardar</button>
-                </div>
+        <div class="calendar-container" id="calendarContainer">
+            <h2 class="text-center mb-0">Calendario de Clases Semanal</h2>
+            <div class="action-buttons">
+                <button id="downloadImageBtn" class="btn btn-outline-secondary btn-sm">
+                    <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                        <path
+                            d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
+                    </svg>
+                    Exportar Imagen
+                </button>
+                <button id="downloadPdfBtn" class="btn btn-outline-danger btn-sm">
+                    <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                        <path
+                            d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z" />
+                    </svg>
+                    Exportar PDF
+                </button>
+                <button id="exportDataBtn" class="btn btn-outline-success btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-down me-1" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
+                        <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
+                        <path
+                            d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z" />
+                        <path fill-rule="evenodd"
+                            d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                    Exportar Datos (.txt)
+                </button>
+                <button id="importDataBtn" class="btn btn-outline-primary btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-up me-1" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
+                        <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
+                        <path
+                            d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z" />
+                        <path fill-rule="evenodd"
+                            d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                    Importar Datos (.txt)
+                </button>
+                <input type="file" id="fileInput" accept=".txt, .json" style="display: none;" />
+                <!-- Aceptar .json también -->
+            </div>
+
+            <div class="calendar" id="calendar">
+                <div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando calendario...</div>
             </div>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="reservaModal" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reservaModalLabel">Detalles Clase</h5> <button type="button"
+                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reservaForm" novalidate> <input type="hidden" id="reservaDia" /> <input type="hidden"
+                            id="reservaHora" />
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3"> <label for="horaInicio" class="form-label">Inicio</label> <input
+                                    type="time" class="form-control bg-light" id="horaInicio" readonly /> </div>
+                            <div class="col-md-6 mb-3"> <label for="horaFin" class="form-label">Fin</label> <input
+                                    type="time" class="form-control bg-light" id="horaFin" readonly /> </div>
+                            <div class="col-12 mb-3"> <label for="nombre" class="form-label">Nombre</label> <input
+                                    type="text" id="nombre" class="form-control" required />
+                                <div class="invalid-feedback">Ingresa un nombre.</div>
+                            </div>
+                            <div class="col-md-6 mb-3"> <label for="tipo" class="form-label">Tipo</label> <select
+                                    id="tipo" class="form-select" required>
+                                    <option>Individual</option>
+                                    <option>Grupal</option>
+                                    <option>Ayuda Ingreso</option>
+                                </select> </div>
+                            <div class="col-md-6 mb-3"> <label for="duracion" class="form-label">Duración</label>
+                                <select id="duracion" class="form-select" required>
+                                    <option value="40">40 min</option>
+                                    <option value="60">1 hora</option>
+                                </select> </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"> <button type="button" class="btn btn-danger me-auto" id="eliminarBtn"
+                        style="display: none;"> <svg ...></svg> Eliminar </button> <button type="button"
+                        class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button> <button type="button"
+                        class="btn btn-primary" id="guardarBtn">Guardar</button> </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // --- Elementos del DOM ---
         const calendar = document.getElementById('calendar');
+        const downloadImageBtn = document.getElementById('downloadImageBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataBtn = document.getElementById('importDataBtn');
+        const fileInput = document.getElementById('fileInput');
+        const reservaForm = document.getElementById('reservaForm');
+        const eliminarBtn = document.getElementById('eliminarBtn');
+
+        // --- Configuración y Variables Globales ---
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        const slotMinutes = 40;
-        const startHour = 15 * 60;
-        const endHour = 21 * 60;
-        const hours = [];
+        const startHour = 15 * 60; // 15:00 en minutos
+        const endHour = 21 * 60;   // 21:00 en minutos
+        const hours = []; // Array para los puntos de tiempo a verificar
+        const generationIntervalMinutes = 20; // Intervalo para verificar disponibilidad
+        for (let min = startHour; min < endHour; min += generationIntervalMinutes) { hours.push(min); }
+        const localKey = 'reservasCalendarioV2'; // Clave para localStorage
+        let reservas = {}; // Objeto para almacenar las reservas { "Lunes-15:00": {nombre: ..., ...} }
 
-        for (let min = startHour; min + slotMinutes <= endHour; min += slotMinutes) {
-            hours.push(min);
-        }
-
-        const localKey = 'reservasV2';
-        let reservas = JSON.parse(localStorage.getItem(localKey) || '{}');
-
+        // --- Funciones Utilitarias ---
         function formatHora(min) {
             const h = Math.floor(min / 60).toString().padStart(2, '0');
             const m = (min % 60).toString().padStart(2, '0');
             return `${h}:${m}`;
         }
 
-        function renderCalendar() {
-            calendar.innerHTML = '';
-            days.forEach(day => {
-                const div = document.createElement('div');
-                div.className = 'day';
-                div.innerHTML = `<h5>${day}</h5>`;
-                hours.forEach(min => {
-                    const hora = formatHora(min);
-                    const key = `${day}-${hora}`;
-                    const reserva = reservas[key];
-                    const hourDiv = document.createElement('div');
-                    hourDiv.className = 'hour';
-
-                    if (reserva && reserva.inicio === hora) {
-                        hourDiv.classList.add('reserved');
-                        const horaFin = formatHora(reserva.duracion);
-                        hourDiv.innerHTML = `
-                            <strong>${reserva.nombre}</strong><br>
-                            ${hora} - ${horaFin} (${reserva.duracion} min)<br>
-                            <small>${reserva.tipo}</small>
-                        `;
-                        hourDiv.onclick = () => abrirModal(day, hora, reserva);
-                        div.appendChild(hourDiv);
-                    } else if (!estaEnReserva(day, min)) {
-                        hourDiv.textContent = hora;
-                        hourDiv.onclick = () => abrirModal(day, hora, null);
-                        div.appendChild(hourDiv);
-                    }
-                });
-                calendar.appendChild(div);
-            });
+        // --- Funciones de localStorage ---
+        function guardarReservasEnLocalStorage() {
+            try {
+                localStorage.setItem(localKey, JSON.stringify(reservas));
+                console.log('Reservas guardadas en localStorage.');
+            } catch (error) {
+                console.error('Error al guardar en localStorage:', error);
+                Swal.fire('Error', 'No se pudieron guardar los cambios. El almacenamiento local podría estar lleno o deshabilitado.', 'error');
+            }
         }
 
-        function actualizarHoraFin() {
-            const hora = document.getElementById('reservaHora').value;
-            const duracion = parseInt(document.getElementById('duracion').value);
-            const [h, m] = hora.split(':').map(Number);
-            const fin = h * 60 + m + duracion;
-            document.getElementById('horaFin').value = formatHora(fin);
+        function cargarReservasDesdeLocalStorage() {
+            calendar.innerHTML = '<div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando calendario...</div>';
+            try {
+                // **CORRECCIÓN DEL TYPO:** Asegurarse que localKey está bien escrito
+                const dataGuardada = localStorage.getItem(localKey); // Usar la variable correcta
+                reservas = dataGuardada ? JSON.parse(dataGuardada) : {};
+                console.log('Reservas cargadas desde localStorage.');
+            } catch (error) {
+                console.error('Error al cargar/parsear desde localStorage:', error);
+                reservas = {}; // Empezar de cero si hay error
+                Swal.fire('Error', 'No se pudieron cargar las reservas anteriores. Pueden estar corruptas.', 'warning');
+            }
+            // Usar requestAnimationFrame para asegurar que el DOM se actualice antes de renderizar pesado
+            requestAnimationFrame(() => setTimeout(renderCalendar, 0));
+        }
+
+
+        // --- Lógica de Renderizado ---
+        function renderCalendar() {
+            calendar.innerHTML = ''; // Limpiar calendario
+            days.forEach(day => {
+                const dayColumn = document.createElement('div');
+                dayColumn.className = 'day';
+                dayColumn.innerHTML = `<h5>${day}</h5>`;
+
+                hours.forEach(min => {
+                    const horaStr = formatHora(min);
+                    const slotKey = `${day}-${horaStr}`;
+                    const reservaQueIniciaAqui = reservas[slotKey];
+
+                    if (reservaQueIniciaAqui) {
+                        // Si una reserva INICIA aquí, dibujarla
+                        const hourDiv = document.createElement('div');
+                        hourDiv.className = 'hour reserved';
+                        hourDiv.innerHTML = `<strong>${reservaQueIniciaAqui.nombre}</strong><br>${reservaQueIniciaAqui.horaInicio} - ${reservaQueIniciaAqui.horaFin} (${reservaQueIniciaAqui.duracion} min)<br><small>${reservaQueIniciaAqui.tipo}</small>`;
+                        hourDiv.onclick = () => abrirModal(day, horaStr, reservaQueIniciaAqui);
+                        dayColumn.appendChild(hourDiv);
+                    } else {
+                        // Si NINGUNA reserva inicia aquí:
+                        // 1. ¿Está este punto de tiempo libre (no dentro de otra reserva)?
+                        if (!estaEnReserva(day, min)) {
+                            // 2. Si está libre, ¿PUEDE CABER una reserva mínima (40min) desde aquí sin chocar?
+                            if (canFitReservation(day, min, 40)) {
+                                const hourDiv = document.createElement('div');
+                                hourDiv.className = 'hour';
+                                hourDiv.textContent = horaStr;
+                                hourDiv.onclick = () => abrirModal(day, horaStr, null);
+                                dayColumn.appendChild(hourDiv);
+                            }
+                        }
+                    }
+                });
+                calendar.appendChild(dayColumn);
+            });
         }
 
         function estaEnReserva(dia, minutos) {
             for (const key in reservas) {
-                const [resDia, resHora] = key.split('-');
-                if (resDia !== dia) continue;
-                const [rh, rm] = resHora.split(':').map(Number);
+                const reserva = reservas[key];
+                if (!key || key.indexOf('-') === -1) continue;
+                const resDia = key.substring(0, key.lastIndexOf('-'));
+                if (resDia !== dia || !reserva || !reserva.horaInicio || isNaN(reserva.duracion)) continue;
+                const [rh, rm] = reserva.horaInicio.split(':').map(Number);
                 const resInicio = rh * 60 + rm;
-                const resFin = resInicio + reservas[key].duracion;
+                const resFin = resInicio + reserva.duracion;
                 if (minutos >= resInicio && minutos < resFin) return true;
             }
             return false;
         }
 
-        function abrirModal(dia, hora, reserva) {
-            document.getElementById('reservaDia').value = dia;
-            document.getElementById('reservaHora').value = hora;
-            document.getElementById('nombre').value = reserva?.nombre || '';
-            document.getElementById('tipo').value = reserva?.tipo || 'Individual';
-            document.getElementById('duracion').value = reserva?.duracion || 40;
-            document.getElementById('horaInicio').value = hora;
-            actualizarHoraFin();
-            document.getElementById('eliminarBtn').style.display = reserva ? 'inline-block' : 'none';
+        function canFitReservation(day, startMin, duration) {
+            const endMinPropuesto = startMin + duration;
+            if (endMinPropuesto > endHour) return false; // Excede límite horario
+            for (const key in reservas) {
+                const reservaExistente = reservas[key];
+                if (!key || key.indexOf('-') === -1) continue;
+                const resDia = key.substring(0, key.lastIndexOf('-'));
+                if (resDia !== day || !reservaExistente || !reservaExistente.horaInicio || isNaN(reservaExistente.duracion)) continue;
+                const [rh, rm] = reservaExistente.horaInicio.split(':').map(Number);
+                const resInicioExistente = rh * 60 + rm;
+                const resFinExistente = resInicioExistente + reservaExistente.duracion;
+                if (startMin < resFinExistente && endMinPropuesto > resInicioExistente) {
+                    return false; // Hay solapamiento
+                }
+            }
+            return true; // No hay solapamiento
+        }
 
+        // --- Lógica del Modal ---
+        function actualizarHoraFin() {
+            const horaInicioStr = document.getElementById('horaInicio').value;
+            const duracion = parseInt(document.getElementById('duracion').value);
+            const guardarBtn = document.getElementById('guardarBtn');
+            if (!horaInicioStr || isNaN(duracion)) { document.getElementById('horaFin').value = ''; guardarBtn.disabled = true; return; }
+            const [h, m] = horaInicioStr.split(':').map(Number);
+            const finMin = h * 60 + m + duracion;
+            if (finMin > endHour) { document.getElementById('horaFin').value = formatHora(endHour); guardarBtn.disabled = true; }
+            else { document.getElementById('horaFin').value = formatHora(finMin); guardarBtn.disabled = false; }
+        }
+
+        function abrirModal(dia, hora, reservaExistente) {
+            reservaForm.classList.remove('was-validated');
+            document.getElementById('reservaDia').value = dia;
+            document.getElementById('reservaHora').value = hora; // Slot clickeado
+            document.getElementById('nombre').value = reservaExistente?.nombre || '';
+            document.getElementById('tipo').value = reservaExistente?.tipo || 'Individual';
+            document.getElementById('duracion').value = reservaExistente?.duracion || 40;
+            document.getElementById('horaInicio').value = reservaExistente?.horaInicio || hora; // Hora real
+            actualizarHoraFin();
+            eliminarBtn.style.display = reservaExistente ? 'inline-block' : 'none';
             const modal = new bootstrap.Modal(document.getElementById('reservaModal'));
             modal.show();
         }
 
         document.getElementById('duracion').addEventListener('change', actualizarHoraFin);
 
+        // --- Acciones de Guardar y Eliminar (con confirmaciones) ---
         document.getElementById('guardarBtn').onclick = () => {
+            if (!reservaForm.checkValidity()) { reservaForm.classList.add('was-validated'); return; }
             const dia = document.getElementById('reservaDia').value;
-            const hora = document.getElementById('reservaHora').value;
+            const horaInicioStr = document.getElementById('horaInicio').value;
             const nombre = document.getElementById('nombre').value.trim();
             const tipo = document.getElementById('tipo').value;
             const duracion = parseInt(document.getElementById('duracion').value);
-            const [h, m] = hora.split(':').map(Number);
+            const [h, m] = horaInicioStr.split(':').map(Number);
             const inicioMin = h * 60 + m;
             const finMin = inicioMin + duracion;
+            if (finMin > endHour) { Swal.fire('Error', `Termina después de ${formatHora(endHour)}.`, 'error'); return; }
+            const horaFinStr = formatHora(finMin);
+            const slotKey = `${dia}-${horaInicioStr}`;
 
-            if (!nombre) {
-                Swal.fire({ icon: 'warning', title: 'Faltan datos', text: 'El nombre es obligatorio.' });
-                return;
-            }
-
+            let conflicto = false;
             for (const key in reservas) {
-                const [resDia, resHora] = key.split('-');
-                if (resDia !== dia) continue;
-                const [rh, rm] = resHora.split(':').map(Number);
-                const resInicio = rh * 60 + rm;
-                const resFin = resInicio + reservas[key].duracion;
-                const esMismaReserva = key === `${dia}-${hora}`;
-
-                if (!esMismaReserva && (
-                    (inicioMin >= resInicio && inicioMin < resFin) ||
-                    (finMin > resInicio && finMin <= resFin) ||
-                    (inicioMin <= resInicio && finMin >= resFin)
-                )) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Conflicto de horario',
-                        text: `Ya hay una reserva en ese horario: ${reservas[key].nombre} de ${formatHora(resInicio)} a ${formatHora(resFin)}.`,
-                    });
-                    return;
+                const reservaExistente = reservas[key];
+                if (!key || key.indexOf('-') === -1) continue;
+                const resDia = key.substring(0, key.lastIndexOf('-'));
+                if (key !== slotKey && resDia === dia) { // Excluir la propia reserva si existe
+                    if (!reservaExistente || !reservaExistente.horaInicio || isNaN(reservaExistente.duracion)) continue;
+                    const [rhC, rmC] = reservaExistente.horaInicio.split(':').map(Number);
+                    const rInicioC = rhC * 60 + rmC;
+                    const rFinC = rInicioC + reservaExistente.duracion;
+                    if (inicioMin < rFinC && finMin > rInicioC) {
+                        conflicto = true;
+                        Swal.fire('Error', `Conflicto con ${reservaExistente.nombre}...`, 'error');
+                        break;
+                    }
                 }
             }
+            if (conflicto) return;
 
-            reservas[`${dia}-${hora}`] = {
-                inicio: hora,
-                nombre,
-                tipo,
-                duracion
-            };
+            const esEdicion = eliminarBtn.style.display !== 'none';
+            const ejecutarGuardado = () => { reservas[slotKey] = { nombre, tipo, duracion, horaInicio: horaInicioStr, horaFin: horaFinStr }; guardarReservasEnLocalStorage(); const mE = document.getElementById('reservaModal'); const mI = bootstrap.Modal.getInstance(mE); if (mI) mI.hide(); renderCalendar(); Swal.fire({ icon: 'success', title: '¡Guardado!', showConfirmButton: false, timer: 1500 }); };
 
-            localStorage.setItem(localKey, JSON.stringify(reservas));
-            document.querySelector('.btn-close').click();
-            renderCalendar();
+            if (esEdicion) {
+                Swal.fire({ title: 'Confirmar Cambios', text: `¿Guardar mods para "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí', cancelButtonText: 'No' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } });
+            } else { ejecutarGuardado(); }
         };
 
         document.getElementById('eliminarBtn').onclick = () => {
             const dia = document.getElementById('reservaDia').value;
-            const hora = document.getElementById('reservaHora').value;
+            const hora = document.getElementById('horaInicio').value;
             const key = `${dia}-${hora}`;
-            const reserva = reservas[key];
-            if (!reserva) return;
-
-            delete reservas[key];
-            localStorage.setItem(localKey, JSON.stringify(reservas));
-            document.querySelector('.btn-close').click();
-            renderCalendar();
+            Swal.fire({ title: '¿Seguro?', text: `Eliminar reserva de "${reservas[key]?.nombre || 'clase'}".`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí', cancelButtonText: 'No' }).then((result) => { if (result.isConfirmed) { if (reservas[key]) { delete reservas[key]; guardarReservasEnLocalStorage(); const mE = document.getElementById('reservaModal'); const mI = bootstrap.Modal.getInstance(mE); if (mI) mI.hide(); renderCalendar(); Swal.fire('¡Eliminado!', '', 'success'); } } });
         };
 
-        renderCalendar();
+        // --- Funciones y Listeners para Exportar (Visual y Datos) e Importar ---
+        function setExportButtonLoading(isLoading) {
+            const buttons = [downloadImageBtn, downloadPdfBtn, exportDataBtn, importDataBtn];
+            buttons.forEach(btn => { if (btn) btn.disabled = isLoading; }); // Chequear si existen
+
+            const loadingSpinner = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
+            const imgIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/></svg> Exportar Imagen';
+            const pdfIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/><path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z"/></svg> Exportar PDF';
+            const exportDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Exportar Datos (.txt)';
+            const importDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar Datos (.txt)';
+
+            if (isLoading) {
+                if (downloadImageBtn) downloadImageBtn.innerHTML = loadingSpinner;
+                if (downloadPdfBtn) downloadPdfBtn.innerHTML = loadingSpinner;
+                if (exportDataBtn) exportDataBtn.innerHTML = loadingSpinner;
+                if (importDataBtn) importDataBtn.innerHTML = loadingSpinner; // Aunque no debería estar activo
+            } else {
+                if (downloadImageBtn) downloadImageBtn.innerHTML = imgIconHTML;
+                if (downloadPdfBtn) downloadPdfBtn.innerHTML = pdfIconHTML;
+                if (exportDataBtn) exportDataBtn.innerHTML = exportDataIconHTML;
+                if (importDataBtn) importDataBtn.innerHTML = importDataIconHTML;
+            }
+        }
+
+        async function captureCalendar(options = {}) {
+            try {
+                const targetWidth = 1200;
+                const canvas = await html2canvas(calendar, { scale: 2, useCORS: true, logging: false, allowTaint: true, backgroundColor: '#ffffff', width: targetWidth, windowWidth: targetWidth, ...options });
+                return canvas;
+            } catch (err) { console.error("Error html2canvas:", err); throw err; }
+        }
+
+        downloadImageBtn.addEventListener('click', async () => {
+            setExportButtonLoading(true);
+            try {
+                const canvas = await captureCalendar();
+                const imageData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = imageData; link.download = 'calendario-reservas.png';
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                Swal.fire({ icon: 'success', title: 'Imagen generada', showConfirmButton: false, timer: 1500 });
+            } catch (err) { Swal.fire('Error', 'No se pudo generar la imagen.', 'error'); }
+            finally { setExportButtonLoading(false); }
+        });
+
+        downloadPdfBtn.addEventListener('click', async () => {
+            setExportButtonLoading(true);
+            const { jsPDF } = window.jspdf;
+            try {
+                const canvas = await captureCalendar();
+                const imgData = canvas.toDataURL('image/jpeg', 0.92);
+                const imgProps = canvas;
+                const orientation = imgProps.width > imgProps.height ? 'l' : 'p';
+                const pdf = new jsPDF({ orientation: orientation, unit: 'pt', format: [imgProps.width, imgProps.height] });
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                pdf.save('calendario-reservas.pdf');
+                Swal.fire({ icon: 'success', title: 'PDF generado', showConfirmButton: false, timer: 1500 });
+            } catch (err) { Swal.fire('Error', 'No se pudo generar el PDF.', 'error'); }
+            finally { setExportButtonLoading(false); }
+        });
+
+        exportDataBtn.addEventListener('click', () => {
+            try {
+                const dataString = JSON.stringify(reservas, null, 2);
+                const blob = new Blob([dataString], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url; link.download = 'calendario_reservas_datos.txt';
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                Swal.fire('Exportado', 'Datos guardados en .txt', 'success');
+            } catch (error) { Swal.fire('Error', 'No se exportaron datos.', 'error'); }
+        });
+
+        importDataBtn.addEventListener('click', () => { fileInput.click(); });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const fileContent = e.target.result;
+                try {
+                    const importedData = JSON.parse(fileContent);
+                    if (typeof importedData !== 'object' || importedData === null || Array.isArray(importedData)) {
+                        throw new Error("Archivo no contiene objeto JSON válido.");
+                    }
+                    Swal.fire({
+                        title: 'Importar Datos', text: "¿Reemplazar datos actuales? (Irreversible)", icon: 'warning',
+                        showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí', cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            reservas = importedData;
+                            guardarReservasEnLocalStorage();
+                            renderCalendar();
+                            Swal.fire('¡Importado!', 'Datos actualizados.', 'success');
+                        }
+                    });
+                } catch (error) { Swal.fire('Error Importación', `No se procesó. ¿JSON válido?\n${error.message}`, 'error'); }
+                finally { fileInput.value = null; }
+            };
+            reader.onerror = (e) => { Swal.fire('Error Lectura', 'No se leyó archivo.', 'error'); fileInput.value = null; };
+            reader.readAsText(file);
+        });
+
+        // --- INICIALIZACIÓN ---
+        document.addEventListener('DOMContentLoaded', cargarReservasDesdeLocalStorage);
     </script>
+
 </body>
 
 </html>

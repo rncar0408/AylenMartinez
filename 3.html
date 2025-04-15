@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Revisión de Cursos Nuevos</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .course-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Formulario de Revisión de Cursos Nuevos</h2>
+
+    <form id="emailForm">
+        <label for="toEmail">Correo destino</label>
+        <input type="email" id="toEmail" name="toEmail" required>
+
+        <div id="coursesContainer">
+            <div class="course-item">
+                <label>Nombre corto del curso:</label>
+                <input type="text" name="shortname" required>
+                <label>Nombre completo del curso:</label>
+                <input type="text" name="fullname" required>
+                <label>Fecha de inicio:</label>
+                <input type="text" name="startdate" placeholder="dd/mm/yyyy" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addCourse()">Agregar otro curso</button>
+        <br><br>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        (function () {
+            emailjs.init("j8lNj9CYVgllN7EEU"); // tu public key actualizada
+        })();
+
+        function addCourse() {
+            const container = document.getElementById('coursesContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'course-item';
+            newItem.innerHTML = `
+                <label>Nombre corto del curso:</label>
+                <input type="text" name="shortname" required>
+                <label>Nombre completo del curso:</label>
+                <input type="text" name="fullname" required>
+                <label>Fecha de inicio:</label>
+                <input type="text" name="startdate" placeholder="dd/mm/yyyy" required>
+            `;
+            container.appendChild(newItem);
+        }
+
+        document.getElementById('emailForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const to_email = form.toEmail.value;
+
+            const courseItems = form.querySelectorAll('.course-item');
+            const rows = [];
+
+            courseItems.forEach(item => {
+                const shortname = item.querySelector('input[name="shortname"]').value;
+                const fullname = item.querySelector('input[name="fullname"]').value;
+                const startdate = item.querySelector('input[name="startdate"]').value;
+
+                rows.push(`
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">${shortname}</td> <!-- Cambié el orden aquí -->
+                        <td style="border: 1px solid #ddd; padding: 8px;">${fullname}</td> <!-- Cambié el orden aquí -->
+                        <td style="border: 1px solid #ddd; padding: 8px;">${startdate}</td>
+                    </tr>
+                `);
+            });
+
+            const message = `
+                <p style="font-family: Arial, sans-serif;">Se detallan a continuación los cursos próximos a iniciar:</p>
+                <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="border: 1px solid #ddd; padding: 8px;">Nombre corto</th> <!-- Cambié el encabezado aquí -->
+                            <th style="border: 1px solid #ddd; padding: 8px;">Nombre completo</th> <!-- Cambié el encabezado aquí -->
+                            <th style="border: 1px solid #ddd; padding: 8px;">Fecha de inicio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.join("")}
+                    </tbody>
+                </table>
+            `;
+
+            const templateParams = {
+                to_email: to_email,
+                name: "Cursos próximos",
+                title: "Revisión de cursos nuevos",
+                time: new Date().toLocaleString(),
+                message: message
+            };
+
+            emailjs.send("service_0wesvbo", "template_ads5nzc", templateParams)
+                .then(function (response) {
+                    alert("Correo enviado correctamente ✅");
+                    form.reset();
+                }, function (error) {
+                    alert("Error al enviar el correo ❌");
+                    console.error("EmailJS error:", error);
+                });
+        });
+    </script>
+
+</body>
+
+</html>
