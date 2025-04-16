@@ -681,8 +681,6 @@
                 ejecutarGuardado();
             }
         };
-
-
         document.getElementById('eliminarBtn').onclick = () => {
             const dia = document.getElementById('reservaDia').value;
             const hora = document.getElementById('horaInicio').value; // Usar horaInicio real
@@ -726,8 +724,6 @@
                 }
             });
         };
-
-
         // --- Funciones y Listeners para Exportar (Visual y Datos) e Importar ---
         function setExportButtonLoading(isLoading) {
             const buttons = [downloadImageBtn, downloadPdfBtn, exportDataBtn, importDataBtn];
@@ -751,7 +747,6 @@
                 if (importDataBtn) importDataBtn.innerHTML = importDataIconHTML;
             }
         }
-
         async function captureCalendar(options = {}) {
             try {
                 // Añadir un pequeño margen inferior para asegurar que no se corte el borde
@@ -785,8 +780,6 @@
                 throw err;
             }
         }
-
-
         downloadImageBtn.addEventListener('click', async () => {
             setExportButtonLoading(true);
             await new Promise(resolve => setTimeout(resolve, 100)); // Pequeña pausa para renderizado UI
@@ -806,7 +799,6 @@
             }
             finally { setExportButtonLoading(false); }
         });
-
         downloadPdfBtn.addEventListener('click', async () => {
             setExportButtonLoading(true);
             await new Promise(resolve => setTimeout(resolve, 100)); // Pequeña pausa
@@ -836,8 +828,6 @@
             }
             finally { setExportButtonLoading(false); }
         });
-
-
         exportDataBtn.addEventListener('click', () => {
             if (Object.keys(reservas).length === 0) {
                 Swal.fire('Vacío', 'No hay reservas para exportar.', 'info');
@@ -860,9 +850,7 @@
                 Swal.fire('Error', 'Ocurrió un error al exportar los datos.', 'error');
             }
         });
-
         importDataBtn.addEventListener('click', () => { fileInput.click(); });
-
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) return;
@@ -873,8 +861,6 @@
                 fileInput.value = null; // Resetear input
                 return;
             }
-
-
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileContent = e.target.result;
@@ -933,8 +919,6 @@
             };
             reader.readAsText(file); // Leer como texto
         });
-
-
         // --- INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', cargarReservasDesdeLocalStorage);
     </script>
