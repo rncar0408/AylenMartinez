@@ -15,6 +15,10 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha512-r22gChDnGvCbOBVEEYcvbRPcfTaXflcJrycv5fK7NfYMhAxtQQEz3O4ht6iAnWvSMnCjU/hV9YEr7+5JaK9MAA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
+        </script>
     <style>
         body {
             background-color: #eef2f7 !important;
@@ -36,9 +40,15 @@
             border-radius: 8px;
             margin-bottom: 20px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-around;
             align-items: center;
             border: 1px solid #dee2e6;
+            gap: 10px;
+        }
+
+        .price-display {
+            text-align: center;
         }
 
         .price-display span {
@@ -57,7 +67,7 @@
         .month-display {
             font-size: 1.5rem;
             font-weight: 500;
-            min-width: 200px;
+            min-width: 180px;
             text-align: center;
         }
 
@@ -87,7 +97,6 @@
             min-width: 200px;
         }
 
-        /* Ajustar bases */
         .payment-status-details {
             flex-basis: 35%;
             min-width: 180px;
@@ -99,9 +108,11 @@
             min-width: 150px;
             text-align: right;
             margin-top: 5px;
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
         }
 
-        /* Botones pueden ir abajo en móvil */
         .student-info span {
             display: block;
         }
@@ -130,7 +141,6 @@
             font-size: 0.95rem;
         }
 
-        /* Amarillo/Naranja para parcial */
         .status-pending {
             color: #dc3545;
             font-weight: bold;
@@ -182,7 +192,6 @@
             margin-top: 10px;
         }
 
-        /* Para botones generales */
         .action-buttons-main .btn {
             margin: 5px 8px;
         }
@@ -195,24 +204,19 @@
         <div class="payment-container" id="paymentContainer">
             <h2 class="text-center mb-4">Control de Pagos Mensuales</h2>
 
-            <!-- Sección de Precios -->
             <div class="price-section">
                 <div class="price-display">40 min/mes: <span id="price40"></span></div>
                 <div class="price-display">60 min/mes: <span id="price60"></span></div>
                 <button id="editPricesBtn" class="btn btn-outline-secondary btn-sm">Editar Precios</button>
             </div>
 
-            <!-- Controles de Navegación de Mes -->
             <div class="month-navigation">
                 <button id="prevMonthBtn" class="btn btn-outline-secondary btn-sm">
                     < Mes Anterior</button>
                         <span id="monthDisplay" class="month-display">Cargando...</span>
                         <button id="nextMonthBtn" class="btn btn-outline-secondary btn-sm">Mes Siguiente ></button>
             </div>
-
             <hr>
-
-            <!-- Botones Exportar/Importar -->
             <div class="action-buttons-main">
                 <button id="exportDataBtn" class="btn btn-outline-success btn-sm">Exportar Datos (JSON)</button>
                 <button id="importDataBtn" class="btn btn-outline-primary btn-sm">Importar Datos (JSON)</button>
@@ -220,12 +224,10 @@
             </div>
             <hr>
 
-            <!-- Lista de Alumnos -->
             <h4 class="text-center mb-3" id="studentListTitle">Alumnos</h4>
             <ul class="student-list" id="studentList">
-                <li class="text-center p-4">Cargando alumnos...</li>
+                <li class="text-center p-4">Cargando alumnos y pagos...</li>
             </ul>
-
         </div>
     </div>
 
@@ -234,78 +236,64 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="priceModalLabel">Editar Precios Base Mensuales</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="priceModalLabel">Editar Precios Base Mensuales</h5> <button
+                        type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="priceForm">
-                        <div class="mb-3">
-                            <label for="basePrice40Input" class="form-label">Precio Mensual (40 min)</label>
-                            <input type="number" id="basePrice40Input" class="form-control" required min="0">
-                        </div>
-                        <div class="mb-3">
-                            <label for="basePrice60Input" class="form-label">Precio Mensual (60 min)</label>
-                            <input type="number" id="basePrice60Input" class="form-control" required min="0">
-                        </div>
+                        <div class="mb-3"> <label for="basePrice40Input" class="form-label">Precio Mensual (40
+                                min)</label> <input type="number" id="basePrice40Input" class="form-control" required
+                                min="0"> </div>
+                        <div class="mb-3"> <label for="basePrice60Input" class="form-label">Precio Mensual (60
+                                min)</label> <input type="number" id="basePrice60Input" class="form-control" required
+                                min="0"> </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="savePricesBtn">Guardar Precios</button>
-                </div>
+                <div class="modal-footer"> <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary"
+                        id="savePricesBtn">Guardar Precios</button> </div>
             </div>
         </div>
     </div>
-
 
     <!-- Modal Registro/Modificación de Pago -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="paymentModalLabel">Registrar Pago</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <h5 class="modal-title" id="paymentModalLabel">Registrar Pago</h5> <button type="button"
+                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="paymentForm" novalidate>
-                        <input type="hidden" id="paymentStudentId" />
-                        <input type="hidden" id="paymentYearMonth" />
-                        <div class="mb-2">
-                            <label class="form-label">Alumno:</label>
+                    <form id="paymentForm" novalidate> <input type="hidden" id="paymentStudentId" /> <input
+                            type="hidden" id="paymentYearMonth" />
+                        <div class="mb-2"> <label class="form-label">Alumno:</label>
                             <p><strong id="paymentStudentName"></strong></p>
                         </div>
-                        <div class="mb-2">
-                            <label class="form-label">Mes a Pagar:</label>
+                        <div class="mb-2"> <label class="form-label">Mes a Pagar:</label>
                             <p><strong id="paymentMonthYearDisplay"></strong> (<span
                                     id="paymentClassCountDisplay"></span> clases)</p>
                         </div>
-                        <div class="mb-3">
-                            <label for="paymentClassesPaid" class="form-label">Clases a Pagar</label>
-                            <select id="paymentClassesPaid" class="form-select" required>
-                                {/* Las opciones se llenarán dinámicamente */}
-                            </select>
+                        <div class="mb-3"> <label for="paymentClassesPaid" class="form-label">Clases a Pagar</label>
+                            <select id="paymentClassesPaid" class="form-select" required></select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Monto Sugerido:</label>
+                        <div class="mb-3"> <label class="form-label">Monto Sugerido:</label>
                             <p><strong id="suggestedAmountDisplay"></strong></p>
                         </div>
-                        <div class="mb-3">
-                            <label for="paymentAmount" class="form-label">Monto Pagado Efectivamente</label>
-                            <input type="number" id="paymentAmount" class="form-control" required min="0" step="0.01" />
+                        <div class="mb-3"> <label for="paymentAmount" class="form-label">Monto Pagado
+                                Efectivamente</label> <input type="number" id="paymentAmount" class="form-control"
+                                required min="0" step="0.01" />
                             <div class="invalid-feedback">Ingresa un monto válido.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="paymentDate" class="form-label">Fecha de Pago</label>
-                            <input type="date" id="paymentDate" class="form-control" required />
+                        <div class="mb-3"> <label for="paymentDate" class="form-label">Fecha de Pago</label> <input
+                                type="date" id="paymentDate" class="form-control" required />
                             <div class="invalid-feedback">Selecciona una fecha válida.</div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="savePaymentBtn">Guardar Pago</button>
-                </div>
+                <div class="modal-footer"> <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary"
+                        id="savePaymentBtn">Guardar Pago</button> </div>
             </div>
         </div>
     </div>
@@ -315,9 +303,8 @@
         <div class="modal-dialog modal-dialog-centered modal-lg-receipt">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="receiptModalLabel">Comprobante de Pago</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <h5 class="modal-title" id="receiptModalLabel">Comprobante de Pago</h5> <button type="button"
+                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="receiptContentContainer">
@@ -331,41 +318,30 @@
                             <div class="receipt-footer"> Gracias por tu pago. </div>
                         </div>
                     </div>
-                    {/* Campo para ingresar email */}
-                    <div class="mt-3">
-                        <label for="receiptEmailInput" class="form-label">Enviar a Email:</label>
-                        <input type="email" class="form-control" id="receiptEmailInput"
-                            placeholder="Ingresa el email del destinatario">
-                    </div>
+                    <div class="mt-3"> <label for="receiptEmailInput" class="form-label">Enviar a Email:</label> <input
+                            type="email" class="form-control" id="receiptEmailInput"
+                            placeholder="Ingresa el email del destinatario"> </div>
                 </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="downloadReceiptImageBtn">
-                        <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <div class="modal-footer justify-content-center"> <button type="button"
+                        class="btn btn-outline-secondary btn-sm" id="downloadReceiptImageBtn"> <svg class="bi me-1"
+                            width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                             <path
                                 d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
-                        </svg>
-                        Imagen
-                    </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" id="downloadReceiptPdfBtn">
-                        <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        </svg> Imagen </button> <button type="button" class="btn btn-outline-danger btn-sm"
+                        id="downloadReceiptPdfBtn"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
                             <path
                                 d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z" />
-                        </svg>
-                        PDF
-                    </button>
-                    <button type="button" class="btn btn-outline-primary btn-sm" id="sendReceiptEmailBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-envelope" viewBox="0 0 16 16">
+                        </svg> PDF </button> <button type="button" class="btn btn-outline-primary btn-sm"
+                        id="sendReceiptEmailBtn"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                             <path
                                 d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
-                        </svg>
-                        Enviar Email
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+                        </svg> Enviar Email </button> <button type="button" class="btn btn-secondary btn-sm"
+                        data-bs-dismiss="modal">Cerrar</button> </div>
             </div>
         </div>
     </div>
@@ -373,12 +349,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // EmailJS Init
+        function xlsxScriptLoaded() { console.log("XLSX loaded."); }
+        function xlsxScriptFailed() { console.error("Failed to load XLSX."); Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); }
+
         (function () {
-            emailjs.init({ publicKey: "TU_PUBLIC_KEY" }); // <<<--- ¡¡¡IMPORTANTE!!! Reemplazar
+            emailjs.init({ publicKey: "VeY3vHwsOZrOOSsKI" }); // *** TU PUBLIC KEY ***
         })();
 
-        // DOM Elements
         const studentList = document.getElementById('studentList');
         const monthDisplay = document.getElementById('monthDisplay');
         const prevMonthBtn = document.getElementById('prevMonthBtn');
@@ -396,447 +373,274 @@
         const exportDataBtn = document.getElementById('exportDataBtn');
         const importDataBtn = document.getElementById('importDataBtn');
         const fileInput = document.getElementById('fileInput');
+        const downloadReceiptImageBtn = document.getElementById('downloadReceiptImageBtn');
+        const downloadReceiptPdfBtn = document.getElementById('downloadReceiptPdfBtn');
+        const sendReceiptEmailBtn = document.getElementById('sendReceiptEmailBtn');
 
-        // Global State
-        const dataKey = 'studentPaymentDataV2'; // Updated key
+        const reservationDataKey = 'reservasCalendarioV2'; // Clave del calendario de reservas
+        const paymentDataKey = 'studentPaymentDataV2';     // Clave para esta app (pagos y precios)
+
         const defaultPrices = { duration40: 50000, duration60: 70000 };
         let students = {};
-        let basePrices = { ...defaultPrices }; // Start with defaults
+        let basePrices = { ...defaultPrices };
         let currentYear = new Date().getFullYear();
         let currentMonth = new Date().getMonth();
         const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // Para calcular clases
+        const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         let receiptData = {};
 
-        // --- Utility Functions ---
         function getYearMonthKey(year, month) { return `${year}-${(month + 1).toString().padStart(2, '0')}`; }
         function formatCurrency(amount) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(amount); }
         function formatDate(dateString) { if (!dateString) return 'N/A'; try { const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } catch (e) { return dateString; } }
 
-        // --- Important: Calculate Classes in Month for a Specific Weekday ---
         function countWeekdaysInMonth(year, month, targetDayName) {
-            const targetDayIndex = dayNames.indexOf(targetDayName); // 0=Domingo, 1=Lunes...
-            if (targetDayIndex === -1) return 0; // Invalid day name
-
-            let count = 0;
-            const date = new Date(Date.UTC(year, month, 1)); // Start of month (UTC to avoid timezone shifts)
-            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate(); // Get last day
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                date.setUTCDate(day);
-                if (date.getUTCDay() === targetDayIndex) {
-                    count++;
-                }
-            }
+            const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return 0;
+            let count = 0; const date = new Date(Date.UTC(year, month, 1));
+            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+            for (let day = 1; day <= daysInMonth; day++) { date.setUTCDate(day); if (date.getUTCDay() === targetDayIndex) { count++; } }
             return count;
         }
-
-        // --- Calculate Prices and Details ---
         function calculateMonthlyDetails(year, month, studentDuration, studentDay) {
             const basePrice = studentDuration === 60 ? basePrices.duration60 : basePrices.duration40;
             const classCount = countWeekdaysInMonth(year, month, studentDay);
-            const perClassPrice = classCount > 0 ? Math.round(basePrice / classCount) : basePrice; // Round for simplicity
+            const perClassPrice = classCount > 0 ? Math.round(basePrice / classCount) : basePrice;
             return { basePrice, classCount, perClassPrice };
         }
-
-        // --- LocalStorage Functions ---
         function saveData() {
             try {
-                const dataToSave = {
-                    students: students,
-                    prices: basePrices
-                };
-                localStorage.setItem(dataKey, JSON.stringify(dataToSave));
-                console.log("Datos guardados.");
-            } catch (error) {
-                console.error("Error guardando:", error);
-                Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error');
-            }
+                const dataToSave = { students: students, prices: basePrices };
+                localStorage.setItem(paymentDataKey, JSON.stringify(dataToSave));
+                console.log(`Datos guardados en ${paymentDataKey}.`);
+            } catch (error) { console.error("Error guardando:", error); Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error'); }
         }
 
         function loadData() {
+            let loadedStudents = {};
+            let loadedPrices = { ...defaultPrices };
+            let processedStudents = {};
+
             try {
-                const storedData = localStorage.getItem(dataKey);
-                if (storedData) {
-                    const parsedData = JSON.parse(storedData);
-                    students = parsedData.students || {}; // Fallback to empty object
-                    basePrices = parsedData.prices || { ...defaultPrices }; // Fallback to defaults
-                    console.log("Datos cargados:", { students, basePrices });
+                const paymentStoredData = localStorage.getItem(paymentDataKey);
+                if (paymentStoredData) {
+                    const parsedPaymentData = JSON.parse(paymentStoredData);
+                    loadedStudents = parsedPaymentData.students || {};
+                    loadedPrices = parsedPaymentData.prices || { ...defaultPrices };
+                    console.log("Datos de pagos cargados.");
                 } else {
-                    basePrices = { ...defaultPrices }; // Use defaults if no data
-                    // EXAMPLE DATA - REMOVE OR MODIFY FOR REAL USE
-                    students = {
-                        "s1": { name: "Ana García", classDay: "Lunes", classTime: "16:00", duration: 40, email: "ana.g@example.com", payments: {} },
-                        "s2": { name: "Carlos López", classDay: "Martes", classTime: "18:00", duration: 60, payments: { "2024-07": { amountPaid: 70000, classesPaid: 4, isFullMonthPayment: true, paymentDate: "2024-07-03", monthlyPriceApplied: 70000 } } },
-                        "s3": { name: "María Fernández", classDay: "Miércoles", classTime: "17:20", duration: 40, payments: {} }
-                    };
-                    console.log("Cargando datos de ejemplo.");
+                    console.log("No se encontraron datos de pagos previos.");
                 }
+
+                const reservationStoredData = localStorage.getItem(reservationDataKey);
+                if (reservationStoredData) {
+                    const parsedReservationData = JSON.parse(reservationStoredData);
+                    console.log("Datos de reservas encontrados.");
+
+                    for (const key in parsedReservationData) {
+                        const reserva = parsedReservationData[key];
+                        if (!reserva || typeof reserva !== 'object' || !reserva.nombre || !reserva.horaInicio || !reserva.duracion) {
+                            console.warn(`Reserva inválida encontrada con clave ${key}, saltando.`);
+                            continue;
+                        }
+
+                        // Usar una combinación de nombre y día/hora como ID más estable que solo la clave de reserva
+                        const dia = key.substring(0, key.lastIndexOf('-'));
+                        // Normalizar nombre para usar como parte del ID (quitar espacios, a minúsculas)
+                        const normalizedName = reserva.nombre.toLowerCase().replace(/\s+/g, '');
+                        const studentId = `${normalizedName}-${dia}-${reserva.horaInicio}`; // ID más robusto
+
+                        const newStudentEntry = {
+                            name: reserva.nombre,
+                            classDay: dia,
+                            classTime: reserva.horaInicio,
+                            duration: reserva.duracion,
+                            email: '', // Inicializar email vacío, se puede llenar desde datos de pago si existen
+                            payments: {}
+                        };
+
+                        // Buscar si existe un alumno con el MISMO ID en los datos cargados de pagos
+                        if (loadedStudents[studentId]) {
+                            console.log(`Fusionando pagos para ${studentId} (${newStudentEntry.name})`);
+                            newStudentEntry.payments = loadedStudents[studentId].payments || {};
+                            newStudentEntry.email = loadedStudents[studentId].email || ''; // Mantener email si existía
+                            // Eliminar la entrada de loadedStudents para no duplicarla si la clave de reserva original era diferente
+                            delete loadedStudents[studentId];
+                        } else {
+                            // Intentar buscar por nombre si el ID no coincide (menos preciso)
+                            const existingStudentKey = Object.keys(loadedStudents).find(
+                                sid => loadedStudents[sid].name === newStudentEntry.name &&
+                                    loadedStudents[sid].classDay === newStudentEntry.classDay &&
+                                    loadedStudents[sid].classTime === newStudentEntry.classTime
+                            );
+                            if (existingStudentKey) {
+                                console.log(`Fusionando pagos por coincidencia de nombre/horario para ${studentId}`);
+                                newStudentEntry.payments = loadedStudents[existingStudentKey].payments || {};
+                                newStudentEntry.email = loadedStudents[existingStudentKey].email || '';
+                                delete loadedStudents[existingStudentKey]; // Eliminar la entrada antigua
+                            }
+                        }
+                        processedStudents[studentId] = newStudentEntry;
+                    }
+                    console.log("Lista de alumnos procesada desde reservas.");
+                    // Añadir alumnos que solo existían en los datos de pago (quizás de importación o reservas antiguas)
+                    Object.assign(processedStudents, loadedStudents);
+
+
+                } else {
+                    console.log("No se encontraron datos de reservas en localStorage. La lista de alumnos se basará solo en datos de pagos previos (si existen).");
+                    processedStudents = loadedStudents;
+                }
+
             } catch (error) {
-                console.error("Error cargando/parseando:", error);
-                students = {};
-                basePrices = { ...defaultPrices };
-                Swal.fire('Advertencia', 'No se pudieron cargar datos anteriores. Se usarán valores por defecto.', 'warning');
+                console.error("Error cargando/parseando datos:", error);
+                processedStudents = {};
+                loadedPrices = { ...defaultPrices };
+                Swal.fire('Advertencia', 'Error al cargar datos. Se usarán valores por defecto.', 'warning');
             }
-            updatePriceDisplay(); // Update UI after loading
+
+            students = processedStudents;
+            basePrices = loadedPrices;
+            updatePriceDisplay();
         }
 
-        // --- Rendering Logic ---
-        function updatePriceDisplay() {
-            price40Display.textContent = formatCurrency(basePrices.duration40);
-            price60Display.textContent = formatCurrency(basePrices.duration60);
-        }
+
+        function updatePriceDisplay() { price40Display.textContent = formatCurrency(basePrices.duration40); price60Display.textContent = formatCurrency(basePrices.duration60); }
 
         function renderMonthlyView(year, month) {
-            monthDisplay.textContent = `${monthNames[month]} ${year}`;
-            studentList.innerHTML = '';
-            const yearMonthKey = getYearMonthKey(year, month);
-            const studentIds = Object.keys(students);
-
-            if (studentIds.length === 0) { studentList.innerHTML = '<li class="text-center text-muted p-4">No hay alumnos registrados.</li>'; return; }
-
+            monthDisplay.textContent = `${monthNames[month]} ${year}`; studentList.innerHTML = '';
+            const yearMonthKey = getYearMonthKey(year, month); const studentIds = Object.keys(students);
+            if (studentIds.length === 0) { studentList.innerHTML = '<li class="text-center text-muted p-4">No hay alumnos cargados desde el calendario de reservas.</li>'; return; }
             studentIds.sort((a, b) => students[a].name.localeCompare(students[b].name)).forEach(id => {
                 const student = students[id];
-                if (!student.classDay || !student.duration) {
-                    console.warn(`Alumno ${student.name} (ID: ${id}) sin día o duración asignada.`);
-                    return; // Saltar si faltan datos esenciales
-                }
-                const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay);
-                const payment = student.payments?.[yearMonthKey];
-
-                const li = document.createElement('li');
-                li.className = 'student-item';
-
-                let statusHTML = '';
-                let actionsHTML = '';
-                let paymentDetailsHTML = '';
-
-                if (payment) {
-                    const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`;
-                    paymentDetailsHTML = `
-                        <div class="payment-details">
-                            Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)}
-                        </div>
-                    `;
-                    // Determine status based on classes paid vs classes in month
-                    if (payment.isFullMonthPayment || payment.classesPaid >= monthlyDetails.classCount) {
-                        statusHTML = `<span class="status-paid-full">Pagado (Completo)</span>`;
-                    } else {
-                        statusHTML = `<span class="status-paid-partial">Pago Parcial (${payment.classesPaid}/${monthlyDetails.classCount})</span>`;
-                    }
-                    actionsHTML = `
-                        <button class="btn btn-outline-info btn-sm view-receipt-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}">Recibo</button>
-                        <button class="btn btn-outline-warning btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Modificar</button>
-                    `;
-                } else {
-                    statusHTML = `<span class="status-pending">Pendiente</span>`;
-                    actionsHTML = `
-                        <button class="btn btn-success btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Registrar Pago</button>
-                    `;
-                }
-
-                li.innerHTML = `
-                    <div class="student-info">
-                        <span class="student-name">${student.name}</span>
-                        <span class="class-slot">Clase: ${student.classDay} ${student.classTime}</span>
-                         <span class="class-duration">Duración: ${student.duration} min</span>
-                    </div>
-                    <div class="payment-status-details">
-                        ${statusHTML}
-                        ${paymentDetailsHTML}
-                    </div>
-                    <div class="payment-actions">
-                        ${actionsHTML}
-                    </div>
-                `;
+                if (!student.classDay || !student.duration || !student.classTime) { console.warn(`Datos incompletos para alumno ID: ${id} (${student.name}). Saltando.`); return; }
+                const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay); const payment = student.payments?.[yearMonthKey];
+                const li = document.createElement('li'); li.className = 'student-item';
+                let statusHTML = ''; let actionsHTML = ''; let paymentDetailsHTML = '';
+                if (payment) { const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`; paymentDetailsHTML = `<div class="payment-details"> Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)} </div>`; if (payment.isFullMonthPayment || payment.classesPaid >= monthlyDetails.classCount) { statusHTML = `<span class="status-paid-full">Pagado (Completo)</span>`; } else { statusHTML = `<span class="status-paid-partial">Pago Parcial (${payment.classesPaid}/${monthlyDetails.classCount})</span>`; } actionsHTML = `<button class="btn btn-outline-info btn-sm view-receipt-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}">Recibo</button> <button class="btn btn-outline-warning btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Modificar</button>`; }
+                else { statusHTML = `<span class="status-pending">Pendiente</span>`; actionsHTML = `<button class="btn btn-success btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Registrar Pago</button>`; }
+                li.innerHTML = `<div class="student-info"> <span class="student-name">${student.name}</span> <span class="class-slot">Clase: ${student.classDay} ${student.classTime}</span> <span class="class-duration">Duración: ${student.duration} min</span> </div> <div class="payment-status-details"> ${statusHTML} ${paymentDetailsHTML} </div> <div class="payment-actions"> ${actionsHTML} </div>`;
                 studentList.appendChild(li);
             });
-
             document.querySelectorAll('.register-payment-btn').forEach(button => button.addEventListener('click', handleRegisterPaymentClick));
             document.querySelectorAll('.view-receipt-btn').forEach(button => button.addEventListener('click', handleViewReceiptClick));
         }
-
-        // --- Event Handlers ---
-        function handleRegisterPaymentClick(event) {
-            const button = event.currentTarget;
-            const studentId = button.dataset.studentid;
-            const yearMonth = button.dataset.yearmonth;
-            const duration = parseInt(button.dataset.duration, 10);
-            const day = button.dataset.day;
-            openPaymentModal(studentId, yearMonth, duration, day);
-        }
+        function handleRegisterPaymentClick(event) { const btn = event.currentTarget; openPaymentModal(btn.dataset.studentid, btn.dataset.yearmonth, parseInt(btn.dataset.duration, 10), btn.dataset.day); }
         function handleViewReceiptClick(event) { openReceiptModal(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth); }
 
-        prevMonthBtn.addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderMonthlyView(currentYear, currentMonth); });
-        nextMonthBtn.addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderMonthlyView(currentYear, currentMonth); });
-        document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
-        document.getElementById('savePricesBtn').addEventListener('click', savePrices);
-
-        document.getElementById('savePaymentBtn').addEventListener('click', () => {
-            if (!paymentForm.checkValidity()) { paymentForm.classList.add('was-validated'); return; }
-            const studentId = document.getElementById('paymentStudentId').value;
-            const yearMonth = document.getElementById('paymentYearMonth').value;
-            const amountPaid = parseFloat(document.getElementById('paymentAmount').value);
-            const paymentDate = document.getElementById('paymentDate').value;
-            const classesPaidOption = document.getElementById('paymentClassesPaid').value; // "full" or number as string
-
-            if (!studentId || !yearMonth || isNaN(amountPaid) || amountPaid < 0 || !paymentDate || !classesPaidOption) { Swal.fire('Error', 'Completa todos los campos.', 'error'); return; }
-            if (!students[studentId]) { Swal.fire('Error', 'Alumno no encontrado.', 'error'); return; }
-
-            const [year, monthNum] = yearMonth.split('-').map(Number);
-            const month = monthNum - 1;
-            const student = students[studentId];
-            const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay);
-
-            const isFullMonthPayment = classesPaidOption === 'full';
-            const classesPaid = isFullMonthPayment ? monthlyDetails.classCount : parseInt(classesPaidOption, 10);
-
-            if (!students[studentId].payments) students[studentId].payments = {};
-            students[studentId].payments[yearMonth] = {
-                amountPaid: amountPaid,
-                paymentDate: paymentDate,
-                paid: true, // Consideramos "paid" si se registra algo
-                classesPaid: classesPaid,
-                isFullMonthPayment: isFullMonthPayment,
-                monthlyPriceApplied: monthlyDetails.basePrice // Guardamos el precio base usado
-            };
-
-            saveData(); paymentModal.hide(); renderMonthlyView(currentYear, currentMonth);
-            Swal.fire({ icon: 'success', title: '¡Pago Guardado!', showConfirmButton: false, timer: 1500 });
-        });
-
-        // --- Modal Functions ---
-        function openPriceModal() {
-            document.getElementById('basePrice40Input').value = basePrices.duration40;
-            document.getElementById('basePrice60Input').value = basePrices.duration60;
-            priceModal.show();
-        }
-
+        function openPriceModal() { document.getElementById('basePrice40Input').value = basePrices.duration40; document.getElementById('basePrice60Input').value = basePrices.duration60; priceModal.show(); }
         function savePrices() {
-            const price40 = parseFloat(document.getElementById('basePrice40Input').value);
-            const price60 = parseFloat(document.getElementById('basePrice60Input').value);
-
-            if (isNaN(price40) || isNaN(price60) || price40 < 0 || price60 < 0) {
-                Swal.fire('Error', 'Ingresa precios válidos.', 'error');
-                return;
-            }
-            basePrices.duration40 = price40;
-            basePrices.duration60 = price60;
-            saveData();
-            updatePriceDisplay(); // Actualizar vista de precios
-            renderMonthlyView(currentYear, currentMonth); // Re-renderizar por si afecta cálculos
-            priceModal.hide();
-            Swal.fire('Éxito', 'Precios actualizados.', 'success');
+            const price40 = parseFloat(document.getElementById('basePrice40Input').value); const price60 = parseFloat(document.getElementById('basePrice60Input').value);
+            if (isNaN(price40) || isNaN(price60) || price40 < 0 || price60 < 0) { Swal.fire('Error', 'Ingresa precios válidos.', 'error'); return; }
+            basePrices.duration40 = price40; basePrices.duration60 = price60;
+            saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); priceModal.hide(); Swal.fire('Éxito', 'Precios actualizados.', 'success');
         }
-
         function openPaymentModal(studentId, yearMonth, studentDuration, studentDay) {
-            const student = students[studentId];
-            if (!student) return;
-
-            const [year, monthNum] = yearMonth.split('-').map(Number);
-            const month = monthNum - 1;
-            const monthName = monthNames[month];
+            const student = students[studentId]; if (!student) { Swal.fire('Error', 'No se encontró el alumno.', 'error'); return; }
+            const [year, monthNum] = yearMonth.split('-').map(Number); const month = monthNum - 1; const monthName = monthNames[month];
             const monthlyDetails = calculateMonthlyDetails(year, month, studentDuration, studentDay);
-
-            document.getElementById('paymentStudentId').value = studentId;
-            document.getElementById('paymentYearMonth').value = yearMonth;
-            document.getElementById('paymentStudentName').textContent = student.name;
-            document.getElementById('paymentMonthYearDisplay').textContent = `${monthName} ${year}`;
-            document.getElementById('paymentClassCountDisplay').textContent = monthlyDetails.classCount;
-
-            // Llenar opciones de clases a pagar
-            const selectClasses = document.getElementById('paymentClassesPaid');
-            selectClasses.innerHTML = ''; // Limpiar opciones previas
-            for (let i = 1; i <= monthlyDetails.classCount; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = `${i} clase(s)`;
-                selectClasses.appendChild(option);
-            }
-            const fullMonthOption = document.createElement('option');
-            fullMonthOption.value = 'full';
-            fullMonthOption.textContent = `Mes Completo (${monthlyDetails.classCount} clases)`;
-            selectClasses.appendChild(fullMonthOption);
-
-            // Calcular monto sugerido inicial (Mes completo por defecto)
-            document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(monthlyDetails.basePrice);
-            document.getElementById('paymentAmount').value = monthlyDetails.basePrice; // Pre-llenar monto
-            selectClasses.value = 'full'; // Pre-seleccionar mes completo
-
-            // Event listener para recalcular monto sugerido al cambiar clases
-            selectClasses.onchange = () => {
-                const selectedValue = selectClasses.value;
-                let suggestedAmount = 0;
-                if (selectedValue === 'full') {
-                    suggestedAmount = monthlyDetails.basePrice;
-                } else {
-                    const numClasses = parseInt(selectedValue, 10);
-                    suggestedAmount = numClasses * monthlyDetails.perClassPrice; // Usar precio por clase calculado
-                }
-                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(suggestedAmount);
-                document.getElementById('paymentAmount').value = suggestedAmount.toFixed(2); // Actualizar monto pagado (permitir override)
-            };
-
-            // Verificar si hay pago existente para precargar
-            const existingPayment = student.payments?.[yearMonth];
-            if (existingPayment) {
-                document.getElementById('paymentModalLabel').textContent = "Modificar Pago";
-                document.getElementById('paymentAmount').value = existingPayment.amountPaid;
-                document.getElementById('paymentDate').value = existingPayment.paymentDate;
-                selectClasses.value = existingPayment.isFullMonthPayment ? 'full' : existingPayment.classesPaid.toString();
-                // Disparar el onchange para actualizar monto sugerido si es necesario
-                selectClasses.dispatchEvent(new Event('change'));
+            document.getElementById('paymentStudentId').value = studentId; document.getElementById('paymentYearMonth').value = yearMonth;
+            document.getElementById('paymentStudentName').textContent = student.name; document.getElementById('paymentMonthYearDisplay').textContent = `${monthName} ${year}`;
+            document.getElementById('paymentClassCountDisplay').textContent = monthlyDetails.classCount > 0 ? monthlyDetails.classCount : 'N/A';
+            const selectClasses = document.getElementById('paymentClassesPaid'); selectClasses.innerHTML = '';
+            if (monthlyDetails.classCount > 0) {
+                for (let i = 1; i <= monthlyDetails.classCount; i++) { const option = document.createElement('option'); option.value = i; option.textContent = `${i} clase(s)`; selectClasses.appendChild(option); }
+                const fullMonthOption = document.createElement('option'); fullMonthOption.value = 'full'; fullMonthOption.textContent = `Mes Completo (${monthlyDetails.classCount} clases)`; selectClasses.appendChild(fullMonthOption);
+                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(monthlyDetails.basePrice);
+                document.getElementById('paymentAmount').value = monthlyDetails.basePrice.toFixed(2);
+                selectClasses.value = 'full';
+                selectClasses.onchange = () => { const selectedValue = selectClasses.value; let suggestedAmount = 0; if (selectedValue === 'full') { suggestedAmount = monthlyDetails.basePrice; } else { const numClasses = parseInt(selectedValue, 10); suggestedAmount = numClasses * monthlyDetails.perClassPrice; } document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(suggestedAmount); document.getElementById('paymentAmount').value = suggestedAmount.toFixed(2); };
+                selectClasses.disabled = false; // Habilitar selector
             } else {
-                document.getElementById('paymentModalLabel').textContent = "Registrar Pago";
-                document.getElementById('paymentDate').valueAsDate = new Date(); // Default hoy
-                selectClasses.value = 'full'; // Asegurar default
-                selectClasses.dispatchEvent(new Event('change'));
+                selectClasses.innerHTML = '<option value="" disabled>No hay clases este mes</option>';
+                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(0);
+                document.getElementById('paymentAmount').value = '0';
+                selectClasses.onchange = null;
+                selectClasses.disabled = true; // Deshabilitar selector
             }
-
-            paymentForm.classList.remove('was-validated');
-            paymentModal.show();
+            const existingPayment = student.payments?.[yearMonth];
+            if (existingPayment) { document.getElementById('paymentModalLabel').textContent = "Modificar Pago"; document.getElementById('paymentAmount').value = existingPayment.amountPaid.toFixed(2); document.getElementById('paymentDate').value = existingPayment.paymentDate; if (monthlyDetails.classCount > 0) { selectClasses.value = existingPayment.isFullMonthPayment ? 'full' : existingPayment.classesPaid.toString(); selectClasses.dispatchEvent(new Event('change')); } }
+            else { document.getElementById('paymentModalLabel').textContent = "Registrar Pago"; document.getElementById('paymentDate').valueAsDate = new Date(); if (monthlyDetails.classCount > 0) { selectClasses.value = 'full'; selectClasses.dispatchEvent(new Event('change')); } }
+            paymentForm.classList.remove('was-validated'); paymentModal.show();
         }
-
         function openReceiptModal(studentId, yearMonth) {
-            const student = students[studentId];
-            const payment = student?.payments?.[yearMonth];
-            if (!student || !payment) { Swal.fire('Error', 'No se encontró información de pago.', 'error'); return; }
-
-            const [year, monthNum] = yearMonth.split('-').map(Number);
-            const monthName = monthNames[monthNum - 1];
-
-            receiptData = {
-                studentId: studentId, studentName: student.name,
-                studentEmail: student.email || '', // Usar '' si no hay email
-                monthYear: `${monthName} ${year}`, paymentDate: formatDate(payment.paymentDate),
-                amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid,
-                classCount: payment.classesPaid, isFullMonth: payment.isFullMonthPayment
-            };
-
-            document.getElementById('receiptStudentName').textContent = receiptData.studentName;
-            document.getElementById('receiptMonthYear').textContent = receiptData.monthYear;
-            document.getElementById('receiptPaymentDate').textContent = receiptData.paymentDate;
-            document.getElementById('receiptAmount').textContent = payment.amountPaid.toFixed(2);
+            const student = students[studentId]; const payment = student?.payments?.[yearMonth];
+            if (!student || !payment) { Swal.fire('Error', 'No se encontró info de pago.', 'error'); return; }
+            const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1];
+            receiptData = { studentId, studentName: student.name, studentEmail: student.email || '', monthYear: `${monthName} ${year}`, paymentDate: formatDate(payment.paymentDate), amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid, classCount: payment.classesPaid, isFullMonth: payment.isFullMonthPayment };
+            document.getElementById('receiptStudentName').textContent = receiptData.studentName; document.getElementById('receiptMonthYear').textContent = receiptData.monthYear;
+            document.getElementById('receiptPaymentDate').textContent = receiptData.paymentDate; document.getElementById('receiptAmount').textContent = payment.amountPaid.toFixed(2);
             document.getElementById('receiptClassCount').textContent = payment.isFullMonthPayment ? `Mes Completo (${payment.classesPaid})` : payment.classesPaid;
-            document.getElementById('receiptEmailInput').value = receiptData.studentEmail; // Cargar email guardado
-
+            document.getElementById('receiptEmailInput').value = receiptData.studentEmail;
             receiptModal.show();
         }
 
-        // --- Receipt Actions ---
-        document.getElementById('downloadReceiptImageBtn').addEventListener('click', async () => { /* ... (sin cambios) ... */ });
-        document.getElementById('downloadReceiptPdfBtn').addEventListener('click', async () => { /* ... (sin cambios) ... */ });
+        async function downloadReceiptAsImage() {
+            const receiptElement = document.getElementById('receiptContent');
+            if (!receiptElement || typeof window.html2canvas === 'undefined') { Swal.fire('Error', 'Falta html2canvas.', 'error'); return; }
+            try { const canvas = await window.html2canvas(receiptElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); const imageData = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = imageData; link.download = `comprobante_${receiptData.studentName}_${receiptData.monthYear.replace(' ', '_')}.png`; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
+            catch (err) { console.error("Error imagen:", err); Swal.fire('Error', 'No se generó imagen.', 'error'); }
+        }
+        async function downloadReceiptAsPdf() {
+            const receiptElement = document.getElementById('receiptContent');
+            if (!receiptElement || typeof window.html2canvas === 'undefined' || typeof window.jspdf === 'undefined') { Swal.fire('Error', 'Faltan librerías.', 'error'); return; }
+            const { jsPDF } = window.jspdf;
+            try { const canvas = await window.html2canvas(receiptElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); const imgData = canvas.toDataURL('image/png'); const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a5' }); const imgProps = pdf.getImageProperties(imgData); const pdfWidth = pdf.internal.pageSize.getWidth() * 0.8; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; const x = (pdf.internal.pageSize.getWidth() - pdfWidth) / 2; const y = 20; pdf.addImage(imgData, 'PNG', x, y, pdfWidth, pdfHeight); pdf.save(`comprobante_${receiptData.studentName}_${receiptData.monthYear.replace(' ', '_')}.pdf`); }
+            catch (err) { console.error("Error PDF:", err); Swal.fire('Error', 'No se generó PDF.', 'error'); }
+        }
 
-        document.getElementById('sendReceiptEmailBtn').addEventListener('click', () => {
-            const recipientEmail = document.getElementById('receiptEmailInput').value.trim(); // Tomar email del input
+        async function sendReceiptEmail() {
+            const recipientEmail = document.getElementById('receiptEmailInput').value.trim();
+            if (!recipientEmail) { Swal.fire('Falta Email', 'Ingresa correo.', 'warning'); document.getElementById('receiptEmailInput').focus(); return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) { Swal.fire('Email Inválido', 'Ingresa dirección válida.', 'warning'); document.getElementById('receiptEmailInput').focus(); document.getElementById('receiptEmailInput').select(); return; }
 
-            if (!recipientEmail) { Swal.fire('Falta Email', 'Ingresa una dirección de correo electrónico.', 'warning'); return; }
-            // Validación simple de formato email (opcional pero recomendada)
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) {
-                Swal.fire('Email Inválido', 'Ingresa una dirección de correo válida.', 'warning'); return;
-            }
-
-            const serviceID = 'TU_SERVICE_ID_RECIBOS'; // <<<--- ¡¡¡IMPORTANTE!!! REEMPLAZAR
-            const templateID = 'TU_TEMPLATE_ID_RECIBOS'; // <<<--- ¡¡¡IMPORTANTE!!! REEMPLAZAR
-
-            const templateParams = {
-                to_name: receiptData.studentName,
-                to_email: recipientEmail, // Usar email del input
-                month_year: receiptData.monthYear,
-                payment_date: receiptData.paymentDate,
-                amount: receiptData.amountFormatted,
-                class_count: receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount})` : receiptData.classCount, // Texto descriptivo
-            };
-
-            console.log("Enviando email de comprobante con params:", templateParams);
-            Swal.fire({ title: 'Enviando Email...', text: `Enviando comprobante a ${recipientEmail}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
-
-            emailjs.send(serviceID, templateID, templateParams)
-                .then(response => { Swal.fire('¡Enviado!', `Comprobante enviado a ${recipientEmail}.`, 'success'); })
-                .catch(error => { Swal.fire('Error', `No se pudo enviar el email: ${error.text || 'Error desconocido'}`, 'error'); });
-        });
-
-        // --- JSON Export/Import ---
-        exportDataBtn.addEventListener('click', () => {
+            Swal.fire({ title: 'Enviando Email...', text: `Preparando datos para ${recipientEmail}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
             try {
-                const dataToExport = {
-                    students: students,
-                    prices: basePrices
-                };
-                const dataString = JSON.stringify(dataToExport, null, 2);
-                const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `datos_pagos_alumnos_${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                Swal.fire('¡Exportado!', 'Datos completos guardados en JSON.', 'success');
-            } catch (error) {
-                console.error("Error exportando datos:", error);
-                Swal.fire('Error', 'Ocurrió un error al exportar los datos.', 'error');
-            }
-        });
+                const reciboHtml = `<div style="font-family: Arial, sans-serif; border: 1px solid #eee; padding: 20px;background-color: #d9e6cc;border-radius:15px;"><h4 style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">Comprobante de Pago</h4><p><strong>Alumno:</strong> ${receiptData.studentName}</p><p><strong>Mes Abonado:</strong> ${receiptData.monthYear}</p><p><strong>Fecha de Pago:</strong> ${receiptData.paymentDate}</p><p><strong>Clases Abonadas:</strong> ${receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount})` : receiptData.classCount}</p><p><strong>Monto Abonado:</strong> ${receiptData.amountFormatted}</p><p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #777;">Gracias por tu pago.</p></div>`;
+                const serviceID = 'service_h2fm824';
+                const templateID = 'template_v7gzygn'; // <<<--- USA TU TEMPLATE ID REAL
+                const [monthName, yearStr] = receiptData.monthYear.split(' ');
+                const templateParams = { mes: monthName, year: yearStr, email: recipientEmail, recibo: reciboHtml, to_name: receiptData.studentName };
+                console.log("Enviando email (solo texto) con params:", templateParams);
+                await emailjs.send(serviceID, templateID, templateParams);
+                console.log('Email enviado!');
+                Swal.fire('¡Enviado!', `Comprobante enviado a ${recipientEmail}.`, 'success');
+            } catch (error) { console.error('Error email:', error); Swal.fire('Error', `No se pudo enviar email: ${error?.text || error?.message || 'Error desconocido'}`, 'error'); }
+        }
 
-        importDataBtn.addEventListener('click', () => { fileInput.click(); });
-
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!file.name.endsWith('.json')) { Swal.fire('Archivo Inválido', 'Selecciona un archivo .json.', 'error'); fileInput.value = null; return; }
-
+        function exportData() {
+            try { const dataToExport = { students: students, prices: basePrices }; const dataString = JSON.stringify(dataToExport, null, 2); const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `datos_pagos_alumnos_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); Swal.fire('¡Exportado!', 'Datos completos guardados en JSON.', 'success'); }
+            catch (error) { console.error("Error exportando:", error); Swal.fire('Error', 'Ocurrió un error al exportar.', 'error'); }
+        }
+        function importData(event) {
+            const file = event.target.files[0]; if (!file) return; if (!file.name.endsWith('.json')) { Swal.fire('Archivo Inválido', 'Selecciona .json.', 'error'); fileInput.value = null; return; }
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileContent = e.target.result;
                 try {
-                    const importedData = JSON.parse(fileContent);
-                    // Validar estructura básica
-                    if (typeof importedData !== 'object' || importedData === null || (!importedData.students && !importedData.prices)) {
-                        throw new Error("El archivo JSON no tiene la estructura esperada (necesita 'students' y/o 'prices').");
-                    }
-
+                    const importedData = JSON.parse(fileContent); if (typeof importedData !== 'object' || importedData === null || (!importedData.students && !importedData.prices)) { throw new Error("JSON no tiene estructura esperada."); }
                     Swal.fire({
-                        title: 'Confirmar Importación', html: `Se encontraron datos en el archivo.<br>¿Deseas reemplazar <b>TODOS</b> los datos actuales (alumnos y precios)? <br><b style='color:red;'>¡Esta acción es irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Sí, reemplazar', cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            students = importedData.students || {}; // Usar datos importados o vaciar si no existe
-                            basePrices = importedData.prices || { ...defaultPrices }; // Usar precios importados o volver a default
-                            saveData(); // Guardar los nuevos datos
-                            updatePriceDisplay(); // Actualizar UI de precios
-                            renderMonthlyView(currentYear, currentMonth); // Actualizar lista
-                            Swal.fire('¡Importado!', 'Los datos han sido actualizados desde el archivo.', 'success');
-                        }
-                    });
-                } catch (error) {
-                    console.error("Error procesando archivo:", error);
-                    Swal.fire('Error de Importación', `No se pudo procesar el archivo. ¿JSON válido y con estructura correcta?\nError: ${error.message}`, 'error');
-                } finally { fileInput.value = null; }
+                        title: 'Confirmar Importación', html: `Datos encontrados.<br>¿Reemplazar <b>TODOS</b> los datos actuales? <br><b style='color:red;'>¡Irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Sí', cancelButtonText: 'Cancelar'
+                    }).then((result) => { if (result.isConfirmed) { students = importedData.students || {}; basePrices = importedData.prices || { ...defaultPrices }; saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Importado!', 'Datos actualizados.', 'success'); } });
+                } catch (error) { console.error("Error procesando:", error); Swal.fire('Error Importación', `No se procesó archivo. ¿JSON válido?\nError: ${error.message}`, 'error'); }
+                finally { fileInput.value = null; }
             };
-            reader.onerror = (e) => { Swal.fire('Error de Lectura', 'No se pudo leer archivo.', 'error'); fileInput.value = null; };
-            reader.readAsText(file);
-        });
+            reader.onerror = (e) => { Swal.fire('Error Lectura', 'No se leyó archivo.', 'error'); fileInput.value = null; }; reader.readAsText(file);
+        }
 
-        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
             renderMonthlyView(currentYear, currentMonth);
-            // Asegurarse que los listeners de los modales se añaden después de que existan
-            if (document.getElementById('savePaymentBtn')) document.getElementById('savePaymentBtn').addEventListener('click', () => {/* Definida arriba */ });
-            if (document.getElementById('savePricesBtn')) document.getElementById('savePricesBtn').addEventListener('click', savePrices);
-            if (document.getElementById('editPricesBtn')) document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
-            // Listeners para acciones del recibo
-            if (document.getElementById('downloadReceiptImageBtn')) document.getElementById('downloadReceiptImageBtn').addEventListener('click', async () => { /* ... */ });
-            if (document.getElementById('downloadReceiptPdfBtn')) document.getElementById('downloadReceiptPdfBtn').addEventListener('click', async () => { /* ... */ });
-            if (document.getElementById('sendReceiptEmailBtn')) document.getElementById('sendReceiptEmailBtn').addEventListener('click', () => { /* ... */ });
-            // Listeners Export/Import
-            if (exportDataBtn) exportDataBtn.addEventListener('click', () => { /* ... */ });
-            if (importDataBtn) importDataBtn.addEventListener('click', () => fileInput.click());
-            if (fileInput) fileInput.addEventListener('change', (event) => { /* ... */ });
-
+            prevMonthBtn.addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderMonthlyView(currentYear, currentMonth); });
+            nextMonthBtn.addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderMonthlyView(currentYear, currentMonth); });
+            document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
+            document.getElementById('savePricesBtn').addEventListener('click', savePrices);
+            document.getElementById('savePaymentBtn').addEventListener('click', () => { /* La lógica está en la función asociada al botón dentro del modal, no aquí */ });
+            downloadReceiptImageBtn.addEventListener('click', downloadReceiptAsImage);
+            downloadReceiptPdfBtn.addEventListener('click', downloadReceiptAsPdf);
+            sendReceiptEmailBtn.addEventListener('click', sendReceiptEmail);
+            exportDataBtn.addEventListener('click', exportData);
+            importDataBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', importData);
         });
-
     </script>
 
 </body>
