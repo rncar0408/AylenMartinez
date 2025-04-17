@@ -5,24 +5,19 @@
     <meta charset="UTF-8" />
     <title>Calendario de Reservas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- SweetAlert2 Theme -->
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
-    <!-- Incluir jsPDF y html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
         integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- ******** NEW: Include EmailJS Library ******** -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
     <style>
-        /* Estilos (sin cambios) */
         body {
-            background: #f4f6f9;
+            background-color: #dde9ce !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
             line-height: 1.6;
         }
@@ -89,25 +84,69 @@
             font-size: 0.9rem;
         }
 
-        .hour:hover {
+        .hour:hover:not(.reserved) {
             background-color: #e9ecef;
             transform: translateY(-1px);
         }
 
         .reserved {
-            background: #51c2d5;
             color: #fff;
             cursor: pointer;
-            border: 1px solid #40a7b8;
             font-weight: bold;
             padding: 10px;
             font-size: 0.85rem;
             line-height: 1.4;
             word-wrap: break-word;
+            overflow-wrap: break-word;
             border-radius: 8px;
             margin-bottom: 8px;
             text-align: center;
+            border: 1px solid transparent;
+            transition: filter 0.2s ease, transform 0.1s ease;
         }
+
+        .tipo-individual {
+            background-color: #d9a35b;
+            border-color: #c7934b;
+            color: #212529;
+        }
+
+        /* Ochre */
+        .tipo-grupal {
+            background-color: #95bf35;
+            border-color: #85ab25;
+            color: #212529;
+        }
+
+        /* Lime Green */
+        .tipo-ayuda-ingreso {
+            background-color: #d8d02a;
+            border-color: #c6c01a;
+            color: #212529;
+        }
+
+        /* Yellow-Green */
+        .tipo-desde-tres-anios {
+            background-color: #2ab0d8;
+            border-color: #1a9fc6;
+            color: #fff;
+        }
+
+        /* Cyan Blue */
+        .tipo-piano-terapeutico {
+            background-color: #f59e90;
+            border-color: #e38e80;
+            color: #212529;
+        }
+
+        /* Salmon Pink */
+        .tipo-default {
+            background-color: #6c757d;
+            border-color: #5c636a;
+        }
+
+        /* Default Grey */
+
 
         .reserved strong {
             display: block;
@@ -123,14 +162,18 @@
         }
 
         .reserved:hover {
-            background-color: #40a7b8;
+            filter: brightness(90%);
             transform: translateY(-1px);
         }
 
         .modal-header {
-            background-color: #51c2d5;
+            background-color: #96a5c0;
             color: white;
             border-bottom: none;
+            border-color: #96a5c0;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 20px;
         }
 
         .modal-content {
@@ -160,7 +203,7 @@
     </style>
 </head>
 
-<body>
+<body style="background-color: #dde9ce !important;">
     <div class="container py-4">
 
         <div class="calendar-container" id="calendarContainer">
@@ -184,8 +227,7 @@
                     Exportar PDF
                 </button>
                 <button id="exportDataBtn" class="btn btn-outline-success btn-sm btn-bock">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-box-arrow-down me-1" viewBox="0 0 16 16">
+                    <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
                         <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
@@ -194,11 +236,10 @@
                         <path fill-rule="evenodd"
                             d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
                     </svg>
-                    Exportar Datos (.txt)
+                    Exportar Datos (.json)
                 </button>
                 <button id="importDataBtn" class="btn btn-outline-primary btn-sm btn-bock">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-box-arrow-up me-1" viewBox="0 0 16 16">
+                    <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
                         <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
@@ -207,10 +248,9 @@
                         <path fill-rule="evenodd"
                             d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
                     </svg>
-                    Importar Datos (.txt)
+                    Importar Datos (.json)
                 </button>
                 <input type="file" id="fileInput" accept=".txt, .json" style="display: none;" />
-                <!-- Aceptar .json también -->
             </div>
 
             <div class="calendar" id="calendar">
@@ -219,18 +259,18 @@
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="reservaModal" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <!-- Contenido del modal -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reservaModalLabel">Detalles Clase</h5> <button type="button"
-                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="reservaModalLabel">Detalles Clase</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="reservaForm" novalidate> <input type="hidden" id="reservaDia" /> <input type="hidden"
-                            id="reservaHora" />
+                    <form id="reservaForm" novalidate>
+                        <input type="hidden" id="reservaDia" />
+                        <input type="hidden" id="reservaHora" />
                         <div class="row g-3">
                             <div class="col-md-6 mb-3"> <label for="horaInicio" class="form-label">Inicio</label> <input
                                     type="time" class="form-control bg-light" id="horaInicio" readonly /> </div>
@@ -240,52 +280,51 @@
                                     type="text" id="nombre" class="form-control" required />
                                 <div class="invalid-feedback">Ingresa un nombre.</div>
                             </div>
-                            <div class="col-md-6 mb-3"> <label for="tipo" class="form-label">Tipo</label> <select
-                                    id="tipo" class="form-select" required>
+                            <div class="col-md-6 mb-3"> <label for="tipo" class="form-label">Tipo</label>
+                                <select id="tipo" class="form-select" required>
                                     <option>Individual</option>
                                     <option>Grupal</option>
-                                    <option>Ayuda Ingreso</option>
-                                </select> </div>
+                                    <option>Ayuda Ingreso a institutos</option>
+                                    <option>Desde los 3 años</option>
+                                    <option>Piano terapéutico</option>
+                                </select>
+                            </div>
                             <div class="col-md-6 mb-3"> <label for="duracion" class="form-label">Duración</label>
                                 <select id="duracion" class="form-select" required>
                                     <option value="40">40 min</option>
                                     <option value="60">1 hora</option>
                                 </select>
                             </div>
-                            <!-- Opcional: Campo de mensaje si tu template lo requiere
-                            <div class="col-12 mb-3">
-                                <label for="mensajeExtra" class="form-label">Mensaje Adicional (Opcional)</label>
-                                <textarea class="form-control" id="mensajeExtra" rows="2"></textarea>
-                            </div>
-                            -->
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer"> <button type="button" class="btn btn-danger me-auto" id="eliminarBtn"
-                        style="display: none;"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
-                            viewBox="0 0 16 16">
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" id="eliminarBtn"
+                        style="display: none; background-color: #f3a391;">
+                        <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path
                                 d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                             <path
                                 d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                        </svg> Eliminar </button> <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary"
-                        id="guardarBtn">Guardar</button> </div>
+                        </svg>
+                        Eliminar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn" style="background-color: #dde9ce !important;" id="guardarBtn">
+                        Guardar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ******** NEW: Initialize EmailJS ********
         (function () {
-            // Reemplaza con tu PUBLIC KEY (antes User ID) de EmailJS
             emailjs.init({ publicKey: "qOfrwmjiPJNVT91sk" });
         })();
 
-        // --- Elementos del DOM ---
         const calendar = document.getElementById('calendar');
         const downloadImageBtn = document.getElementById('downloadImageBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
@@ -295,24 +334,34 @@
         const reservaForm = document.getElementById('reservaForm');
         const eliminarBtn = document.getElementById('eliminarBtn');
 
-        // --- Configuración y Variables Globales ---
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        const startHour = 15 * 60; // 15:00 en minutos
-        const endHour = 21 * 60;   // 21:00 en minutos
-        const hours = []; // Array para los puntos de tiempo a verificar
-        const generationIntervalMinutes = 20; // Intervalo para verificar disponibilidad
+        const startHour = 15 * 60;
+        const endHour = 21 * 60;
+        const hours = [];
+        const generationIntervalMinutes = 20;
         for (let min = startHour; min < endHour; min += generationIntervalMinutes) { hours.push(min); }
-        const localKey = 'reservasCalendarioV2'; // Clave para localStorage
-        let reservas = {}; // Objeto para almacenar las reservas { "Lunes-15:00": {nombre: ..., ...} }
+        const localKey = 'reservasCalendarioV2';
+        let reservas = {};
 
-        // --- Funciones Utilitarias ---
         function formatHora(min) {
             const h = Math.floor(min / 60).toString().padStart(2, '0');
             const m = (min % 60).toString().padStart(2, '0');
             return `${h}:${m}`;
         }
 
-        // --- Funciones de localStorage ---
+        function getTipoClass(tipo) {
+            switch (tipo) {
+                case 'Individual': return 'tipo-individual';
+                case 'Grupal': return 'tipo-grupal';
+                case 'Ayuda Ingreso a institutos': return 'tipo-ayuda-ingreso';
+                case 'Desde los 3 años': return 'tipo-desde-tres-anios';
+                case 'Piano terapéutico': return 'tipo-piano-terapeutico';
+                default:
+                    console.warn(`Tipo de reserva desconocido: "${tipo}". Usando clase default.`);
+                    return 'tipo-default';
+            }
+        }
+
         function guardarReservasEnLocalStorage() {
             try {
                 localStorage.setItem(localKey, JSON.stringify(reservas));
@@ -322,7 +371,6 @@
                 Swal.fire('Error', 'No se pudieron guardar los cambios. El almacenamiento local podría estar lleno o deshabilitado.', 'error');
             }
         }
-
         function cargarReservasDesdeLocalStorage() {
             calendar.innerHTML = '<div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando calendario...</div>';
             try {
@@ -331,15 +379,14 @@
                 console.log('Reservas cargadas desde localStorage.');
             } catch (error) {
                 console.error('Error al cargar/parsear desde localStorage:', error);
-                reservas = {}; // Empezar de cero si hay error
+                reservas = {};
                 Swal.fire('Error', 'No se pudieron cargar las reservas anteriores. Pueden estar corruptas.', 'warning');
             }
             requestAnimationFrame(() => setTimeout(renderCalendar, 0));
         }
 
-        // --- Lógica de Renderizado ---
         function renderCalendar() {
-            calendar.innerHTML = ''; // Limpiar calendario
+            calendar.innerHTML = '';
             days.forEach(day => {
                 const dayColumn = document.createElement('div');
                 dayColumn.className = 'day';
@@ -351,17 +398,17 @@
                     const reservaQueIniciaAqui = reservas[slotKey];
 
                     if (reservaQueIniciaAqui) {
-                        // Si una reserva INICIA aquí, dibujarla
                         const hourDiv = document.createElement('div');
-                        hourDiv.className = 'hour reserved';
+                        const reservaTipo = reservaQueIniciaAqui.tipo;
+                        const tipoClass = getTipoClass(reservaTipo);
+
+                        hourDiv.classList.add('hour', 'reserved', tipoClass);
+
                         hourDiv.innerHTML = `<strong>${reservaQueIniciaAqui.nombre}</strong><br>${reservaQueIniciaAqui.horaInicio} - ${reservaQueIniciaAqui.horaFin} (${reservaQueIniciaAqui.duracion} min)<br><small>${reservaQueIniciaAqui.tipo}</small>`;
                         hourDiv.onclick = () => abrirModal(day, horaStr, reservaQueIniciaAqui);
                         dayColumn.appendChild(hourDiv);
                     } else {
-                        // Si NINGUNA reserva inicia aquí:
-                        // 1. ¿Está este punto de tiempo libre (no dentro de otra reserva)?
                         if (!estaEnReserva(day, min)) {
-                            // 2. Si está libre, ¿PUEDE CABER una reserva mínima (40min) desde aquí sin chocar?
                             if (canFitReservation(day, min, 40)) {
                                 const hourDiv = document.createElement('div');
                                 hourDiv.className = 'hour';
@@ -370,7 +417,6 @@
                                 dayColumn.appendChild(hourDiv);
                             }
                         }
-                        // Nota: No se dibujan slots si están ocupados por una reserva que *no* empezó aquí.
                     }
                 });
                 calendar.appendChild(dayColumn);
@@ -380,134 +426,88 @@
         function estaEnReserva(dia, minutos) {
             for (const key in reservas) {
                 const reserva = reservas[key];
-                // Validaciones robustas
-                if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue;
-                const parts = key.split('-');
-                if (parts.length < 2) continue; // Asegurarse que hay día y hora
-                const resDia = parts.slice(0, -1).join('-'); // Manejar días con guiones si existieran
-                const resHoraStr = parts[parts.length - 1];
-
-                if (resDia !== dia || !reserva || typeof reserva !== 'object' || !reserva.horaInicio || typeof reserva.horaInicio !== 'string' || typeof reserva.duracion !== 'number' || isNaN(reserva.duracion)) continue;
-
-                // Validar formato de horaInicio
-                const horaParts = reserva.horaInicio.split(':');
-                if (horaParts.length !== 2) continue;
-                const rh = parseInt(horaParts[0], 10);
-                const rm = parseInt(horaParts[1], 10);
-                if (isNaN(rh) || isNaN(rm)) continue;
-
-                const resInicio = rh * 60 + rm;
-                const resFin = resInicio + reserva.duracion;
-                if (minutos >= resInicio && minutos < resFin) return true; // Está ocupado
-            }
-            return false; // Está libre
-        }
-
-
-        function canFitReservation(day, startMin, duration) {
-            const endMinPropuesto = startMin + duration;
-            if (endMinPropuesto > endHour) return false; // Excede límite horario
-
-            // Verificar si el slot propuesto completo (startMin hasta endMinPropuesto) choca con alguna reserva existente
-            for (const key in reservas) {
-                const reservaExistente = reservas[key];
-                // Validaciones robustas (similares a estaEnReserva)
                 if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue;
                 const parts = key.split('-');
                 if (parts.length < 2) continue;
                 const resDia = parts.slice(0, -1).join('-');
                 const resHoraStr = parts[parts.length - 1];
-
+                if (resDia !== dia || !reserva || typeof reserva !== 'object' || !reserva.horaInicio || typeof reserva.horaInicio !== 'string' || typeof reserva.duracion !== 'number' || isNaN(reserva.duracion)) continue;
+                const horaParts = reserva.horaInicio.split(':');
+                if (horaParts.length !== 2) continue;
+                const rh = parseInt(horaParts[0], 10);
+                const rm = parseInt(horaParts[1], 10);
+                if (isNaN(rh) || isNaN(rm)) continue;
+                const resInicio = rh * 60 + rm;
+                const resFin = resInicio + reserva.duracion;
+                if (minutos >= resInicio && minutos < resFin) return true;
+            }
+            return false;
+        }
+        function canFitReservation(day, startMin, duration) {
+            const endMinPropuesto = startMin + duration;
+            if (endMinPropuesto > endHour) return false;
+            for (const key in reservas) {
+                const reservaExistente = reservas[key];
+                if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue;
+                const parts = key.split('-');
+                if (parts.length < 2) continue;
+                const resDia = parts.slice(0, -1).join('-');
+                const resHoraStr = parts[parts.length - 1];
                 if (resDia !== day || !reservaExistente || typeof reservaExistente !== 'object' || !reservaExistente.horaInicio || typeof reservaExistente.horaInicio !== 'string' || typeof reservaExistente.duracion !== 'number' || isNaN(reservaExistente.duracion)) continue;
-
                 const horaParts = reservaExistente.horaInicio.split(':');
                 if (horaParts.length !== 2) continue;
                 const rh = parseInt(horaParts[0], 10);
                 const rm = parseInt(horaParts[1], 10);
                 if (isNaN(rh) || isNaN(rm)) continue;
-
                 const resInicioExistente = rh * 60 + rm;
                 const resFinExistente = resInicioExistente + reservaExistente.duracion;
-
-                // Lógica de solapamiento: si el inicio propuesto es antes de que termine la existente
-                // Y el fin propuesto es después de que inicie la existente
                 if (startMin < resFinExistente && endMinPropuesto > resInicioExistente) {
-                    return false; // Hay solapamiento
+                    return false;
                 }
             }
-            return true; // No hay solapamiento, se puede reservar
+            return true;
         }
 
-        // --- Lógica del Modal ---
         function actualizarHoraFin() {
             const horaInicioStr = document.getElementById('horaInicio').value;
             const duracion = parseInt(document.getElementById('duracion').value);
             const guardarBtn = document.getElementById('guardarBtn');
-
-            // Deshabilitar botón si no hay hora de inicio o duración válida
             if (!horaInicioStr || isNaN(duracion) || duracion <= 0) {
                 document.getElementById('horaFin').value = '';
                 guardarBtn.disabled = true;
                 return;
             }
-
             const [h, m] = horaInicioStr.split(':').map(Number);
             const inicioMin = h * 60 + m;
             const finMin = inicioMin + duracion;
-
-            // Validar si la hora de fin excede el límite del calendario
             if (finMin > endHour) {
-                document.getElementById('horaFin').value = formatHora(endHour); // Mostrar el límite
-                guardarBtn.disabled = true; // Deshabilitar guardado
-                // Opcional: Mostrar un mensaje de advertencia
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Hora Inválida',
-                    text: `La clase terminaría después de las ${formatHora(endHour)}. Ajusta la duración o la hora de inicio.`,
-                    timer: 3000,
-                    showConfirmButton: false
-                });
+                document.getElementById('horaFin').value = formatHora(endHour);
+                guardarBtn.disabled = true;
+                Swal.fire({ icon: 'warning', title: 'Hora Inválida', text: `La clase terminaría después de las ${formatHora(endHour)}. Ajusta la duración o la hora de inicio.`, timer: 3000, showConfirmButton: false });
             } else {
                 document.getElementById('horaFin').value = formatHora(finMin);
-                guardarBtn.disabled = false; // Habilitar guardado si es válido
+                guardarBtn.disabled = false;
             }
         }
-
-
         function abrirModal(dia, hora, reservaExistente) {
             reservaForm.classList.remove('was-validated');
             document.getElementById('reservaDia').value = dia;
-            document.getElementById('reservaHora').value = hora; // Slot clickeado (podría no ser la hora de inicio real si es edición)
+            document.getElementById('reservaHora').value = hora;
             document.getElementById('nombre').value = reservaExistente?.nombre || '';
             document.getElementById('tipo').value = reservaExistente?.tipo || 'Individual';
             document.getElementById('duracion').value = reservaExistente?.duracion || 40;
-            document.getElementById('horaInicio').value = reservaExistente?.horaInicio || hora; // Usar la hora real de inicio si existe, sino la del slot
-
-            // Limpiar campo de mensaje adicional si existe
-            // const mensajeExtraEl = document.getElementById('mensajeExtra');
-            // if (mensajeExtraEl) mensajeExtraEl.value = '';
-
-            actualizarHoraFin(); // Calcular hora fin inicial
+            document.getElementById('horaInicio').value = reservaExistente?.horaInicio || hora;
+            actualizarHoraFin();
             eliminarBtn.style.display = reservaExistente ? 'inline-block' : 'none';
-
             const modal = new bootstrap.Modal(document.getElementById('reservaModal'));
             modal.show();
         }
-
         document.getElementById('duracion').addEventListener('change', actualizarHoraFin);
-        // Actualizar también si cambia la hora de inicio (aunque esté readonly, por si acaso)
         document.getElementById('horaInicio').addEventListener('change', actualizarHoraFin);
 
-
-        // ******** NEW: Función para enviar correo ********
         function enviarCorreoReserva(datosReserva) {
-            // IDs de tu servicio y plantilla en EmailJS
-            const serviceID = 'service_93zs6up'; // Tu Service ID
-            const templateID = 'template_352le9n'; // Tu Template ID
-
-            // Mapea tus datos a los parámetros de la plantilla de EmailJS
-            // Asegúrate que los nombres de las propiedades (day, horaInicio, etc.)
-            // coincidan con las variables en tu plantilla EmailJS (ej: {{day}}, {{horaInicio}})
+            const serviceID = 'service_93zs6up';
+            const templateID = 'template_352le9n';
             const templateParams = {
                 day: datosReserva.dia,
                 horaInicio: datosReserva.horaInicio,
@@ -515,231 +515,109 @@
                 name: datosReserva.nombre,
                 type: datosReserva.tipo,
                 duration: datosReserva.duracion
-                // message: datosReserva.mensaje || 'N/A' // Añadir si tienes campo de mensaje
             };
-
-            console.log("Enviando correo con parámetros:", templateParams); // Para depuración
-
+            console.log("Enviando correo con parámetros:", templateParams);
             emailjs.send(serviceID, templateID, templateParams)
                 .then(response => {
                     console.log('Correo enviado con éxito!', response.status, response.text);
-                    // Opcional: Pequeña notificación no intrusiva de que el correo se envió
-                    // Toast rápido de SweetAlert
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: 'info',
-                        title: 'Notificación enviada.'
-                    });
+                    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; } });
+                    Toast.fire({ icon: 'info', title: 'Notificación enviada.' });
                 })
                 .catch(error => {
                     console.error('Error al enviar correo:', error);
-                    // Mostrar un error específico para el correo, sin detener el flujo principal
-                    Swal.fire({
-                        title: "Error de Notificación",
-                        text: `La reserva se guardó, pero hubo un error al enviar el correo de notificación: ${error.text || 'Error desconocido'}`,
-                        icon: "warning",
-                        timer: 4000, // Más tiempo para leer el error
-                        showConfirmButton: true // Permitir cerrar manualmente
-                    });
+                    Swal.fire({ title: "Error de Notificación", text: `La reserva se guardó, pero hubo un error al enviar el correo de notificación: ${error.text || 'Error desconocido'}`, icon: "warning", timer: 4000, showConfirmButton: true });
                 });
         }
 
-
-        // --- Acciones de Guardar y Eliminar (con confirmaciones) ---
         document.getElementById('guardarBtn').onclick = () => {
-            // 1. Validar Formulario Bootstrap
-            if (!reservaForm.checkValidity()) {
-                reservaForm.classList.add('was-validated');
-                return; // Detener si el formulario no es válido
-            }
-
-            // 2. Obtener datos del formulario
+            if (!reservaForm.checkValidity()) { reservaForm.classList.add('was-validated'); return; }
             const dia = document.getElementById('reservaDia').value;
-            const horaInicioStr = document.getElementById('horaInicio').value; // Hora real de inicio
+            const horaInicioStr = document.getElementById('horaInicio').value;
             const nombre = document.getElementById('nombre').value.trim();
             const tipo = document.getElementById('tipo').value;
             const duracion = parseInt(document.getElementById('duracion').value);
-            // const mensaje = document.getElementById('mensajeExtra')?.value.trim(); // Obtener mensaje si existe
-
-            // Validar duración mínima (ej. > 0)
-            if (isNaN(duracion) || duracion <= 0) {
-                Swal.fire('Error', 'La duración debe ser un número positivo.', 'error');
-                return;
-            }
-
-            // 3. Calcular hora de fin y validar límite horario
+            if (isNaN(duracion) || duracion <= 0) { Swal.fire('Error', 'La duración debe ser un número positivo.', 'error'); return; }
             const [h, m] = horaInicioStr.split(':').map(Number);
             const inicioMin = h * 60 + m;
             const finMin = inicioMin + duracion;
-
-            if (finMin > endHour) {
-                Swal.fire('Error', `La clase no puede terminar después de las ${formatHora(endHour)}. Verifica la duración o la hora de inicio.`, 'error');
-                return; // Detener si excede el límite
-            }
+            if (finMin > endHour) { Swal.fire('Error', `La clase no puede terminar después de las ${formatHora(endHour)}. Verifica la duración o la hora de inicio.`, 'error'); return; }
             const horaFinStr = formatHora(finMin);
-
-            // 4. Determinar la clave ÚNICA de la reserva (basada en día y hora de INICIO)
             const slotKey = `${dia}-${horaInicioStr}`;
-
-            // 5. Verificar conflictos con OTRAS reservas
             let conflicto = false;
             let reservaConflictiva = null;
             for (const key in reservas) {
-                // Ignorar la propia reserva que se está editando
                 if (key === slotKey) continue;
-
                 const reservaExistente = reservas[key];
-                // Validaciones robustas para la reserva existente
                 if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue;
                 const parts = key.split('-');
                 if (parts.length < 2) continue;
                 const resDiaExistente = parts.slice(0, -1).join('-');
-                const resHoraStrExistente = parts[parts.length - 1];
-
                 if (resDiaExistente !== dia || !reservaExistente || typeof reservaExistente !== 'object' || !reservaExistente.horaInicio || typeof reservaExistente.horaInicio !== 'string' || typeof reservaExistente.duracion !== 'number' || isNaN(reservaExistente.duracion)) continue;
-
                 const horaPartsExistente = reservaExistente.horaInicio.split(':');
                 if (horaPartsExistente.length !== 2) continue;
                 const rhC = parseInt(horaPartsExistente[0], 10);
                 const rmC = parseInt(horaPartsExistente[1], 10);
                 if (isNaN(rhC) || isNaN(rmC)) continue;
-
                 const rInicioC = rhC * 60 + rmC;
                 const rFinC = rInicioC + reservaExistente.duracion;
-
-                // Lógica de solapamiento: si la nueva reserva (inicioMin a finMin)
-                // se solapa con la existente (rInicioC a rFinC)
-                if (inicioMin < rFinC && finMin > rInicioC) {
-                    conflicto = true;
-                    reservaConflictiva = reservaExistente;
-                    break; // Salir al encontrar el primer conflicto
-                }
+                if (inicioMin < rFinC && finMin > rInicioC) { conflicto = true; reservaConflictiva = reservaExistente; break; }
             }
-
-            if (conflicto) {
-                Swal.fire('Error de Conflicto', `La reserva propuesta (${horaInicioStr} - ${horaFinStr}) se solapa con la clase de "${reservaConflictiva.nombre}" (${reservaConflictiva.horaInicio} - ${reservaConflictiva.horaFin}).`, 'error');
-                return; // Detener si hay conflicto
-            }
-
-            // 6. Confirmación (si es edición) y Ejecución del Guardado
-            const esEdicion = eliminarBtn.style.display !== 'none'; // Determinar si es edición antes de definir ejecutarGuardado
-
+            if (conflicto) { Swal.fire('Error de Conflicto', `La reserva propuesta (${horaInicioStr} - ${horaFinStr}) se solapa con la clase de "${reservaConflictiva.nombre}" (${reservaConflictiva.horaInicio} - ${reservaConflictiva.horaFin}).`, 'error'); return; }
+            const esEdicion = eliminarBtn.style.display !== 'none';
             const ejecutarGuardado = () => {
                 const datosParaGuardar = { nombre, tipo, duracion, horaInicio: horaInicioStr, horaFin: horaFinStr };
-                // Si la clave original (slot clickeado) es diferente a la nueva clave (porque se cambió la hora de inicio durante la edición)
-                // y se estaba editando (esEdicion era true), hay que eliminar la entrada antigua.
                 const horaOriginalClickeada = document.getElementById('reservaHora').value;
                 const slotKeyOriginal = `${dia}-${horaOriginalClickeada}`;
-                if (esEdicion && slotKey !== slotKeyOriginal && reservas[slotKeyOriginal]) {
-                    console.log(`Eliminando entrada antigua por cambio de hora: ${slotKeyOriginal}`);
-                    delete reservas[slotKeyOriginal]; // Borrar la entrada vieja si la hora de inicio cambió
-                }
-
-                reservas[slotKey] = datosParaGuardar; // Guardar o sobrescribir con la nueva clave
+                if (esEdicion && slotKey !== slotKeyOriginal && reservas[slotKeyOriginal]) { delete reservas[slotKeyOriginal]; }
+                reservas[slotKey] = datosParaGuardar;
                 guardarReservasEnLocalStorage();
-
-                // ******** NEW: Enviar correo DESPUÉS de guardar ********
-                const datosParaCorreo = { dia, horaInicio: horaInicioStr, horaFin: horaFinStr, nombre, tipo, duracion /*, mensaje*/ };
+                const datosParaCorreo = { dia, horaInicio: horaInicioStr, horaFin: horaFinStr, nombre, tipo, duracion };
                 enviarCorreoReserva(datosParaCorreo);
-                // ********************************************************
-
                 const mE = document.getElementById('reservaModal');
                 const mI = bootstrap.Modal.getInstance(mE);
                 if (mI) mI.hide();
-                renderCalendar(); // Re-renderizar el calendario
+                renderCalendar();
                 Swal.fire({ icon: 'success', title: '¡Guardado!', text: `Reserva para ${nombre} guardada correctamente.`, showConfirmButton: false, timer: 1500 });
             };
-
             if (esEdicion) {
-                // Si es edición, preguntar antes de guardar
-                Swal.fire({
-                    title: 'Confirmar Cambios',
-                    text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Sí, guardar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        ejecutarGuardado();
-                    }
-                });
-            } else {
-                // Si es una reserva nueva, guardar directamente
-                ejecutarGuardado();
-            }
+                Swal.fire({ title: 'Confirmar Cambios', text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí, guardar', cancelButtonText: 'Cancelar' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } });
+            } else { ejecutarGuardado(); }
         };
         document.getElementById('eliminarBtn').onclick = () => {
             const dia = document.getElementById('reservaDia').value;
-            const hora = document.getElementById('horaInicio').value; // Usar horaInicio real
+            const hora = document.getElementById('horaInicio').value;
             const key = `${dia}-${hora}`;
-
-            if (!reservas[key]) {
-                Swal.fire('Error', 'No se encontró la reserva para eliminar.', 'error');
-                return;
-            }
-
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: `Estás a punto de eliminar la reserva de "${reservas[key]?.nombre || 'esta clase'}". ¡Esta acción no se puede deshacer!`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
+            if (!reservas[key]) { Swal.fire('Error', 'No se encontró la reserva para eliminar.', 'error'); return; }
+            Swal.fire({ title: '¿Estás seguro?', text: `Estás a punto de eliminar la reserva de "${reservas[key]?.nombre || 'esta clase'}". ¡Esta acción no se puede deshacer!`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar' }).then((result) => {
                 if (result.isConfirmed) {
                     if (reservas[key]) {
-                        delete reservas[key]; // Eliminar la reserva del objeto
-                        guardarReservasEnLocalStorage(); // Guardar los cambios en localStorage
-
+                        delete reservas[key];
+                        guardarReservasEnLocalStorage();
                         const mE = document.getElementById('reservaModal');
                         const mI = bootstrap.Modal.getInstance(mE);
-                        if (mI) mI.hide(); // Cerrar el modal
-
-                        renderCalendar(); // Actualizar la vista del calendario
-                        Swal.fire(
-                            '¡Eliminado!',
-                            'La reserva ha sido eliminada.',
-                            'success'
-                        );
-                    } else {
-                        // Esto no debería pasar si la validación inicial funcionó, pero por si acaso
-                        Swal.fire('Error', 'No se pudo eliminar la reserva porque ya no existe.', 'error');
-                        renderCalendar(); // Actualizar por si acaso
-                    }
+                        if (mI) mI.hide();
+                        renderCalendar();
+                        Swal.fire('¡Eliminado!', 'La reserva ha sido eliminada.', 'success');
+                    } else { Swal.fire('Error', 'No se pudo eliminar la reserva porque ya no existe.', 'error'); renderCalendar(); }
                 }
             });
         };
-        // --- Funciones y Listeners para Exportar (Visual y Datos) e Importar ---
+
         function setExportButtonLoading(isLoading) {
             const buttons = [downloadImageBtn, downloadPdfBtn, exportDataBtn, importDataBtn];
-            buttons.forEach(btn => { if (btn) btn.disabled = isLoading; }); // Chequear si existen
+            buttons.forEach(btn => { if (btn) btn.disabled = isLoading; });
 
             const loadingSpinner = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
             const imgIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/></svg> Exportar Imagen';
             const pdfIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/><path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z"/></svg> Exportar PDF';
-            const exportDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Exportar Datos (.txt)';
-            const importDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar Datos (.txt)';
+            const exportDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Exportar Datos (.json)';
+            const importDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar Datos (.json)';
 
             if (isLoading) {
                 if (downloadImageBtn) downloadImageBtn.innerHTML = loadingSpinner;
                 if (downloadPdfBtn) downloadPdfBtn.innerHTML = loadingSpinner;
                 if (exportDataBtn) exportDataBtn.innerHTML = loadingSpinner;
-                if (importDataBtn) importDataBtn.innerHTML = loadingSpinner; // Aunque no debería estar activo
+                if (importDataBtn) importDataBtn.innerHTML = loadingSpinner;
             } else {
                 if (downloadImageBtn) downloadImageBtn.innerHTML = imgIconHTML;
                 if (downloadPdfBtn) downloadPdfBtn.innerHTML = pdfIconHTML;
@@ -749,32 +627,27 @@
         }
         async function captureCalendar(options = {}) {
             try {
-                // Añadir un pequeño margen inferior para asegurar que no se corte el borde
                 const calendarElement = document.getElementById('calendar');
                 const containerElement = document.getElementById('calendarContainer');
                 const originalPadding = containerElement.style.paddingBottom;
-                containerElement.style.paddingBottom = '30px'; // Aumentar temporalmente padding
+                containerElement.style.paddingBottom = '30px';
 
-                const targetWidth = 1200; // Ancho deseado para la captura
-                const canvas = await html2canvas(containerElement, { // Capturar el contenedor para incluir título y botones si están visibles
-                    scale: 2, // Mayor resolución
+                const targetWidth = 1200;
+                const canvas = await html2canvas(containerElement, {
+                    scale: 2,
                     useCORS: true,
                     logging: false,
                     allowTaint: true,
-                    backgroundColor: '#ffffff', // Fondo blanco explícito
+                    backgroundColor: '#ffffff',
                     width: targetWidth,
                     windowWidth: targetWidth,
-                    // Ignorar elementos que no queremos en la captura
                     ignoreElements: (element) => element.classList.contains('action-buttons') || element.tagName === 'BUTTON' || element.tagName === 'INPUT',
                     ...options
                 });
-
-                containerElement.style.paddingBottom = originalPadding; // Restaurar padding
-
+                containerElement.style.paddingBottom = originalPadding;
                 return canvas;
             } catch (err) {
                 console.error("Error html2canvas:", err);
-                // Restaurar padding en caso de error también
                 const containerElement = document.getElementById('calendarContainer');
                 containerElement.style.paddingBottom = originalPadding;
                 throw err;
@@ -782,7 +655,7 @@
         }
         downloadImageBtn.addEventListener('click', async () => {
             setExportButtonLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 100)); // Pequeña pausa para renderizado UI
+            await new Promise(resolve => setTimeout(resolve, 100));
             try {
                 const canvas = await captureCalendar();
                 const imageData = canvas.toDataURL('image/png');
@@ -801,25 +674,17 @@
         });
         downloadPdfBtn.addEventListener('click', async () => {
             setExportButtonLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 100)); // Pequeña pausa
+            await new Promise(resolve => setTimeout(resolve, 100));
             const { jsPDF } = window.jspdf;
             try {
                 const canvas = await captureCalendar();
-                const imgData = canvas.toDataURL('image/jpeg', 0.92); // Usar JPEG para PDF, puede ser más eficiente
-
+                const imgData = canvas.toDataURL('image/jpeg', 0.92);
                 const imgProps = { width: canvas.width, height: canvas.height };
-                const pdfWidth = 595.28; // Ancho A4 en puntos (pt)
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; // Calcular altura proporcional
-
-                // Determinar orientación basada en la proporción (si es más ancho que alto)
+                const pdfWidth = 595.28;
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
                 const orientation = pdfWidth > pdfHeight ? 'l' : 'p';
-
-                // Crear PDF en tamaño A4 con la orientación calculada
                 const pdf = new jsPDF({ orientation: orientation, unit: 'pt', format: 'a4' });
-
-                // Añadir imagen al PDF, ajustando al ancho de la página A4
                 pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-
                 pdf.save('calendario-reservas.pdf');
                 Swal.fire({ icon: 'success', title: 'PDF generado', showConfirmButton: false, timer: 1500 });
             } catch (err) {
@@ -829,17 +694,14 @@
             finally { setExportButtonLoading(false); }
         });
         exportDataBtn.addEventListener('click', () => {
-            if (Object.keys(reservas).length === 0) {
-                Swal.fire('Vacío', 'No hay reservas para exportar.', 'info');
-                return;
-            }
+            if (Object.keys(reservas).length === 0) { Swal.fire('Vacío', 'No hay reservas para exportar.', 'info'); return; }
             try {
-                const dataString = JSON.stringify(reservas, null, 2); // Formato JSON legible
-                const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' }); // Cambiado a JSON type
+                const dataString = JSON.stringify(reservas, null, 2);
+                const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `calendario_reservas_${new Date().toISOString().split('T')[0]}.json`; // Nombre con fecha y extensión .json
+                link.download = `calendario_reservas_${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -854,11 +716,9 @@
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) return;
-
-            // Validar tipo de archivo (opcional pero recomendado)
             if (!file.type.match('application/json') && !file.name.endsWith('.json') && !file.name.endsWith('.txt')) {
                 Swal.fire('Archivo Inválido', 'Por favor, selecciona un archivo .json o .txt que contenga datos JSON válidos.', 'error');
-                fileInput.value = null; // Resetear input
+                fileInput.value = null;
                 return;
             }
             const reader = new FileReader();
@@ -866,28 +726,19 @@
                 const fileContent = e.target.result;
                 try {
                     const importedData = JSON.parse(fileContent);
-
-                    // Validación básica de la estructura importada
                     if (typeof importedData !== 'object' || importedData === null || Array.isArray(importedData)) {
                         throw new Error("El archivo no contiene un objeto JSON válido en la raíz.");
                     }
-
-                    // Validación más específica (opcional): verificar si las claves y valores tienen sentido
                     let dataIsValid = true;
                     for (const key in importedData) {
                         if (typeof key !== 'string' || key.indexOf('-') === -1 || typeof importedData[key] !== 'object' || !importedData[key].nombre || !importedData[key].horaInicio) {
                             console.warn(`Entrada inválida encontrada durante la importación: Clave "${key}"`, importedData[key]);
                             dataIsValid = false;
-                            // Decide si quieres detener la importación o solo advertir
-                            // throw new Error(`Formato de reserva inválido para la clave "${key}".`);
                         }
                     }
                     if (!dataIsValid) {
-                        // Podrías preguntar al usuario si quiere continuar a pesar de las advertencias
                         console.warn("Algunas entradas en el archivo importado podrían tener un formato inesperado.");
                     }
-
-
                     Swal.fire({
                         title: 'Confirmar Importación',
                         html: `Se encontraron <b>${Object.keys(importedData).length}</b> reservas en el archivo.<br>¿Deseas reemplazar <b>TODAS</b> las reservas actuales con las del archivo? <br><b style='color:red;'>¡Esta acción es irreversible!</b>`,
@@ -899,9 +750,9 @@
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            reservas = importedData; // Reemplazar datos en memoria
-                            guardarReservasEnLocalStorage(); // Guardar los nuevos datos
-                            renderCalendar(); // Actualizar la interfaz
+                            reservas = importedData;
+                            guardarReservasEnLocalStorage();
+                            renderCalendar();
                             Swal.fire('¡Importado!', 'Las reservas han sido actualizadas desde el archivo.', 'success');
                         }
                     });
@@ -910,16 +761,16 @@
                     Swal.fire('Error de Importación', `No se pudo procesar el archivo. Asegúrate de que sea un archivo JSON válido.\nError: ${error.message}`, 'error');
                 }
                 finally {
-                    fileInput.value = null; // Resetear input para permitir seleccionar el mismo archivo de nuevo
+                    fileInput.value = null;
                 }
             };
             reader.onerror = (e) => {
                 Swal.fire('Error de Lectura', 'No se pudo leer el archivo seleccionado.', 'error');
-                fileInput.value = null; // Resetear input
+                fileInput.value = null;
             };
-            reader.readAsText(file); // Leer como texto
+            reader.readAsText(file);
         });
-        // --- INICIALIZACIÓN ---
+
         document.addEventListener('DOMContentLoaded', cargarReservasDesdeLocalStorage);
     </script>
 
