@@ -7,13 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
-    <!-- (Opcional) Chart.js vía CDN si quieres gráficos más avanzados -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha512-r22gChDnGvCbOBVEEYcvbRPcfTaXflcJrycv5fK7NfYMhAxtQQEz3O4ht6iAnWvSMnCjU/hV9YEr7+5JaK9MAA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
+        </script>
     <style>
         body {
-            background-color: #f0f2f5 !important;
-            /* Un gris muy claro para el dashboard */
+            background-color: #eef2f7 !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            line-height: 1.6;
         }
 
         .dashboard-container {
@@ -57,7 +67,6 @@
             height: 40px;
             margin-bottom: 10px;
             color: #0d6efd;
-            /* Color primario de Bootstrap */
         }
 
         .nav-card h5 {
@@ -111,24 +120,18 @@
             color: #198754;
         }
 
-        /* Verde */
         .metric-pending .metric-value {
             color: #dc3545;
         }
 
-        /* Rojo */
         .metric-partial .metric-value {
             color: #ffc107;
         }
 
-        /* Amarillo */
         .metric-total .metric-value {
             color: #0d6efd;
         }
 
-        /* Azul */
-
-        /* Basic Bar Visualization (Optional) */
         .payment-bar-container {
             height: 25px;
             background-color: #e9ecef;
@@ -163,6 +166,20 @@
         .table-summary th {
             background-color: #f8f9fa;
         }
+
+        .payment-row-clickable {
+            cursor: pointer;
+        }
+
+        .payment-row-clickable:hover {
+            background-color: #e9ecef !important;
+        }
+
+        #paidClassesList {
+            padding-left: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 
@@ -172,11 +189,9 @@
 
             <h1 class="text-center mb-4">Dashboard Principal</h1>
 
-            <!-- Navegación -->
             <div class="dashboard-nav">
-                <a href="index.html" class="nav-card">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-calendar-week" viewBox="0 0 16 16">
+                <a href="calendario.html" class="nav-card"> <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        height="16" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
                         <path
                             d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         <path
@@ -184,9 +199,8 @@
                     </svg>
                     <h5>Calendario Reservas</h5>
                 </a>
-                <a href="pagos.html" class="nav-card">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-cash-coin" viewBox="0 0 16 16">
+                <a href="pagos.html" class="nav-card"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0" />
                         <path
@@ -196,47 +210,32 @@
                     </svg>
                     <h5>Calendario Pagos</h5>
                 </a>
-                <a href="calendario.html" class="nav-card"> <!-- Asumiendo que calendario.html es el original -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-house-door" viewBox="0 0 16 16">
+                <a href="index.html" class="nav-card"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
                         <path
                             d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354l-6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207z" />
                     </svg>
-                    <h5>Volver a Inicio (Reservas)</h5>
+                    <h5>Ver página comercial</h5>
                 </a>
             </div>
 
-            <!-- Resumen de Pagos -->
             <div class="summary-section">
                 <h3 class="summary-title" id="summaryTitle">Resumen de Pagos - Mes Actual</h3>
-
                 <div class="summary-metrics">
-                    <div class="metric-item metric-total">
-                        <span class="metric-value" id="totalCollected">--</span>
-                        <span class="metric-label">Total Recaudado</span>
-                    </div>
-                    <div class="metric-item metric-paid">
-                        <span class="metric-value" id="paidCount">--</span>
-                        <span class="metric-label">Alumnos Pagados (Total)</span>
-                    </div>
-                    <div class="metric-item metric-partial">
-                        <span class="metric-value" id="partialCount">--</span>
-                        <span class="metric-label">Alumnos Pagados (Parcial)</span>
-                    </div>
-                    <div class="metric-item metric-pending">
-                        <span class="metric-value" id="pendingCount">--</span>
-                        <span class="metric-label">Alumnos Pendientes</span>
-                    </div>
+                    <div class="metric-item metric-total"> <span class="metric-value" id="totalCollected">--</span>
+                        <span class="metric-label">Total Recaudado</span> </div>
+                    <div class="metric-item metric-paid"> <span class="metric-value" id="paidCount">--</span> <span
+                            class="metric-label">Pagados (Completo)</span> </div>
+                    <div class="metric-item metric-partial"> <span class="metric-value" id="partialCount">--</span>
+                        <span class="metric-label">Pagados (Parcial)</span> </div>
+                    <div class="metric-item metric-pending"> <span class="metric-value" id="pendingCount">--</span>
+                        <span class="metric-label">Pendientes</span> </div>
                 </div>
-
-                <!-- Visualización Simple de Barra -->
                 <div class="payment-bar-container">
                     <div id="barPaid" class="bar-paid" title="Pagado Completo"></div>
                     <div id="barPartial" class="bar-partial" title="Pago Parcial"></div>
                     <div id="barPending" class="bar-pending" title="Pendiente"></div>
                 </div>
-
-                <!-- Tabla Resumen -->
                 <h5 class="text-center mt-4 mb-3">Detalle de Pagos del Mes</h5>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-sm table-summary">
@@ -261,10 +260,46 @@
         </div>
     </div>
 
+    <!-- Modal Detalle de Pago -->
+    <div class="modal fade" id="paymentDetailModal" tabindex="-1" aria-labelledby="paymentDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentDetailModalLabel">Detalle del Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6"><strong>Alumno:</strong> <span id="detailStudentName"></span></div>
+                        <div class="col-md-6"><strong>Mes/Año:</strong> <span id="detailMonthYear"></span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6"><strong>Monto Pagado:</strong> <span id="detailAmountPaid"></span></div>
+                        <div class="col-md-6"><strong>Fecha Pago:</strong> <span id="detailPaymentDate"></span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6"><strong>Tipo Pago:</strong> <span id="detailPaymentType"></span></div>
+                        <div class="col-md-6"><strong>Clases Pagadas:</strong> <span id="detailClassesPaidCount"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <h6>Fechas de Clase Cubiertas por este Pago:</h6>
+                    <ul id="paidClassesList" class="list-group list-group-flush">
+                        <li class="list-group-item text-muted">Calculando fechas...</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // No se necesita XLSX aquí
         function xlsxScriptLoaded() { console.log("XLSX loaded (not used here)."); }
         function xlsxScriptFailed() { console.error("Failed to load XLSX."); }
 
@@ -272,7 +307,6 @@
         const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
-        // Elementos del DOM para el resumen
         const summaryTitle = document.getElementById('summaryTitle');
         const totalCollectedEl = document.getElementById('totalCollected');
         const paidCountEl = document.getElementById('paidCount');
@@ -282,11 +316,19 @@
         const barPartialEl = document.getElementById('barPartial');
         const barPendingEl = document.getElementById('barPending');
         const summaryTableBody = document.getElementById('summaryTableBody');
+        const paymentDetailModalEl = document.getElementById('paymentDetailModal');
+        const paymentDetailModal = new bootstrap.Modal(paymentDetailModalEl);
 
-        // --- Utility Functions --- (Copied/Adapted from pagos.html)
+        // *** Declaración GLOBAL de las variables ***
+        let students = {};
+        let basePrices = {};
+        const defaultPrices = { duration40: 0, duration60: 0 }; // Default prices
+
+
         function getYearMonthKey(year, month) { return `${year}-${(month + 1).toString().padStart(2, '0')}`; }
         function formatCurrency(amount) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(amount); }
         function formatDate(dateString) { if (!dateString) return '-'; try { const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } catch (e) { return dateString; } }
+
         function countWeekdaysInMonth(year, month, targetDayName) {
             const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return 0;
             let count = 0; const date = new Date(Date.UTC(year, month, 1));
@@ -295,132 +337,122 @@
             return count;
         }
 
+        function getCoveredClassDates(year, month, targetDayName, classesPaid, isFullMonth) {
+            const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return [];
+            const dates = []; const date = new Date(Date.UTC(year, month, 1));
+            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+            for (let day = 1; day <= daysInMonth; day++) { date.setUTCDate(day); if (date.getUTCDay() === targetDayIndex) { dates.push(new Date(date.getTime())); } }
+            let coveredDates = [];
+            if (isFullMonth) { coveredDates = dates; }
+            else { coveredDates = dates.slice(0, classesPaid); }
+            return coveredDates.map(d => formatDate(d.toISOString().split('T')[0]));
+        }
+
         function loadAndProcessDashboardData() {
-            summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3">Cargando datos...</td></tr>'; // Clear table
-            let students = {};
-            let basePrices = {}; // Necesitamos precios para calcular total esperado vs pagado
+            summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3">Cargando datos...</td></tr>';
+            // *** NO declarar 'students' y 'basePrices' aquí con let/const ***
+            // *** Usar las variables globales declaradas fuera ***
 
             try {
                 const storedData = localStorage.getItem(paymentDataKey);
                 if (storedData) {
                     const parsedData = JSON.parse(storedData);
+                    // *** Asignar a las variables GLOBALES ***
                     students = parsedData.students || {};
-                    basePrices = parsedData.prices || { duration40: 0, duration60: 0 }; // Default a 0 si no hay precios
+                    basePrices = parsedData.prices || { ...defaultPrices }; // Usar spread para copia
                     console.log("Datos cargados para dashboard:", { students, basePrices });
                 } else {
                     console.log("No se encontraron datos de pagos/alumnos.");
+                    students = {}; // Asegurar que esté vacío si no hay datos
+                    basePrices = { ...defaultPrices }; // Usar defaults
                     summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-muted">No se encontraron datos guardados.</td></tr>';
-                    updateSummaryMetrics(0, 0, 0, 0, 0); // Update metrics to zero
-                    return; // No hay nada que procesar
+                    updateSummaryMetrics(0, 0, 0, 0, 0);
+                    return;
                 }
             } catch (error) {
                 console.error("Error cargando/parseando datos para dashboard:", error);
+                students = {}; // Asegurar que esté vacío en caso de error
+                basePrices = { ...defaultPrices }; // Usar defaults
                 summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-danger">Error al cargar los datos.</td></tr>';
-                updateSummaryMetrics(0, 0, 0, 0, 0); // Update metrics to zero
+                updateSummaryMetrics(0, 0, 0, 0, 0);
                 return;
             }
 
             const now = new Date();
             const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth(); // 0-11
+            const currentMonth = now.getMonth();
             const currentYearMonthKey = getYearMonthKey(currentYear, currentMonth);
             summaryTitle.textContent = `Resumen de Pagos - ${monthNames[currentMonth]} ${currentYear}`;
 
-            let totalCollected = 0;
-            let paidFullCount = 0;
-            let paidPartialCount = 0;
-            let pendingCount = 0;
-            const tableRows = [];
-            const totalStudents = Object.keys(students).length;
+            let totalCollected = 0; let paidFullCount = 0; let paidPartialCount = 0; let pendingCount = 0;
+            const tableRows = []; const totalStudents = Object.keys(students).length; // Calcular sobre el global 'students'
 
-            Object.values(students).forEach(student => {
-                if (!student.classDay || !student.duration) return; // Saltar si faltan datos
-
+            // *** Iterar sobre el global 'students' ***
+            Object.entries(students).forEach(([studentId, student]) => {
+                if (!student.classDay || !student.duration) return;
                 const classesInMonth = countWeekdaysInMonth(currentYear, currentMonth, student.classDay);
                 const payment = student.payments?.[currentYearMonthKey];
-
-                let statusText = 'Pendiente';
-                let rowClass = 'table-danger'; // Bootstrap class for pending
-                let amountPaidDisplay = '-';
-                let classesPaidDisplay = '-';
-                let paymentDateDisplay = '-';
+                let statusText = 'Pendiente'; let rowClass = 'table-danger'; // Default para pendiente (no clickable)
+                let dataAttributes = ''; let amountPaidDisplay = '-'; let classesPaidDisplay = '-'; let paymentDateDisplay = '-';
 
                 if (payment) {
-                    totalCollected += payment.amountPaid;
-                    amountPaidDisplay = formatCurrency(payment.amountPaid);
+                    rowClass = 'payment-row-clickable'; // Hacer clickeable si hay pago
+                    dataAttributes = `data-studentid="${studentId}" data-yearmonth="${currentYearMonthKey}"`;
+                    totalCollected += payment.amountPaid; amountPaidDisplay = formatCurrency(payment.amountPaid);
                     classesPaidDisplay = payment.isFullMonthPayment ? `Mes Completo (${payment.classesPaid})` : payment.classesPaid;
                     paymentDateDisplay = formatDate(payment.paymentDate);
+                    if (payment.isFullMonthPayment || payment.classesPaid >= classesInMonth) { statusText = 'Pagado (Completo)'; rowClass += ' table-success'; paidFullCount++; }
+                    else { statusText = `Parcial (${payment.classesPaid}/${classesInMonth})`; rowClass += ' table-warning'; paidPartialCount++; }
+                } else { pendingCount++; }
 
-                    if (payment.isFullMonthPayment || payment.classesPaid >= classesInMonth) {
-                        statusText = 'Pagado (Completo)';
-                        rowClass = 'table-success'; // Bootstrap class for paid full
-                        paidFullCount++;
-                    } else {
-                        statusText = `Parcial (${payment.classesPaid}/${classesInMonth})`;
-                        rowClass = 'table-warning'; // Bootstrap class for partial
-                        paidPartialCount++;
-                    }
-                } else {
-                    pendingCount++;
-                }
-
-                tableRows.push(`
-                    <tr class="${rowClass}">
-                        <td>${student.name}</td>
-                        <td>${statusText}</td>
-                        <td>${amountPaidDisplay}</td>
-                        <td>${classesPaidDisplay}</td>
-                        <td>${paymentDateDisplay}</td>
-                    </tr>
-                `);
+                tableRows.push(`<tr class="${rowClass}" ${dataAttributes}><td>${student.name}</td><td>${statusText}</td><td>${amountPaidDisplay}</td><td>${classesPaidDisplay}</td><td>${paymentDateDisplay}</td></tr>`);
             });
 
-            // Actualizar Métricas y Barra
             updateSummaryMetrics(totalCollected, paidFullCount, paidPartialCount, pendingCount, totalStudents);
 
-            // Renderizar Tabla
-            if (tableRows.length > 0) {
-                summaryTableBody.innerHTML = tableRows.join('');
-            } else if (totalStudents === 0) { // Chequear si el objeto students estaba vacío
-                summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-muted">No hay alumnos registrados.</td></tr>';
-            } else { // Si hay alumnos pero ninguno en la tabla (ej. todos sin datos)
-                summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-warning">No hay datos de alumnos válidos para mostrar.</td></tr>';
-            }
+            if (tableRows.length > 0) { summaryTableBody.innerHTML = tableRows.join(''); }
+            else if (totalStudents === 0) { summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-muted">No hay alumnos registrados.</td></tr>'; }
+            else { summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-warning">No hay datos válidos.</td></tr>'; }
         }
 
         function updateSummaryMetrics(total, paid, partial, pending, totalStudents) {
-            totalCollectedEl.textContent = formatCurrency(total);
-            paidCountEl.textContent = paid;
-            partialCountEl.textContent = partial;
-            pendingCountEl.textContent = pending;
-
-            // Actualizar Barra Visual
-            if (totalStudents > 0) {
-                const paidPercent = (paid / totalStudents) * 100;
-                const partialPercent = (partial / totalStudents) * 100;
-                // El resto es pendiente
-                barPaidEl.style.width = `${paidPercent}%`;
-                barPartialEl.style.width = `${partialPercent}%`;
-                barPendingEl.style.width = `${100 - paidPercent - partialPercent}%`; // Ajusta el restante
-                // Añadir tooltips descriptivos
-                barPaidEl.title = `${paid} (${paidPercent.toFixed(1)}%) Pagado Completo`;
-                barPartialEl.title = `${partial} (${partialPercent.toFixed(1)}%) Pago Parcial`;
-                barPendingEl.title = `${pending} (${(100 - paidPercent - partialPercent).toFixed(1)}%) Pendiente`;
-            } else {
-                barPaidEl.style.width = '0%';
-                barPartialEl.style.width = '0%';
-                barPendingEl.style.width = '100%'; // Mostrar barra como pendiente si no hay alumnos
-                barPaidEl.title = 'Pagado Completo';
-                barPartialEl.title = 'Pago Parcial';
-                barPendingEl.title = 'Pendiente';
-            }
+            totalCollectedEl.textContent = formatCurrency(total); paidCountEl.textContent = paid;
+            partialCountEl.textContent = partial; pendingCountEl.textContent = pending;
+            if (totalStudents > 0) { const paidPercent = (paid / totalStudents) * 100; const partialPercent = (partial / totalStudents) * 100; const pendingPercent = 100 - paidPercent - partialPercent; barPaidEl.style.width = `${paidPercent}%`; barPartialEl.style.width = `${partialPercent}%`; barPendingEl.style.width = `${pendingPercent}%`; barPaidEl.title = `${paid} (${paidPercent.toFixed(1)}%) Pagado Completo`; barPartialEl.title = `${partial} (${partialPercent.toFixed(1)}%) Pago Parcial`; barPendingEl.title = `${pending} (${pendingPercent.toFixed(1)}%) Pendiente`; }
+            else { barPaidEl.style.width = '0%'; barPartialEl.style.width = '0%'; barPendingEl.style.width = '100%'; barPaidEl.title = ''; barPartialEl.title = ''; barPendingEl.title = ''; }
         }
 
+        function openPaymentDetailModal(studentId, yearMonth) {
+            // *** Acceder a la variable GLOBAL 'students' ***
+            const student = students[studentId];
+            const payment = student?.payments?.[yearMonth];
+            if (!student || !payment) { console.error(`No data found for ${studentId}, ${yearMonth}`); Swal.fire('Error', 'Info detallada no encontrada.', 'error'); return; }
 
-        // --- INITIALIZATION ---
+            const [year, monthNum] = yearMonth.split('-').map(Number);
+            const month = monthNum - 1; const monthName = monthNames[month];
+            const coveredDates = getCoveredClassDates(year, month, student.classDay, payment.classesPaid, payment.isFullMonthPayment);
+            document.getElementById('detailStudentName').textContent = student.name;
+            document.getElementById('detailMonthYear').textContent = `${monthName} ${year}`;
+            document.getElementById('detailAmountPaid').textContent = formatCurrency(payment.amountPaid);
+            document.getElementById('detailPaymentDate').textContent = formatDate(payment.paymentDate);
+            document.getElementById('detailPaymentType').textContent = payment.isFullMonthPayment ? 'Mes Completo' : 'Parcial';
+            document.getElementById('detailClassesPaidCount').textContent = payment.classesPaid;
+            const listElement = document.getElementById('paidClassesList'); listElement.innerHTML = '';
+            if (coveredDates.length > 0) { coveredDates.forEach(dateStr => { const li = document.createElement('li'); li.className = 'list-group-item'; li.textContent = dateStr; listElement.appendChild(li); }); }
+            else { listElement.innerHTML = '<li class="list-group-item text-muted">No se calcularon fechas.</li>'; }
+            paymentDetailModal.show();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            loadAndProcessDashboardData();
-            // Podrías añadir un botón para refrescar los datos si es necesario
+            loadAndProcessDashboardData(); // Carga los datos en las variables globales
+
+            summaryTableBody.addEventListener('click', (event) => {
+                const clickedRow = event.target.closest('tr.payment-row-clickable');
+                if (clickedRow?.dataset.studentid && clickedRow?.dataset.yearmonth) {
+                    openPaymentDetailModal(clickedRow.dataset.studentid, clickedRow.dataset.yearmonth);
+                }
+            });
+            // Puedes añadir otros listeners aquí si es necesario
         });
     </script>
 
