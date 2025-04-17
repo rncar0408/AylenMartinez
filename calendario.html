@@ -580,7 +580,7 @@
                 Swal.fire({ icon: 'success', title: '¡Guardado!', text: `Reserva para ${nombre} guardada correctamente.`, showConfirmButton: false, timer: 1500 });
             };
             if (esEdicion) {
-                Swal.fire({ title: 'Confirmar Cambios', text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí, guardar', cancelButtonText: 'Cancelar' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } });
+                Swal.fire({ title: 'Confirmar Cambios', text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#d9e6cc', cancelButtonColor: '#f3a391', confirmButtonText: 'Sí, guardar', cancelButtonText: 'Cancelar' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } });
             } else { ejecutarGuardado(); }
         };
         document.getElementById('eliminarBtn').onclick = () => {
@@ -588,7 +588,7 @@
             const hora = document.getElementById('horaInicio').value;
             const key = `${dia}-${hora}`;
             if (!reservas[key]) { Swal.fire('Error', 'No se encontró la reserva para eliminar.', 'error'); return; }
-            Swal.fire({ title: '¿Estás seguro?', text: `Estás a punto de eliminar la reserva de "${reservas[key]?.nombre || 'esta clase'}". ¡Esta acción no se puede deshacer!`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar' }).then((result) => {
+            Swal.fire({ title: '¿Estás seguro?', text: `Estás a punto de eliminar la reserva de "${reservas[key]?.nombre || 'esta clase'}". ¡Esta acción no se puede deshacer!`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d9e6cc', cancelButtonColor: '#f3a391', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar' }).then((result) => {
                 if (result.isConfirmed) {
                     if (reservas[key]) {
                         delete reservas[key];
