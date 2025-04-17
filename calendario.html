@@ -15,6 +15,11 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
+    <!-- Include XLSX library with onload/onerror handlers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha512-r22gChDnGvCbOBVEEYcvbRPcfTaXflcJrycv5fK7NfYMhAxtQQEz3O4ht6iAnWvSMnCjU/hV9YEr7+5JaK9MAA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
+        </script>
     <style>
         body {
             background-color: #dde9ce !important;
@@ -111,42 +116,34 @@
             color: #212529;
         }
 
-        /* Ochre */
         .tipo-grupal {
             background-color: #95bf35;
             border-color: #85ab25;
             color: #212529;
         }
 
-        /* Lime Green */
         .tipo-ayuda-ingreso {
             background-color: #d8d02a;
             border-color: #c6c01a;
             color: #212529;
         }
 
-        /* Yellow-Green */
         .tipo-desde-tres-anios {
             background-color: #2ab0d8;
             border-color: #1a9fc6;
             color: #fff;
         }
 
-        /* Cyan Blue */
         .tipo-piano-terapeutico {
             background-color: #f59e90;
             border-color: #e38e80;
             color: #212529;
         }
 
-        /* Salmon Pink */
         .tipo-default {
             background-color: #6c757d;
             border-color: #5c636a;
         }
-
-        /* Default Grey */
-
 
         .reserved strong {
             display: block;
@@ -226,17 +223,24 @@
                     </svg>
                     Exportar PDF
                 </button>
-                <button id="exportDataBtn" class="btn btn-outline-success btn-sm btn-bock">
-                    <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
-                        <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
+                <button id="exportExcelBtn" class="btn btn-outline-success btn-sm btn-bock" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-spreadsheet me-1" viewBox="0 0 16 16">
                         <path
-                            d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z" />
-                        <path fill-rule="evenodd"
-                            d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
+                            d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9h-3V6h1V4.5h-1A1.5 1.5 0 0 1 9.5 3M3 11h10v1h-3v2h3v1h-3v2H9v-2H6v2H5v-2H3z" />
+                        <path d="M3 6h10v3H3z" />
                     </svg>
-                    Exportar Datos (.json)
+                    Exportar Excel
+                </button>
+                <button id="exportDataBtn" class="btn btn-outline-secondary btn-sm btn-bock">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-code me-1" viewBox="0 0 16 16">
+                        <path
+                            d="M14.5 14a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 14V2A1.5 1.5 0 0 1 3 0.5H13A1.5 1.5 0 0 1 14.5 2zm-1.5.5a.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5z" />
+                        <path
+                            d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0m2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0" />
+                    </svg>
+                    Exportar JSON
                 </button>
                 <button id="importDataBtn" class="btn btn-outline-primary btn-sm btn-bock">
                     <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -248,7 +252,7 @@
                         <path fill-rule="evenodd"
                             d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
                     </svg>
-                    Importar Datos (.json)
+                    Importar JSON
                 </button>
                 <input type="file" id="fileInput" accept=".txt, .json" style="display: none;" />
             </div>
@@ -299,8 +303,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn me-auto" id="eliminarBtn"
-                        style="display: none; background-color: #f3a391;">
+                    <button type="button" class="btn btn-danger me-auto" id="eliminarBtn" style="display: none;">
                         <svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path
                                 d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
@@ -310,7 +313,7 @@
                         Eliminar
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn" style="background-color: #dde9ce !important;" id="guardarBtn">
+                    <button type="button" class="btn btn-primary" id="guardarBtn">
                         Guardar
                     </button>
                 </div>
@@ -321,19 +324,54 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // --- Funciones de Callback para carga de script XLSX (Definidas Globalmente) ---
+        function xlsxScriptLoaded() {
+            console.log("XLSX library loaded successfully.");
+            const btn = document.getElementById('exportExcelBtn');
+            if (btn) {
+                btn.disabled = false; // Habilitar el botón
+                console.log("Excel export button enabled.");
+            } else {
+                // Intentar de nuevo después de un pequeño retraso si el DOM no estaba listo
+                setTimeout(() => {
+                    const retryBtn = document.getElementById('exportExcelBtn');
+                    if (retryBtn) retryBtn.disabled = false;
+                    else console.error("Excel export button not found even after delay.");
+                }, 500);
+            }
+        }
+
+        function xlsxScriptFailed() {
+            console.error("Failed to load XLSX library.");
+            const btn = document.getElementById('exportExcelBtn');
+            if (btn) {
+                btn.title = "Error al cargar librería Excel";
+                // Podrías añadir una clase para indicar visualmente el error
+                btn.classList.add('btn-danger'); // O alguna otra clase visual
+                btn.innerHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/></svg> Error Excel';
+            }
+            Swal.fire('Error Crítico', 'No se pudo cargar la librería necesaria para exportar a Excel. Por favor, revisa tu conexión a internet y recarga la página.', 'error');
+        }
+        // --- Fin Funciones Callback ---
+
+
+        // EmailJS Init
         (function () {
             emailjs.init({ publicKey: "qOfrwmjiPJNVT91sk" });
         })();
 
+        // DOM Elements (declaradas aquí para scope global dentro del script)
         const calendar = document.getElementById('calendar');
         const downloadImageBtn = document.getElementById('downloadImageBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
         const exportDataBtn = document.getElementById('exportDataBtn');
         const importDataBtn = document.getElementById('importDataBtn');
+        const exportExcelBtn = document.getElementById('exportExcelBtn');
         const fileInput = document.getElementById('fileInput');
         const reservaForm = document.getElementById('reservaForm');
         const eliminarBtn = document.getElementById('eliminarBtn');
 
+        // Global Config & Variables
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         const startHour = 15 * 60;
         const endHour = 21 * 60;
@@ -391,19 +429,15 @@
                 const dayColumn = document.createElement('div');
                 dayColumn.className = 'day';
                 dayColumn.innerHTML = `<h5>${day}</h5>`;
-
                 hours.forEach(min => {
                     const horaStr = formatHora(min);
                     const slotKey = `${day}-${horaStr}`;
                     const reservaQueIniciaAqui = reservas[slotKey];
-
                     if (reservaQueIniciaAqui) {
                         const hourDiv = document.createElement('div');
                         const reservaTipo = reservaQueIniciaAqui.tipo;
                         const tipoClass = getTipoClass(reservaTipo);
-
                         hourDiv.classList.add('hour', 'reserved', tipoClass);
-
                         hourDiv.innerHTML = `<strong>${reservaQueIniciaAqui.nombre}</strong><br>${reservaQueIniciaAqui.horaInicio} - ${reservaQueIniciaAqui.horaFin} (${reservaQueIniciaAqui.duracion} min)<br><small>${reservaQueIniciaAqui.tipo}</small>`;
                         hourDiv.onclick = () => abrirModal(day, horaStr, reservaQueIniciaAqui);
                         dayColumn.appendChild(hourDiv);
@@ -508,14 +542,7 @@
         function enviarCorreoReserva(datosReserva) {
             const serviceID = 'service_93zs6up';
             const templateID = 'template_352le9n';
-            const templateParams = {
-                day: datosReserva.dia,
-                horaInicio: datosReserva.horaInicio,
-                horaFin: datosReserva.horaFin,
-                name: datosReserva.nombre,
-                type: datosReserva.tipo,
-                duration: datosReserva.duracion
-            };
+            const templateParams = { day: datosReserva.dia, horaInicio: datosReserva.horaInicio, horaFin: datosReserva.horaFin, name: datosReserva.nombre, type: datosReserva.tipo, duration: datosReserva.duracion };
             console.log("Enviando correo con parámetros:", templateParams);
             emailjs.send(serviceID, templateID, templateParams)
                 .then(response => {
@@ -531,96 +558,66 @@
 
         document.getElementById('guardarBtn').onclick = () => {
             if (!reservaForm.checkValidity()) { reservaForm.classList.add('was-validated'); return; }
-            const dia = document.getElementById('reservaDia').value;
-            const horaInicioStr = document.getElementById('horaInicio').value;
-            const nombre = document.getElementById('nombre').value.trim();
-            const tipo = document.getElementById('tipo').value;
+            const dia = document.getElementById('reservaDia').value; const horaInicioStr = document.getElementById('horaInicio').value;
+            const nombre = document.getElementById('nombre').value.trim(); const tipo = document.getElementById('tipo').value;
             const duracion = parseInt(document.getElementById('duracion').value);
             if (isNaN(duracion) || duracion <= 0) { Swal.fire('Error', 'La duración debe ser un número positivo.', 'error'); return; }
-            const [h, m] = horaInicioStr.split(':').map(Number);
-            const inicioMin = h * 60 + m;
-            const finMin = inicioMin + duracion;
+            const [h, m] = horaInicioStr.split(':').map(Number); const inicioMin = h * 60 + m; const finMin = inicioMin + duracion;
             if (finMin > endHour) { Swal.fire('Error', `La clase no puede terminar después de las ${formatHora(endHour)}. Verifica la duración o la hora de inicio.`, 'error'); return; }
-            const horaFinStr = formatHora(finMin);
-            const slotKey = `${dia}-${horaInicioStr}`;
-            let conflicto = false;
-            let reservaConflictiva = null;
+            const horaFinStr = formatHora(finMin); const slotKey = `${dia}-${horaInicioStr}`;
+            let conflicto = false; let reservaConflictiva = null;
             for (const key in reservas) {
-                if (key === slotKey) continue;
-                const reservaExistente = reservas[key];
-                if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue;
-                const parts = key.split('-');
-                if (parts.length < 2) continue;
+                if (key === slotKey) continue; const reservaExistente = reservas[key];
+                if (!key || typeof key !== 'string' || key.indexOf('-') === -1) continue; const parts = key.split('-'); if (parts.length < 2) continue;
                 const resDiaExistente = parts.slice(0, -1).join('-');
                 if (resDiaExistente !== dia || !reservaExistente || typeof reservaExistente !== 'object' || !reservaExistente.horaInicio || typeof reservaExistente.horaInicio !== 'string' || typeof reservaExistente.duracion !== 'number' || isNaN(reservaExistente.duracion)) continue;
-                const horaPartsExistente = reservaExistente.horaInicio.split(':');
-                if (horaPartsExistente.length !== 2) continue;
-                const rhC = parseInt(horaPartsExistente[0], 10);
-                const rmC = parseInt(horaPartsExistente[1], 10);
-                if (isNaN(rhC) || isNaN(rmC)) continue;
-                const rInicioC = rhC * 60 + rmC;
-                const rFinC = rInicioC + reservaExistente.duracion;
+                const horaPartsExistente = reservaExistente.horaInicio.split(':'); if (horaPartsExistente.length !== 2) continue;
+                const rhC = parseInt(horaPartsExistente[0], 10); const rmC = parseInt(horaPartsExistente[1], 10); if (isNaN(rhC) || isNaN(rmC)) continue;
+                const rInicioC = rhC * 60 + rmC; const rFinC = rInicioC + reservaExistente.duracion;
                 if (inicioMin < rFinC && finMin > rInicioC) { conflicto = true; reservaConflictiva = reservaExistente; break; }
             }
             if (conflicto) { Swal.fire('Error de Conflicto', `La reserva propuesta (${horaInicioStr} - ${horaFinStr}) se solapa con la clase de "${reservaConflictiva.nombre}" (${reservaConflictiva.horaInicio} - ${reservaConflictiva.horaFin}).`, 'error'); return; }
             const esEdicion = eliminarBtn.style.display !== 'none';
             const ejecutarGuardado = () => {
                 const datosParaGuardar = { nombre, tipo, duracion, horaInicio: horaInicioStr, horaFin: horaFinStr };
-                const horaOriginalClickeada = document.getElementById('reservaHora').value;
-                const slotKeyOriginal = `${dia}-${horaOriginalClickeada}`;
+                const horaOriginalClickeada = document.getElementById('reservaHora').value; const slotKeyOriginal = `${dia}-${horaOriginalClickeada}`;
                 if (esEdicion && slotKey !== slotKeyOriginal && reservas[slotKeyOriginal]) { delete reservas[slotKeyOriginal]; }
-                reservas[slotKey] = datosParaGuardar;
-                guardarReservasEnLocalStorage();
-                const datosParaCorreo = { dia, horaInicio: horaInicioStr, horaFin: horaFinStr, nombre, tipo, duracion };
-                enviarCorreoReserva(datosParaCorreo);
-                const mE = document.getElementById('reservaModal');
-                const mI = bootstrap.Modal.getInstance(mE);
-                if (mI) mI.hide();
-                renderCalendar();
-                Swal.fire({ icon: 'success', title: '¡Guardado!', text: `Reserva para ${nombre} guardada correctamente.`, showConfirmButton: false, timer: 1500 });
+                reservas[slotKey] = datosParaGuardar; guardarReservasEnLocalStorage();
+                const datosParaCorreo = { dia, horaInicio: horaInicioStr, horaFin: horaFinStr, nombre, tipo, duracion }; enviarCorreoReserva(datosParaCorreo);
+                const mE = document.getElementById('reservaModal'); const mI = bootstrap.Modal.getInstance(mE); if (mI) mI.hide();
+                renderCalendar(); Swal.fire({ icon: 'success', title: '¡Guardado!', text: `Reserva para ${nombre} guardada correctamente.`, showConfirmButton: false, timer: 1500 });
             };
-            if (esEdicion) {
-                Swal.fire({ title: 'Confirmar Cambios', text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#d9e6cc', cancelButtonColor: '#f3a391', confirmButtonText: 'Sí, guardar', cancelButtonText: 'Cancelar' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } });
-            } else { ejecutarGuardado(); }
+            if (esEdicion) { Swal.fire({ title: 'Confirmar Cambios', text: `¿Estás seguro de guardar los cambios para la reserva de "${nombre}"?`, icon: 'question', showCancelButton: true, confirmButtonColor: '#d9e6cc', cancelButtonColor: '#f3a391', confirmButtonText: 'Sí, guardar', cancelButtonText: 'Cancelar' }).then((result) => { if (result.isConfirmed) { ejecutarGuardado(); } }); } else { ejecutarGuardado(); }
         };
         document.getElementById('eliminarBtn').onclick = () => {
-            const dia = document.getElementById('reservaDia').value;
-            const hora = document.getElementById('horaInicio').value;
-            const key = `${dia}-${hora}`;
+            const dia = document.getElementById('reservaDia').value; const hora = document.getElementById('horaInicio').value; const key = `${dia}-${hora}`;
             if (!reservas[key]) { Swal.fire('Error', 'No se encontró la reserva para eliminar.', 'error'); return; }
             Swal.fire({ title: '¿Estás seguro?', text: `Estás a punto de eliminar la reserva de "${reservas[key]?.nombre || 'esta clase'}". ¡Esta acción no se puede deshacer!`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d9e6cc', cancelButtonColor: '#f3a391', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar' }).then((result) => {
-                if (result.isConfirmed) {
-                    if (reservas[key]) {
-                        delete reservas[key];
-                        guardarReservasEnLocalStorage();
-                        const mE = document.getElementById('reservaModal');
-                        const mI = bootstrap.Modal.getInstance(mE);
-                        if (mI) mI.hide();
-                        renderCalendar();
-                        Swal.fire('¡Eliminado!', 'La reserva ha sido eliminada.', 'success');
-                    } else { Swal.fire('Error', 'No se pudo eliminar la reserva porque ya no existe.', 'error'); renderCalendar(); }
-                }
+                if (result.isConfirmed) { if (reservas[key]) { delete reservas[key]; guardarReservasEnLocalStorage(); const mE = document.getElementById('reservaModal'); const mI = bootstrap.Modal.getInstance(mE); if (mI) mI.hide(); renderCalendar(); Swal.fire('¡Eliminado!', 'La reserva ha sido eliminada.', 'success'); } else { Swal.fire('Error', 'No se pudo eliminar la reserva porque ya no existe.', 'error'); renderCalendar(); } }
             });
         };
 
         function setExportButtonLoading(isLoading) {
-            const buttons = [downloadImageBtn, downloadPdfBtn, exportDataBtn, importDataBtn];
-            buttons.forEach(btn => { if (btn) btn.disabled = isLoading; });
-
+            const buttons = [downloadImageBtn, downloadPdfBtn, exportExcelBtn, exportDataBtn, importDataBtn];
+            buttons.forEach(btn => { if (btn && btn.id !== 'exportExcelBtn') btn.disabled = isLoading; });
+            if (exportExcelBtn) { exportExcelBtn.disabled = isLoading || (typeof window.XLSX === 'undefined'); }
             const loadingSpinner = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
             const imgIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/></svg> Exportar Imagen';
             const pdfIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/><path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z"/></svg> Exportar PDF';
-            const exportDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Exportar Datos (.json)';
-            const importDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar Datos (.json)';
+            const excelIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet me-1" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9h-3V6h1V4.5h-1A1.5 1.5 0 0 1 9.5 3M3 11h10v1h-3v2h3v1h-3v2H9v-2H6v2H5v-2H3z"/><path d="M3 6h10v3H3z"/></svg> Exportar Excel';
+            const exportDataIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-code me-1" viewBox="0 0 16 16"><path d="M14.5 14a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 14V2A1.5 1.5 0 0 1 3 0.5H13A1.5 1.5 0 0 1 14.5 2zm-1.5.5a.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5z"/><path d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0m2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0"/></svg> Exportar JSON';
+            const importDataIconHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar JSON';
 
             if (isLoading) {
                 if (downloadImageBtn) downloadImageBtn.innerHTML = loadingSpinner;
                 if (downloadPdfBtn) downloadPdfBtn.innerHTML = loadingSpinner;
+                if (exportExcelBtn) exportExcelBtn.innerHTML = loadingSpinner;
                 if (exportDataBtn) exportDataBtn.innerHTML = loadingSpinner;
                 if (importDataBtn) importDataBtn.innerHTML = loadingSpinner;
             } else {
                 if (downloadImageBtn) downloadImageBtn.innerHTML = imgIconHTML;
                 if (downloadPdfBtn) downloadPdfBtn.innerHTML = pdfIconHTML;
+                if (exportExcelBtn) exportExcelBtn.innerHTML = excelIconHTML;
                 if (exportDataBtn) exportDataBtn.innerHTML = exportDataIconHTML;
                 if (importDataBtn) importDataBtn.innerHTML = importDataIconHTML;
             }
@@ -631,19 +628,8 @@
                 const containerElement = document.getElementById('calendarContainer');
                 const originalPadding = containerElement.style.paddingBottom;
                 containerElement.style.paddingBottom = '30px';
-
                 const targetWidth = 1200;
-                const canvas = await html2canvas(containerElement, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: targetWidth,
-                    windowWidth: targetWidth,
-                    ignoreElements: (element) => element.classList.contains('action-buttons') || element.tagName === 'BUTTON' || element.tagName === 'INPUT',
-                    ...options
-                });
+                const canvas = await html2canvas(containerElement, { scale: 2, useCORS: true, logging: false, allowTaint: true, backgroundColor: '#ffffff', width: targetWidth, windowWidth: targetWidth, ignoreElements: (element) => element.classList.contains('action-buttons') || element.tagName === 'BUTTON' || element.tagName === 'INPUT', ...options });
                 containerElement.style.paddingBottom = originalPadding;
                 return canvas;
             } catch (err) {
@@ -660,17 +646,13 @@
                 const canvas = await captureCalendar();
                 const imageData = canvas.toDataURL('image/png');
                 const link = document.createElement('a');
-                link.href = imageData;
-                link.download = 'calendario-reservas.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                link.href = imageData; link.download = 'calendario-reservas.png';
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
                 Swal.fire({ icon: 'success', title: 'Imagen generada', showConfirmButton: false, timer: 1500 });
             } catch (err) {
                 console.error("Error generando imagen:", err);
                 Swal.fire('Error', 'No se pudo generar la imagen. Revisa la consola para detalles.', 'error');
-            }
-            finally { setExportButtonLoading(false); }
+            } finally { setExportButtonLoading(false); }
         });
         downloadPdfBtn.addEventListener('click', async () => {
             setExportButtonLoading(true);
@@ -680,8 +662,7 @@
                 const canvas = await captureCalendar();
                 const imgData = canvas.toDataURL('image/jpeg', 0.92);
                 const imgProps = { width: canvas.width, height: canvas.height };
-                const pdfWidth = 595.28;
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                const pdfWidth = 595.28; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
                 const orientation = pdfWidth > pdfHeight ? 'l' : 'p';
                 const pdf = new jsPDF({ orientation: orientation, unit: 'pt', format: 'a4' });
                 pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
@@ -690,8 +671,7 @@
             } catch (err) {
                 console.error("Error generando PDF:", err);
                 Swal.fire('Error', 'No se pudo generar el PDF. Revisa la consola para detalles.', 'error');
-            }
-            finally { setExportButtonLoading(false); }
+            } finally { setExportButtonLoading(false); }
         });
         exportDataBtn.addEventListener('click', () => {
             if (Object.keys(reservas).length === 0) { Swal.fire('Vacío', 'No hay reservas para exportar.', 'info'); return; }
@@ -700,11 +680,8 @@
                 const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
-                link.href = url;
-                link.download = `calendario_reservas_${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                link.href = url; link.download = `calendario_reservas_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 Swal.fire('¡Exportado!', 'Datos guardados en formato JSON (.json)', 'success');
             } catch (error) {
@@ -712,66 +689,107 @@
                 Swal.fire('Error', 'Ocurrió un error al exportar los datos.', 'error');
             }
         });
+
+        function exportarExcel() {
+            if (typeof window.XLSX === 'undefined') {
+                console.error("XLSX library not loaded yet!");
+                Swal.fire('Error', 'La librería para exportar a Excel no se ha cargado todavía. Por favor, espera un momento y vuelve a intentarlo. Asegúrate de tener conexión a internet.', 'error');
+                return;
+            }
+            if (Object.keys(reservas).length === 0) {
+                Swal.fire('Vacío', 'No hay reservas para exportar a Excel.', 'info');
+                return;
+            }
+            setExportButtonLoading(true);
+            try {
+                const dataForExcel = [];
+                const headers = ['Día', 'Hora Inicio', 'Hora Fin', 'Nombre', 'Tipo', 'Duración (min)'];
+                dataForExcel.push(headers);
+                const sortedKeys = Object.keys(reservas).sort((a, b) => {
+                    const [dayA, timeA] = a.split('-'); const [dayB, timeB] = b.split('-');
+                    const dayIndexA = days.indexOf(dayA); const dayIndexB = days.indexOf(dayB);
+                    if (dayIndexA !== dayIndexB) { return dayIndexA - dayIndexB; }
+                    return timeA.localeCompare(timeB);
+                });
+                sortedKeys.forEach(key => {
+                    const reserva = reservas[key];
+                    const dia = key.substring(0, key.lastIndexOf('-'));
+                    dataForExcel.push([dia, reserva.horaInicio, reserva.horaFin, reserva.nombre, reserva.tipo, reserva.duracion]);
+                });
+                const ws = window.XLSX.utils.aoa_to_sheet(dataForExcel);
+                const columnWidths = headers.map(header => ({ wch: header.length + 5 }));
+                dataForExcel.forEach(row => {
+                    row.forEach((cell, index) => {
+                        const len = cell ? String(cell).length : 0;
+                        if (columnWidths[index].wch < len + 2) { columnWidths[index].wch = len + 2; }
+                    });
+                });
+                columnWidths.forEach(col => { if (col.wch > 50) col.wch = 50; });
+                ws['!cols'] = columnWidths;
+                const wb = window.XLSX.utils.book_new();
+                window.XLSX.utils.book_append_sheet(wb, ws, 'Reservas');
+                const fecha = new Date().toISOString().split('T')[0];
+                window.XLSX.writeFile(wb, `reservas_calendario_${fecha}.xlsx`);
+                Swal.fire('¡Exportado!', 'Datos guardados en formato Excel (.xlsx)', 'success');
+            } catch (error) {
+                console.error("Error durante la generación de Excel:", error);
+                Swal.fire('Error', 'Ocurrió un error al generar el archivo Excel.', 'error');
+            } finally {
+                setExportButtonLoading(false);
+            }
+        }
+
         importDataBtn.addEventListener('click', () => { fileInput.click(); });
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) return;
             if (!file.type.match('application/json') && !file.name.endsWith('.json') && !file.name.endsWith('.txt')) {
                 Swal.fire('Archivo Inválido', 'Por favor, selecciona un archivo .json o .txt que contenga datos JSON válidos.', 'error');
-                fileInput.value = null;
-                return;
+                fileInput.value = null; return;
             }
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileContent = e.target.result;
                 try {
                     const importedData = JSON.parse(fileContent);
-                    if (typeof importedData !== 'object' || importedData === null || Array.isArray(importedData)) {
-                        throw new Error("El archivo no contiene un objeto JSON válido en la raíz.");
-                    }
+                    if (typeof importedData !== 'object' || importedData === null || Array.isArray(importedData)) { throw new Error("El archivo no contiene un objeto JSON válido en la raíz."); }
                     let dataIsValid = true;
-                    for (const key in importedData) {
-                        if (typeof key !== 'string' || key.indexOf('-') === -1 || typeof importedData[key] !== 'object' || !importedData[key].nombre || !importedData[key].horaInicio) {
-                            console.warn(`Entrada inválida encontrada durante la importación: Clave "${key}"`, importedData[key]);
-                            dataIsValid = false;
-                        }
-                    }
-                    if (!dataIsValid) {
-                        console.warn("Algunas entradas en el archivo importado podrían tener un formato inesperado.");
-                    }
+                    for (const key in importedData) { if (typeof key !== 'string' || key.indexOf('-') === -1 || typeof importedData[key] !== 'object' || !importedData[key].nombre || !importedData[key].horaInicio) { console.warn(`Entrada inválida encontrada: Clave "${key}"`, importedData[key]); dataIsValid = false; } }
+                    if (!dataIsValid) { console.warn("Algunas entradas en el archivo podrían tener formato inesperado."); }
                     Swal.fire({
-                        title: 'Confirmar Importación',
-                        html: `Se encontraron <b>${Object.keys(importedData).length}</b> reservas en el archivo.<br>¿Deseas reemplazar <b>TODAS</b> las reservas actuales con las del archivo? <br><b style='color:red;'>¡Esta acción es irreversible!</b>`,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, reemplazar',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            reservas = importedData;
-                            guardarReservasEnLocalStorage();
-                            renderCalendar();
-                            Swal.fire('¡Importado!', 'Las reservas han sido actualizadas desde el archivo.', 'success');
-                        }
-                    });
+                        title: 'Confirmar Importación', html: `Se encontraron <b>${Object.keys(importedData).length}</b> reservas.<br>¿Reemplazar <b>TODAS</b> las reservas actuales? <br><b style='color:red;'>¡Acción irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Sí, reemplazar', cancelButtonText: 'Cancelar'
+                    }).then((result) => { if (result.isConfirmed) { reservas = importedData; guardarReservasEnLocalStorage(); renderCalendar(); Swal.fire('¡Importado!', 'Las reservas han sido actualizadas.', 'success'); } });
                 } catch (error) {
-                    console.error("Error procesando archivo importado:", error);
-                    Swal.fire('Error de Importación', `No se pudo procesar el archivo. Asegúrate de que sea un archivo JSON válido.\nError: ${error.message}`, 'error');
-                }
-                finally {
-                    fileInput.value = null;
-                }
+                    console.error("Error procesando archivo:", error);
+                    Swal.fire('Error de Importación', `No se pudo procesar archivo. ¿JSON válido?\nError: ${error.message}`, 'error');
+                } finally { fileInput.value = null; }
             };
-            reader.onerror = (e) => {
-                Swal.fire('Error de Lectura', 'No se pudo leer el archivo seleccionado.', 'error');
-                fileInput.value = null;
-            };
+            reader.onerror = (e) => { Swal.fire('Error de Lectura', 'No se pudo leer archivo.', 'error'); fileInput.value = null; };
             reader.readAsText(file);
         });
 
-        document.addEventListener('DOMContentLoaded', cargarReservasDesdeLocalStorage);
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarReservasDesdeLocalStorage();
+            // Attach other listeners here
+            if (downloadImageBtn) downloadImageBtn.addEventListener('click', async () => {/*...*/ });
+            if (downloadPdfBtn) downloadPdfBtn.addEventListener('click', async () => {/*...*/ });
+            if (exportDataBtn) exportDataBtn.addEventListener('click', () => {/*...*/ });
+            if (importDataBtn) importDataBtn.addEventListener('click', () => fileInput.click());
+            if (fileInput) fileInput.addEventListener('change', (event) => {/*...*/ });
+            if (eliminarBtn) eliminarBtn.addEventListener('click', () => {/*...*/ });
+            if (guardarBtn) guardarBtn.addEventListener('click', () => {/*...*/ });
+            if (duracion) duracion.addEventListener('change', actualizarHoraFin);
+            // Attach Excel listener
+            if (exportExcelBtn) {
+                exportExcelBtn.addEventListener('click', exportarExcel);
+                // Check initial load state just in case XLSX loaded faster than DOMContentLoaded
+                if (typeof window.XLSX !== 'undefined') {
+                    xlsxScriptLoaded(); // Enable if already loaded
+                }
+            } else {
+                console.error("Botón de exportar Excel no encontrado en DOMContentLoaded.");
+            }
+        });
     </script>
 
 </body>
