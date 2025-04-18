@@ -20,55 +20,134 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
         </script>
     <style>
+        /* --- START: Copied styles for background #dde9ce and responsiveness --- */
         body {
-            background-color: #eef2f7 !important;
+            /* --- Applied new background color --- */
+            background-color: #dde9ce !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
             line-height: 1.6;
+            color: #333;
+            /* Default text color */
+        }
+
+        .container.py-5 {
+            padding-top: 2rem !important;
+            /* Reduced top padding slightly */
+            padding-bottom: 3rem !important;
         }
 
         .payment-container {
             background: #ffffff;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            /* --- Slightly enhanced shadow for more definition --- */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
+        /* Link style */
+        .back-to-dashboard {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .back-to-dashboard:hover {
+            color: #0a58ca;
+            text-decoration: underline;
+        }
+
+        .back-to-dashboard svg {
+            margin-bottom: 2px;
+            /* Align icon better */
+        }
+
+
         .price-section {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background-color: #f0f4f0;
+            /* Slightly adjusted color to blend */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             align-items: center;
-            border: 1px solid #dee2e6;
-            gap: 10px;
+            border: 1px solid #ced4da;
+            gap: 15px;
         }
 
         .price-display {
             text-align: center;
+            font-size: 1rem;
+            color: #555;
         }
 
         .price-display span {
             font-weight: bold;
             color: #0d6efd;
+            /* Bootstrap primary color */
+            font-size: 1.1rem;
+        }
+
+        #editPricesBtn {
+            font-weight: 500;
         }
 
         .month-navigation {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             gap: 15px;
         }
 
+        .month-navigation .btn {
+            padding: 0.375rem 0.75rem;
+            /* Standard Bootstrap button padding */
+        }
+
         .month-display {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 500;
-            min-width: 180px;
+            min-width: 200px;
+            /* Wider display */
             text-align: center;
+            color: #2c3e50;
+            /* Darker color for emphasis */
+        }
+
+        hr {
+            border-top: 1px solid #ccc;
+            /* Slightly darker separator */
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .action-buttons-main {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 15px;
+            padding: 0 15px;
+            /* Add padding on small screens */
+        }
+
+        .action-buttons-main .btn {
+            margin: 6px 10px;
+            font-weight: 500;
+            /* Slightly bolder text */
+            /* Making main buttons solid */
+            /* btn-success and btn-primary classes will be added directly in HTML below */
+        }
+
+        #studentListTitle {
+            color: #34495e;
+            /* Darker heading color */
+            font-weight: 600;
         }
 
         .student-list {
@@ -81,54 +160,82 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
-            transition: box-shadow 0.2s ease;
+            padding: 18px 25px;
+            /* Slightly more padding */
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: 1px solid #d5dce5;
+            /* Softer border */
+            background-color: #fdfdfe;
+            /* Very light background for items */
+            transition: box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
         .student-item:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border-color: #adb5bd;
         }
 
         .student-info {
-            flex-basis: 40%;
-            min-width: 200px;
+            flex: 1 1 45%;
+            /* Grow, shrink, basis */
+            min-width: 220px;
+            /* Slightly larger min-width */
+            padding-right: 15px;
+            /* Space between sections */
         }
 
         .payment-status-details {
-            flex-basis: 35%;
-            min-width: 180px;
+            flex: 1 1 30%;
+            min-width: 190px;
             text-align: right;
+            padding-right: 15px;
+            /* Space between sections */
         }
 
         .payment-actions {
-            flex-basis: 20%;
-            min-width: 150px;
+            flex: 0 0 auto;
+            /* Don't grow or shrink, size based on content */
+            min-width: 160px;
+            /* Adjust if needed */
             text-align: right;
-            margin-top: 5px;
             display: flex;
-            gap: 5px;
+            gap: 8px;
+            /* Increased gap */
             justify-content: flex-end;
+            align-items: center;
+            /* Vertically align buttons if they wrap */
+        }
+
+        /* Style for buttons generated by JS */
+        .payment-actions .btn {
+            display: inline-flex;
+            /* Align icon and text */
+            align-items: center;
+            gap: 4px;
         }
 
         .student-info span {
             display: block;
+            margin-bottom: 2px;
+            /* Small gap between lines */
         }
 
         .student-name {
             font-weight: 600;
-            font-size: 1.1rem;
-            color: #333;
+            font-size: 1.15rem;
+            /* Slightly larger name */
+            color: #2c3e50;
         }
 
         .class-slot,
         .class-duration {
             font-size: 0.9rem;
-            color: #555;
+            color: #5a6a7a;
+            /* Slightly darker gray */
         }
 
+        /* Status colors remain the same, but check contrast */
         .status-paid-full {
             color: #198754;
             font-weight: bold;
@@ -150,51 +257,195 @@
         .payment-details {
             font-size: 0.85rem;
             color: #6c757d;
-            margin-top: 3px;
+            margin-top: 5px;
         }
 
+        /* Modal Styles - Mostly Bootstrap, but ensure content looks good */
+        .modal-header {
+            border-bottom: none;
+            /* Cleaner look */
+        }
+
+        .modal-header .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            /* Ensure close button is visible */
+        }
+
+        .modal-body p strong {
+            color: #333;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            /* Separator */
+            background-color: #f8f9fa;
+            /* Light background for footer */
+        }
+
+
+        /* Receipt Styles */
         #receiptContent {
-            border: 1px dashed #ccc;
-            padding: 25px;
+            border: 1px dashed #aaa;
+            /* Darker dashed border */
+            padding: 30px;
+            /* More padding */
             margin: 20px auto;
-            max-width: 500px;
-            font-family: 'Courier New', Courier, monospace;
+            max-width: 550px;
+            /* Slightly wider */
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            /* Monospace font */
             background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            /* Subtle shadow */
         }
 
         #receiptContent h4 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            font-size: 1.3rem;
+            color: #333;
         }
 
         #receiptContent p {
-            margin-bottom: 8px;
-            line-height: 1.5;
-            font-size: 0.95rem;
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 1rem;
+            /* Slightly larger text */
+        }
+
+        #receiptContent p strong {
+            display: inline-block;
+            min-width: 140px;
+            /* Align values */
         }
 
         #receiptContent .receipt-footer {
-            margin-top: 30px;
+            margin-top: 35px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #777;
+            border-top: 1px dotted #ccc;
+            padding-top: 15px;
         }
 
         .modal-lg-receipt {
             max-width: 700px;
         }
 
-        .action-buttons-main {
-            text-align: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 767.98px) {
+            .price-section {
+                flex-direction: column;
+                /* Stack prices vertically */
+                align-items: stretch;
+                /* Stretch items */
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .price-display {
+                text-align: left;
+                /* Align left on small screens */
+                padding-left: 10px;
+            }
+
+            #editPricesBtn {
+                align-self: center;
+                /* Center button */
+                margin-top: 10px;
+            }
+
+            .student-item {
+                flex-direction: column;
+                /* Stack sections vertically */
+                align-items: stretch;
+                /* Align items to stretch full width */
+                padding: 15px;
+                /* Adjust padding */
+            }
+
+            .student-info,
+            .payment-status-details,
+            .payment-actions {
+                flex-basis: auto;
+                /* Reset flex-basis */
+                width: 100%;
+                /* Take full width */
+                text-align: left;
+                /* Align text left for consistency */
+                padding-right: 0;
+                /* Remove right padding */
+                margin-bottom: 12px;
+                /* Add spacing between sections */
+            }
+
+            .payment-status-details {
+                margin-top: 8px;
+                /* Add space above status */
+                text-align: left;
+                /* Ensure left alignment */
+            }
+
+            .payment-actions {
+                margin-top: 5px;
+                justify-content: flex-start;
+                /* Align buttons left */
+                margin-bottom: 0;
+                /* No margin at the very bottom */
+                flex-wrap: wrap;
+                /* Allow buttons to wrap */
+            }
+
+            .month-display {
+                font-size: 1.4rem;
+                /* Slightly smaller font */
+                min-width: 150px;
+            }
+
+            .month-navigation {
+                gap: 10px;
+                /* Reduce gap */
+            }
+
+            .modal-lg-receipt {
+                max-width: 95%;
+                /* Allow modal to use more width */
+            }
+
+            #receiptContent {
+                padding: 20px;
+            }
         }
 
-        .action-buttons-main .btn {
-            margin: 5px 8px;
+        @media (max-width: 575.98px) {
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            /* Smaller main title */
+            .payment-container {
+                padding: 20px;
+            }
+
+            .student-name {
+                font-size: 1.1rem;
+            }
+
+            .action-buttons-main .btn {
+                display: block;
+                width: 90%;
+                margin: 8px auto;
+            }
+
+            /* Stack main buttons */
+            .container.py-5 {
+                padding-top: 1.5rem !important;
+            }
         }
+
+        /* --- END: Copied styles --- */
     </style>
 </head>
 
@@ -202,6 +453,16 @@
     <div class="container py-5">
 
         <div class="payment-container" id="paymentContainer">
+            <div class="mb-4">
+                <a href="dashboard.html" class="back-to-dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                    </svg>
+                    Volver al Dashboard
+                </a>
+            </div>
             <h2 class="text-center mb-4">Control de Pagos Mensuales</h2>
 
             <div class="price-section">
@@ -210,16 +471,29 @@
                 <button id="editPricesBtn" class="btn btn-outline-secondary btn-sm">Editar Precios</button>
             </div>
 
+            <!-- Added Icons to Month Buttons -->
             <div class="month-navigation">
                 <button id="prevMonthBtn" class="btn btn-outline-secondary btn-sm">
-                    < Mes Anterior</button>
-                        <span id="monthDisplay" class="month-display">Cargando...</span>
-                        <button id="nextMonthBtn" class="btn btn-outline-secondary btn-sm">Mes Siguiente ></button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg> Mes Anterior
+                </button>
+                <span id="monthDisplay" class="month-display">Cargando...</span>
+                <button id="nextMonthBtn" class="btn btn-outline-secondary btn-sm">
+                    Mes Siguiente <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                    </svg>
+                </button>
             </div>
             <hr>
+            <!-- Changed Main Buttons to solid -->
             <div class="action-buttons-main">
-                <button id="exportDataBtn" class="btn btn-outline-success btn-sm">Exportar Datos (JSON)</button>
-                <button id="importDataBtn" class="btn btn-outline-primary btn-sm">Importar Datos (JSON)</button>
+                <button id="exportDataBtn" class="btn btn-success btn-sm">Exportar Datos (JSON)</button>
+                <button id="importDataBtn" class="btn btn-primary btn-sm">Importar Datos (JSON)</button>
                 <input type="file" id="fileInput" accept=".json" style="display: none;" />
             </div>
             <hr>
@@ -276,6 +550,7 @@
                         </div>
                         <div class="mb-3"> <label for="paymentClassesPaid" class="form-label">Clases a Pagar</label>
                             <select id="paymentClassesPaid" class="form-select" required></select>
+                            <div class="invalid-feedback">Selecciona una opción de clases.</div>
                         </div>
                         <div class="mb-3"> <label class="form-label">Monto Sugerido:</label>
                             <p><strong id="suggestedAmountDisplay"></strong></p>
@@ -283,7 +558,7 @@
                         <div class="mb-3"> <label for="paymentAmount" class="form-label">Monto Pagado
                                 Efectivamente</label> <input type="number" id="paymentAmount" class="form-control"
                                 required min="0" step="0.01" />
-                            <div class="invalid-feedback">Ingresa un monto válido.</div>
+                            <div class="invalid-feedback">Ingresa un monto válido (número positivo).</div>
                         </div>
                         <div class="mb-3"> <label for="paymentDate" class="form-label">Fecha de Pago</label> <input
                                 type="date" id="paymentDate" class="form-control" required />
@@ -322,26 +597,29 @@
                             type="email" class="form-control" id="receiptEmailInput"
                             placeholder="Ingresa el email del destinatario"> </div>
                 </div>
-                <div class="modal-footer justify-content-center"> <button type="button"
-                        class="btn btn-outline-secondary btn-sm" id="downloadReceiptImageBtn"> <svg class="bi me-1"
-                            width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <!-- Added flex-wrap to modal footer -->
+                <div class="modal-footer justify-content-center flex-wrap">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="downloadReceiptImageBtn"> <svg
+                            class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                             <path
                                 d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
-                        </svg> Imagen </button> <button type="button" class="btn btn-outline-danger btn-sm"
-                        id="downloadReceiptPdfBtn"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
-                            viewBox="0 0 16 16">
+                        </svg> Imagen </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="downloadReceiptPdfBtn"> <svg
+                            class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path
                                 d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
                             <path
                                 d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z" />
-                        </svg> PDF </button> <button type="button" class="btn btn-outline-primary btn-sm"
-                        id="sendReceiptEmailBtn"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                        </svg> PDF </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="sendReceiptEmailBtn"> <svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-envelope" viewBox="0 0 16 16">
                             <path
                                 d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
-                        </svg> Enviar Email </button> <button type="button" class="btn btn-secondary btn-sm"
-                        data-bs-dismiss="modal">Cerrar</button> </div>
+                        </svg> Enviar Email </button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -349,6 +627,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // ===============================================================
+        // --- START: JavaScript Logic (Copied exactly as provided) ---
+        // ===============================================================
         function xlsxScriptLoaded() { console.log("XLSX loaded."); }
         function xlsxScriptFailed() { console.error("Failed to load XLSX."); Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); }
 
@@ -442,30 +723,25 @@
                             continue;
                         }
 
-                        // Usar una combinación de nombre y día/hora como ID más estable que solo la clave de reserva
                         const dia = key.substring(0, key.lastIndexOf('-'));
-                        // Normalizar nombre para usar como parte del ID (quitar espacios, a minúsculas)
                         const normalizedName = reserva.nombre.toLowerCase().replace(/\s+/g, '');
-                        const studentId = `${normalizedName}-${dia}-${reserva.horaInicio}`; // ID más robusto
+                        const studentId = `${normalizedName}-${dia}-${reserva.horaInicio}`;
 
                         const newStudentEntry = {
                             name: reserva.nombre,
                             classDay: dia,
                             classTime: reserva.horaInicio,
                             duration: reserva.duracion,
-                            email: '', // Inicializar email vacío, se puede llenar desde datos de pago si existen
+                            email: '',
                             payments: {}
                         };
 
-                        // Buscar si existe un alumno con el MISMO ID en los datos cargados de pagos
                         if (loadedStudents[studentId]) {
                             console.log(`Fusionando pagos para ${studentId} (${newStudentEntry.name})`);
                             newStudentEntry.payments = loadedStudents[studentId].payments || {};
-                            newStudentEntry.email = loadedStudents[studentId].email || ''; // Mantener email si existía
-                            // Eliminar la entrada de loadedStudents para no duplicarla si la clave de reserva original era diferente
+                            newStudentEntry.email = loadedStudents[studentId].email || '';
                             delete loadedStudents[studentId];
                         } else {
-                            // Intentar buscar por nombre si el ID no coincide (menos preciso)
                             const existingStudentKey = Object.keys(loadedStudents).find(
                                 sid => loadedStudents[sid].name === newStudentEntry.name &&
                                     loadedStudents[sid].classDay === newStudentEntry.classDay &&
@@ -475,15 +751,13 @@
                                 console.log(`Fusionando pagos por coincidencia de nombre/horario para ${studentId}`);
                                 newStudentEntry.payments = loadedStudents[existingStudentKey].payments || {};
                                 newStudentEntry.email = loadedStudents[existingStudentKey].email || '';
-                                delete loadedStudents[existingStudentKey]; // Eliminar la entrada antigua
+                                delete loadedStudents[existingStudentKey];
                             }
                         }
                         processedStudents[studentId] = newStudentEntry;
                     }
                     console.log("Lista de alumnos procesada desde reservas.");
-                    // Añadir alumnos que solo existían en los datos de pago (quizás de importación o reservas antiguas)
                     Object.assign(processedStudents, loadedStudents);
-
 
                 } else {
                     console.log("No se encontraron datos de reservas en localStorage. La lista de alumnos se basará solo en datos de pagos previos (si existen).");
@@ -511,20 +785,66 @@
             if (studentIds.length === 0) { studentList.innerHTML = '<li class="text-center text-muted p-4">No hay alumnos cargados desde el calendario de reservas.</li>'; return; }
             studentIds.sort((a, b) => students[a].name.localeCompare(students[b].name)).forEach(id => {
                 const student = students[id];
-                if (!student.classDay || !student.duration || !student.classTime) { console.warn(`Datos incompletos para alumno ID: ${id} (${student.name}). Saltando.`); return; }
-                const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay); const payment = student.payments?.[yearMonthKey];
+                // --- Updated check for potentially missing student data ---
+                if (!student || !student.name || !student.classDay || !student.duration || !student.classTime) {
+                    console.warn(`Datos incompletos para alumno ID: ${id} (${student?.name || 'Nombre Desconocido'}). Saltando renderizado.`);
+                    return; // Skip rendering this student if core data is missing
+                }
+                // const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay);
+                // const payment = student.payments?.[yearMonthKey];
+                const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay);
+                const payment = student.payments?.[yearMonthKey]; // Safely access payment
+
+
                 const li = document.createElement('li'); li.className = 'student-item';
                 let statusHTML = ''; let actionsHTML = ''; let paymentDetailsHTML = '';
-                if (payment) { const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`; paymentDetailsHTML = `<div class="payment-details"> Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)} </div>`; if (payment.isFullMonthPayment || payment.classesPaid >= monthlyDetails.classCount) { statusHTML = `<span class="status-paid-full">Pagado (Completo)</span>`; } else { statusHTML = `<span class="status-paid-partial">Pago Parcial (${payment.classesPaid}/${monthlyDetails.classCount})</span>`; } actionsHTML = `<button class="btn btn-outline-info btn-sm view-receipt-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}">Recibo</button> <button class="btn btn-outline-warning btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Modificar</button>`; }
-                else { statusHTML = `<span class="status-pending">Pendiente</span>`; actionsHTML = `<button class="btn btn-success btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}">Registrar Pago</button>`; }
+                if (payment) {
+                    const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`;
+                    paymentDetailsHTML = `<div class="payment-details"> Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)} </div>`;
+                    // --- Check based on calculated class count ---
+                    if (payment.isFullMonthPayment || (monthlyDetails.classCount > 0 && payment.classesPaid >= monthlyDetails.classCount)) {
+                        statusHTML = `<span class="status-paid-full">Pagado (Completo)</span>`;
+                    } else {
+                        // --- Display ratio only if classCount is positive ---
+                        const classCountText = monthlyDetails.classCount > 0 ? `/${monthlyDetails.classCount}` : '';
+                        statusHTML = `<span class="status-paid-partial">Pago Parcial (${payment.classesPaid}${classCountText})</span>`;
+                    }
+                    // --- Changed to solid buttons with icons ---
+                    actionsHTML = `
+                        <button class="btn btn-info btn-sm view-receipt-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" title="Ver Comprobante">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-receipt" viewBox="0 0 16 16"><path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0L11 1.293l.646-.647a.5.5 0 0 1 .708 0L13 1.293l.646-.647a.5.5 0 0 1 .434-.14L15 1.5v13a.5.5 0 0 1-.053.224l-.5 2a.5.5 0 0 1-.447.276H1.5a.5.5 0 0 1-.447-.276l-.5-2A.5.5 0 0 1 1 14.5v-13Z M2 2v12h12V2z"/><path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m3 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/></svg>
+                            Recibo
+                        </button>
+                        <button class="btn btn-warning btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Modificar Pago">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11A1.5 1.5 0 0 0 15 13.5V6h-1v7.5a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H6v-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg>
+                            Modificar
+                        </button>`;
+                } else {
+                    statusHTML = `<span class="status-pending">Pendiente</span>`;
+                    // --- Changed to solid button with icon ---
+                    actionsHTML = `
+                        <button class="btn btn-success btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Registrar Pago">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/><path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.935-1.37-1.169-.8-.193-1.425-.384-1.425-1.059 0-.517.397-.977 1.298-1.051v-.48h.375v.488c.77.07 1.216.548 1.216 1.184 0 .631-.373.929-.98 1.138-.554.132-1.116.312-1.116.91 0 .439.323.808 1.317.849z M1.01 1v1.66h.375v-1.66H1.01z M3.47 1v1.66h.375v-1.66h-.375zm2.133 1.66h.375v-1.66h-.375V1.66zm2.134 0h.375v-1.66h-.375V1.66zm2.133 0h.375v-1.66h-.375v-1.66zm1.734 0h.375v-1.66h-.375v1.66z M.5 1.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1zM1 11.88V15h15v-3.12A6.9 6.9 0 0 1 11 13c-1.34 0-2.61-.386-3.66-1.042a7 7 0 0 1-2.23-2.23C4.386 8.61 4 7.34 4 6a7 7 0 0 1 1.042-3.66A7 7 0 0 1 7.27.586 7 7 0 0 1 11 0a7 7 0 0 1 4.414 1.88A7 7 0 0 1 16 6c0 1.34-.386 2.61-1.042 3.66a7 7 0 0 1-2.23 2.23C11.73 11.413 10.34 11.88 9 11.88c-1.34 0-2.61-.386-3.66-1.042a7 7 0 0 1-2.23-2.23A7 7 0 0 1 .96 6H0a8 8 0 0 0 .04 1.042A8 8 0 0 0 2.3 9.27a8 8 0 0 0 2.23 2.23A8 8 0 0 0 6 12.04c1.042.96 2.414 1.46 3.88 1.46 1.466 0 2.838-.5 3.88-1.46A8 8 0 0 0 15.96 9H15a7 7 0 0 1-.04 1.042 7 7 0 0 1-1.88 3.23 7 7 0 0 1-2.23 2.23C9.838 15.614 8.466 16 7 16c-1.466 0-2.838-.5-3.88-1.46A8 8 0 0 0 1 11.88"/></svg>
+                           Registrar Pago
+                        </button>`;
+                }
                 li.innerHTML = `<div class="student-info"> <span class="student-name">${student.name}</span> <span class="class-slot">Clase: ${student.classDay} ${student.classTime}</span> <span class="class-duration">Duración: ${student.duration} min</span> </div> <div class="payment-status-details"> ${statusHTML} ${paymentDetailsHTML} </div> <div class="payment-actions"> ${actionsHTML} </div>`;
                 studentList.appendChild(li);
             });
             document.querySelectorAll('.register-payment-btn').forEach(button => button.addEventListener('click', handleRegisterPaymentClick));
             document.querySelectorAll('.view-receipt-btn').forEach(button => button.addEventListener('click', handleViewReceiptClick));
         }
-        function handleRegisterPaymentClick(event) { const btn = event.currentTarget; openPaymentModal(btn.dataset.studentid, btn.dataset.yearmonth, parseInt(btn.dataset.duration, 10), btn.dataset.day); }
-        function handleViewReceiptClick(event) { openReceiptModal(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth); }
+
+        function handleRegisterPaymentClick(event) {
+            const btn = event.currentTarget;
+            openPaymentModal(btn.dataset.studentid, btn.dataset.yearmonth, parseInt(btn.dataset.duration, 10), btn.dataset.day);
+        }
+
+        function handleViewReceiptClick(event) {
+            // --- DEBUG LOG: Button Click ---
+            console.log('Click en botón Recibo. StudentID:', event.currentTarget.dataset.studentid, 'YearMonth:', event.currentTarget.dataset.yearmonth);
+            openReceiptModal(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth);
+        }
 
         function openPriceModal() { document.getElementById('basePrice40Input').value = basePrices.duration40; document.getElementById('basePrice60Input').value = basePrices.duration60; priceModal.show(); }
         function savePrices() {
@@ -534,63 +854,307 @@
             saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); priceModal.hide(); Swal.fire('Éxito', 'Precios actualizados.', 'success');
         }
         function openPaymentModal(studentId, yearMonth, studentDuration, studentDay) {
-            const student = students[studentId]; if (!student) { Swal.fire('Error', 'No se encontró el alumno.', 'error'); return; }
-            const [year, monthNum] = yearMonth.split('-').map(Number); const month = monthNum - 1; const monthName = monthNames[month];
-            const monthlyDetails = calculateMonthlyDetails(year, month, studentDuration, studentDay);
-            document.getElementById('paymentStudentId').value = studentId; document.getElementById('paymentYearMonth').value = yearMonth;
-            document.getElementById('paymentStudentName').textContent = student.name; document.getElementById('paymentMonthYearDisplay').textContent = `${monthName} ${year}`;
-            document.getElementById('paymentClassCountDisplay').textContent = monthlyDetails.classCount > 0 ? monthlyDetails.classCount : 'N/A';
-            const selectClasses = document.getElementById('paymentClassesPaid'); selectClasses.innerHTML = '';
-            if (monthlyDetails.classCount > 0) {
-                for (let i = 1; i <= monthlyDetails.classCount; i++) { const option = document.createElement('option'); option.value = i; option.textContent = `${i} clase(s)`; selectClasses.appendChild(option); }
-                const fullMonthOption = document.createElement('option'); fullMonthOption.value = 'full'; fullMonthOption.textContent = `Mes Completo (${monthlyDetails.classCount} clases)`; selectClasses.appendChild(fullMonthOption);
-                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(monthlyDetails.basePrice);
-                document.getElementById('paymentAmount').value = monthlyDetails.basePrice.toFixed(2);
-                selectClasses.value = 'full';
-                selectClasses.onchange = () => { const selectedValue = selectClasses.value; let suggestedAmount = 0; if (selectedValue === 'full') { suggestedAmount = monthlyDetails.basePrice; } else { const numClasses = parseInt(selectedValue, 10); suggestedAmount = numClasses * monthlyDetails.perClassPrice; } document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(suggestedAmount); document.getElementById('paymentAmount').value = suggestedAmount.toFixed(2); };
-                selectClasses.disabled = false; // Habilitar selector
-            } else {
-                selectClasses.innerHTML = '<option value="" disabled>No hay clases este mes</option>';
-                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(0);
-                document.getElementById('paymentAmount').value = '0';
-                selectClasses.onchange = null;
-                selectClasses.disabled = true; // Deshabilitar selector
+            const student = students[studentId];
+            if (!student) {
+                Swal.fire('Error', 'No se encontró la información del alumno.', 'error');
+                return;
             }
-            const existingPayment = student.payments?.[yearMonth];
-            if (existingPayment) { document.getElementById('paymentModalLabel').textContent = "Modificar Pago"; document.getElementById('paymentAmount').value = existingPayment.amountPaid.toFixed(2); document.getElementById('paymentDate').value = existingPayment.paymentDate; if (monthlyDetails.classCount > 0) { selectClasses.value = existingPayment.isFullMonthPayment ? 'full' : existingPayment.classesPaid.toString(); selectClasses.dispatchEvent(new Event('change')); } }
-            else { document.getElementById('paymentModalLabel').textContent = "Registrar Pago"; document.getElementById('paymentDate').valueAsDate = new Date(); if (monthlyDetails.classCount > 0) { selectClasses.value = 'full'; selectClasses.dispatchEvent(new Event('change')); } }
-            paymentForm.classList.remove('was-validated'); paymentModal.show();
+
+            const [year, monthNum] = yearMonth.split('-').map(Number);
+            const month = monthNum - 1; // Month is 0-indexed for Date objects
+            const yearMonthKey = getYearMonthKey(year, month); // Ensure correct key format
+            const monthName = monthNames[month];
+            const monthlyDetails = calculateMonthlyDetails(year, month, studentDuration, studentDay);
+            const existingPayment = student.payments?.[yearMonthKey]; // Use correct key
+
+            // Populate hidden fields and static info
+            document.getElementById('paymentStudentId').value = studentId;
+            document.getElementById('paymentYearMonth').value = yearMonthKey; // Store correct key
+            document.getElementById('paymentStudentName').textContent = student.name;
+            document.getElementById('paymentMonthYearDisplay').textContent = `${monthName} ${year}`;
+            document.getElementById('paymentClassCountDisplay').textContent = monthlyDetails.classCount > 0 ? monthlyDetails.classCount : '0'; // Display 0 if no classes
+
+            const selectClasses = document.getElementById('paymentClassesPaid');
+            selectClasses.innerHTML = ''; // Clear previous options
+            selectClasses.disabled = false; // Enable by default
+            document.getElementById('paymentAmount').disabled = false; // Enable by default
+
+            // Populate class selection dropdown
+            if (monthlyDetails.classCount > 0) {
+                for (let i = 1; i <= monthlyDetails.classCount; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    // --- Display calculated price per option ---
+                    option.textContent = `${i} clase(s) (${formatCurrency(i * monthlyDetails.perClassPrice)})`;
+                    selectClasses.appendChild(option);
+                }
+                const fullMonthOption = document.createElement('option');
+                fullMonthOption.value = 'full';
+                // --- Display calculated price for full month ---
+                fullMonthOption.textContent = `Mes Completo (${monthlyDetails.classCount} clases) (${formatCurrency(monthlyDetails.basePrice)})`;
+                selectClasses.appendChild(fullMonthOption);
+
+                // Set default selection and amount based on existing payment or full month
+                if (existingPayment) {
+                    document.getElementById('paymentModalLabel').textContent = "Modificar Pago";
+                    document.getElementById('paymentAmount').value = existingPayment.amountPaid.toFixed(2);
+                    document.getElementById('paymentDate').value = existingPayment.paymentDate; // Assumes YYYY-MM-DD format
+                    selectClasses.value = existingPayment.isFullMonthPayment ? 'full' : existingPayment.classesPaid.toString();
+                    // --- Update suggested amount display correctly on load ---
+                    document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(existingPayment.isFullMonthPayment ? monthlyDetails.basePrice : (existingPayment.classesPaid * monthlyDetails.perClassPrice));
+
+                } else {
+                    document.getElementById('paymentModalLabel').textContent = "Registrar Pago";
+                    selectClasses.value = 'full'; // Default to full month
+                    document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(monthlyDetails.basePrice);
+                    document.getElementById('paymentAmount').value = monthlyDetails.basePrice.toFixed(2); // Default amount
+                    document.getElementById('paymentDate').valueAsDate = new Date(); // Default to today
+                }
+
+            } else { // No classes scheduled for this student this month
+                selectClasses.innerHTML = '<option value="0" selected>0 clases este mes</option>';
+                selectClasses.disabled = true;
+                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(0);
+                document.getElementById('paymentAmount').value = '0.00';
+                document.getElementById('paymentAmount').disabled = true; // Disable amount if no classes
+                document.getElementById('paymentDate').valueAsDate = new Date(); // Default to today
+                if (existingPayment) { // Allow modification if payment exists?
+                    document.getElementById('paymentModalLabel').textContent = "Modificar Pago (0 clases)";
+                    document.getElementById('paymentAmount').value = existingPayment.amountPaid.toFixed(2);
+                    document.getElementById('paymentAmount').disabled = false; // Keep enabled? Or delete only?
+                    document.getElementById('paymentDate').value = existingPayment.paymentDate;
+                } else {
+                    document.getElementById('paymentModalLabel').textContent = "Registrar Pago (0 clases)";
+                }
+            }
+
+            // Update suggested amount and actual amount when selection changes
+            selectClasses.onchange = () => {
+                const selectedValue = selectClasses.value;
+                let suggestedAmount = 0;
+                if (selectedValue === 'full') {
+                    suggestedAmount = monthlyDetails.basePrice;
+                } else {
+                    const numClasses = parseInt(selectedValue, 10);
+                    suggestedAmount = (numClasses > 0 && monthlyDetails.perClassPrice > 0)
+                        ? numClasses * monthlyDetails.perClassPrice
+                        : 0;
+                }
+                document.getElementById('suggestedAmountDisplay').textContent = formatCurrency(suggestedAmount);
+                document.getElementById('paymentAmount').value = suggestedAmount.toFixed(2);
+            };
+
+
+            paymentForm.classList.remove('was-validated'); // Reset validation state
+            paymentModal.show();
         }
+
+        function savePayment() {
+            console.log('Función savePayment iniciada.');
+            if (!paymentForm.checkValidity()) {
+                console.log('Validación del formulario falló.');
+                paymentForm.classList.add('was-validated');
+                const firstInvalidField = paymentForm.querySelector(':invalid');
+                if (firstInvalidField) { firstInvalidField.focus(); }
+                return;
+            }
+            console.log('Validación del formulario PASÓ.');
+            const studentId = document.getElementById('paymentStudentId').value;
+            const yearMonth = document.getElementById('paymentYearMonth').value;
+            const amountPaid = parseFloat(document.getElementById('paymentAmount').value);
+            const paymentDate = document.getElementById('paymentDate').value;
+            const classesPaidSelection = document.getElementById('paymentClassesPaid').value;
+            console.log('Valores leídos:', { studentId, yearMonth, amountPaid, paymentDate, classesPaidSelection });
+            if (isNaN(amountPaid) || amountPaid < 0 || !paymentDate || !yearMonth || !studentId) {
+                console.error('Error: Monto, Fecha, studentId o yearMonth inválidos', { studentId, yearMonth, amountPaid, paymentDate });
+                Swal.fire('Datos Inválidos', 'Verifica el monto, la fecha y los datos ocultos del alumno/mes.', 'warning');
+                paymentForm.classList.add('was-validated');
+                return;
+            }
+            const isFullMonthPayment = classesPaidSelection === 'full';
+            const classCountSpan = document.getElementById('paymentClassCountDisplay');
+            let monthClassCount = 0;
+            if (classCountSpan) {
+                monthClassCount = parseInt(classCountSpan.textContent, 10);
+                if (isNaN(monthClassCount)) monthClassCount = 0;
+            }
+            const classesPaidCount = isFullMonthPayment ? monthClassCount : parseInt(classesPaidSelection, 10);
+            if (!students[studentId]) {
+                console.error(`Error: Alumno con ID ${studentId} no encontrado en el objeto 'students'.`);
+                Swal.fire('Error Interno', 'No se encontró el alumno para guardar el pago. Recarga la página o importa datos.', 'error');
+                return;
+            }
+            if (!students[studentId].payments) {
+                console.log(`Creando objeto 'payments' para alumno ID: ${studentId}`);
+                students[studentId].payments = {};
+            }
+            const paymentObject = {
+                amountPaid: amountPaid,
+                paymentDate: paymentDate,
+                classesPaid: isNaN(classesPaidCount) ? 0 : classesPaidCount,
+                isFullMonthPayment: isFullMonthPayment,
+                recordedAt: new Date().toISOString()
+            };
+            console.log(`Objeto de pago a guardar para ${yearMonth}:`, paymentObject);
+            students[studentId].payments[yearMonth] = paymentObject;
+            console.log('Objeto de pago asignado a students[studentId].payments[yearMonth]. Llamando a saveData()...');
+            saveData();
+            console.log('Datos guardados (llamada a saveData finalizada). Renderizando vista...');
+            renderMonthlyView(currentYear, currentMonth);
+            paymentModal.hide();
+            Swal.fire('¡Guardado!', 'El pago ha sido registrado/actualizado.', 'success');
+        }
+
+        // --- MODIFICADO: openReceiptModal con logs ---
         function openReceiptModal(studentId, yearMonth) {
-            const student = students[studentId]; const payment = student?.payments?.[yearMonth];
-            if (!student || !payment) { Swal.fire('Error', 'No se encontró info de pago.', 'error'); return; }
-            const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1];
-            receiptData = { studentId, studentName: student.name, studentEmail: student.email || '', monthYear: `${monthName} ${year}`, paymentDate: formatDate(payment.paymentDate), amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid, classCount: payment.classesPaid, isFullMonth: payment.isFullMonthPayment };
-            document.getElementById('receiptStudentName').textContent = receiptData.studentName; document.getElementById('receiptMonthYear').textContent = receiptData.monthYear;
-            document.getElementById('receiptPaymentDate').textContent = receiptData.paymentDate; document.getElementById('receiptAmount').textContent = payment.amountPaid.toFixed(2);
-            document.getElementById('receiptClassCount').textContent = payment.isFullMonthPayment ? `Mes Completo (${payment.classesPaid})` : payment.classesPaid;
+            console.log('Abriendo modal de recibo para:', { studentId, yearMonth }); // DEBUG
+            const student = students[studentId];
+            console.log('Buscando alumno:', student ? 'Encontrado' : 'NO ENCONTRADO'); // DEBUG
+            const payment = student?.payments?.[yearMonth];
+            console.log('Buscando pago:', payment ? 'Encontrado' : 'NO ENCONTRADO'); // DEBUG
+
+            if (!student || !payment) {
+                console.error('Error fatal: No se encontró el alumno o el pago en openReceiptModal.'); // DEBUG
+                Swal.fire('Error', 'No se encontró info de pago.', 'error');
+                return;
+            }
+            const [year, monthNum] = yearMonth.split('-').map(Number);
+            const monthName = monthNames[monthNum - 1];
+            // --- Recalculate details for consistency ---
+            const monthlyDetails = calculateMonthlyDetails(year, monthNum - 1, student.duration, student.classDay);
+
+            receiptData = {
+                studentId,
+                studentName: student.name,
+                studentEmail: student.email || '',
+                monthYear: `${monthName} ${year}`,
+                paymentDate: formatDate(payment.paymentDate),
+                amountFormatted: formatCurrency(payment.amountPaid),
+                amountRaw: payment.amountPaid,
+                // --- Use calculated count if full month ---
+                classCount: payment.isFullMonthPayment ? monthlyDetails.classCount : payment.classesPaid,
+                isFullMonth: payment.isFullMonthPayment
+            };
+            console.log('Datos del recibo poblados:', receiptData); // DEBUG
+
+            document.getElementById('receiptStudentName').textContent = receiptData.studentName;
+            document.getElementById('receiptMonthYear').textContent = receiptData.monthYear;
+            document.getElementById('receiptPaymentDate').textContent = receiptData.paymentDate;
+            document.getElementById('receiptAmount').textContent = payment.amountPaid.toFixed(2);
+            // --- Updated display logic ---
+            document.getElementById('receiptClassCount').textContent = receiptData.isFullMonth
+                ? `Mes Completo (${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'})`
+                : `${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'}`;
             document.getElementById('receiptEmailInput').value = receiptData.studentEmail;
+            console.log('Mostrando modal de recibo...'); // DEBUG
             receiptModal.show();
         }
 
-        async function downloadReceiptAsImage() {
+        // --- MODIFICADO: generateReceiptCanvas con logs ---
+        async function generateReceiptCanvas() {
+            console.log('Iniciando generateReceiptCanvas...'); // DEBUG
             const receiptElement = document.getElementById('receiptContent');
-            if (!receiptElement || typeof window.html2canvas === 'undefined') { Swal.fire('Error', 'Falta html2canvas.', 'error'); return; }
-            try { const canvas = await window.html2canvas(receiptElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); const imageData = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = imageData; link.download = `comprobante_${receiptData.studentName}_${receiptData.monthYear.replace(' ', '_')}.png`; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
-            catch (err) { console.error("Error imagen:", err); Swal.fire('Error', 'No se generó imagen.', 'error'); }
-        }
-        async function downloadReceiptAsPdf() {
-            const receiptElement = document.getElementById('receiptContent');
-            if (!receiptElement || typeof window.html2canvas === 'undefined' || typeof window.jspdf === 'undefined') { Swal.fire('Error', 'Faltan librerías.', 'error'); return; }
-            const { jsPDF } = window.jspdf;
-            try { const canvas = await window.html2canvas(receiptElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); const imgData = canvas.toDataURL('image/png'); const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a5' }); const imgProps = pdf.getImageProperties(imgData); const pdfWidth = pdf.internal.pageSize.getWidth() * 0.8; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; const x = (pdf.internal.pageSize.getWidth() - pdfWidth) / 2; const y = 20; pdf.addImage(imgData, 'PNG', x, y, pdfWidth, pdfHeight); pdf.save(`comprobante_${receiptData.studentName}_${receiptData.monthYear.replace(' ', '_')}.pdf`); }
-            catch (err) { console.error("Error PDF:", err); Swal.fire('Error', 'No se generó PDF.', 'error'); }
+            if (!receiptElement) {
+                console.error("Error crítico: Elemento #receiptContent no encontrado en el DOM."); // DEBUG
+                Swal.fire('Error Técnico', 'Elemento del recibo no encontrado.', 'error');
+                return null;
+            }
+            if (typeof window.html2canvas === 'undefined') {
+                console.error("Error crítico: La librería html2canvas (window.html2canvas) no está definida."); // DEBUG
+                Swal.fire('Error Técnico', 'Falta la librería para generar imágenes (html2canvas).', 'error');
+                return null;
+            } else {
+                console.log('Librería html2canvas encontrada.'); // DEBUG
+            }
+
+            console.log('Intentando generar canvas desde:', receiptElement); // DEBUG
+            try {
+                const canvas = await window.html2canvas(receiptElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                console.log('Canvas generado exitosamente:', canvas); // DEBUG
+                return canvas;
+            } catch (err) {
+                console.error("Error durante html2canvas:", err); // DEBUG
+                Swal.fire('Error de Imagen', 'Ocurrió un error al generar la imagen del comprobante.', 'error');
+                return null;
+            }
         }
 
+        // --- MODIFICADO: downloadReceiptAsImage con log ---
+        async function downloadReceiptAsImage() {
+            console.log('Iniciando descarga como Imagen...'); // DEBUG
+            const canvas = await generateReceiptCanvas();
+            if (!canvas) {
+                console.log('Descarga de imagen cancelada porque el canvas no se generó.'); // DEBUG
+                return;
+            }
+            try {
+                const imageData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = imageData;
+                const safeFileName = `comprobante_${receiptData.studentName}_${receiptData.monthYear}`.replace(/[^a-z0-9_-]/gi, '_') + '.png';
+                link.download = safeFileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                console.log('Descarga de imagen iniciada.'); // DEBUG
+            } catch (err) {
+                console.error("Error descargando imagen:", err); // DEBUG
+                Swal.fire('Error de Descarga', 'No se pudo descargar la imagen.', 'error');
+            }
+        }
+
+        // --- MODIFICADO: downloadReceiptAsPdf con log ---
+        async function downloadReceiptAsPdf() {
+            console.log('Iniciando descarga como PDF...'); // DEBUG
+            const canvas = await generateReceiptCanvas();
+            if (!canvas) {
+                console.log('Descarga de PDF cancelada porque el canvas no se generó.'); // DEBUG
+                return;
+            }
+            if (typeof window.jspdf === 'undefined') {
+                console.error("Error crítico: La librería jsPDF (window.jspdf) no está definida."); // DEBUG
+                Swal.fire('Error Técnico', 'Falta la librería para generar PDF (jsPDF).', 'error');
+                return;
+            } else {
+                console.log('Librería jsPDF encontrada.'); // DEBUG
+            }
+
+            const { jsPDF } = window.jspdf;
+            try {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a5' });
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight();
+                const margin = 40; const availableWidth = pdfWidth - 2 * margin; const availableHeight = pdfHeight - 2 * margin;
+                const imgRatio = imgProps.width / imgProps.height;
+                let finalImgWidth = imgProps.width; let finalImgHeight = imgProps.height;
+                if (finalImgWidth > availableWidth) { finalImgWidth = availableWidth; finalImgHeight = finalImgWidth / imgRatio; }
+                if (finalImgHeight > availableHeight) { finalImgHeight = availableHeight; finalImgWidth = finalImgHeight * imgRatio; }
+                const x = (pdfWidth - finalImgWidth) / 2; const y = margin;
+                pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+                const safeFileName = `comprobante_${receiptData.studentName}_${receiptData.monthYear}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf';
+                pdf.save(safeFileName);
+                console.log('Descarga de PDF iniciada.'); // DEBUG
+            } catch (err) {
+                console.error("Error generando/descargando PDF:", err); // DEBUG
+                Swal.fire('Error de PDF', 'No se pudo generar o descargar el PDF.', 'error');
+            }
+        }
+
+        // --- MODIFICADO: sendReceiptEmail con log ---
         async function sendReceiptEmail() {
-            const recipientEmail = document.getElementById('receiptEmailInput').value.trim();
-            if (!recipientEmail) { Swal.fire('Falta Email', 'Ingresa correo.', 'warning'); document.getElementById('receiptEmailInput').focus(); return; }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) { Swal.fire('Email Inválido', 'Ingresa dirección válida.', 'warning'); document.getElementById('receiptEmailInput').focus(); document.getElementById('receiptEmailInput').select(); return; }
+            console.log('Iniciando envío de Email...'); // DEBUG
+            const recipientEmailInput = document.getElementById('receiptEmailInput');
+            const recipientEmail = recipientEmailInput.value.trim();
+            if (!recipientEmail) { Swal.fire('Falta Email', 'Ingresa correo.', 'warning'); recipientEmailInput.focus(); return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) { Swal.fire('Email Inválido', 'Ingresa dirección válida.', 'warning'); recipientEmailInput.focus(); recipientEmailInput.select(); return; }
+
+            // --- Update student email if empty ---
+            if (receiptData.studentId && students[receiptData.studentId] && recipientEmail && !students[receiptData.studentId].email) {
+                students[receiptData.studentId].email = recipientEmail;
+                saveData();
+                console.log(`Email actualizado para ${receiptData.studentName} a ${recipientEmail}`);
+            }
 
             Swal.fire({ title: 'Enviando Email...', text: `Preparando datos para ${recipientEmail}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
             try {
@@ -599,31 +1163,54 @@
                 const templateID = 'template_v7gzygn'; // <<<--- USA TU TEMPLATE ID REAL
                 const [monthName, yearStr] = receiptData.monthYear.split(' ');
                 const templateParams = { mes: monthName, year: yearStr, email: recipientEmail, recibo: reciboHtml, to_name: receiptData.studentName };
-                console.log("Enviando email (solo texto) con params:", templateParams);
+                console.log("Enviando email con params:", templateParams); // DEBUG
                 await emailjs.send(serviceID, templateID, templateParams);
-                console.log('Email enviado!');
+                console.log('Email enviado!'); // DEBUG
                 Swal.fire('¡Enviado!', `Comprobante enviado a ${recipientEmail}.`, 'success');
-            } catch (error) { console.error('Error email:', error); Swal.fire('Error', `No se pudo enviar email: ${error?.text || error?.message || 'Error desconocido'}`, 'error'); }
+            } catch (error) {
+                console.error('Error email:', error); // DEBUG
+                Swal.fire('Error', `No se pudo enviar email: ${error?.text || error?.message || 'Error desconocido'}`, 'error');
+            }
         }
 
         function exportData() {
-            try { const dataToExport = { students: students, prices: basePrices }; const dataString = JSON.stringify(dataToExport, null, 2); const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `datos_pagos_alumnos_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); Swal.fire('¡Exportado!', 'Datos completos guardados en JSON.', 'success'); }
+            try { const dataToExport = { version: 3, createdAt: new Date().toISOString(), students: students, prices: basePrices }; const dataString = JSON.stringify(dataToExport, null, 2); const blob = new Blob([dataString], { type: 'application/json;charset=utf-8' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); link.download = `datos_pagos_alumnos_v3_${timestamp}.json`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); Swal.fire('¡Exportado!', 'Datos completos guardados en JSON.', 'success'); }
             catch (error) { console.error("Error exportando:", error); Swal.fire('Error', 'Ocurrió un error al exportar.', 'error'); }
         }
         function importData(event) {
-            const file = event.target.files[0]; if (!file) return; if (!file.name.endsWith('.json')) { Swal.fire('Archivo Inválido', 'Selecciona .json.', 'error'); fileInput.value = null; return; }
+            const file = event.target.files[0]; if (!file) return; if (!file.name.toLowerCase().endsWith('.json')) { Swal.fire('Archivo Inválido', 'Selecciona .json.', 'error'); fileInput.value = null; return; }
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileContent = e.target.result;
                 try {
-                    const importedData = JSON.parse(fileContent); if (typeof importedData !== 'object' || importedData === null || (!importedData.students && !importedData.prices)) { throw new Error("JSON no tiene estructura esperada."); }
+                    const importedData = JSON.parse(fileContent);
+                    if (typeof importedData !== 'object' || importedData === null || (!importedData.students && !importedData.prices)) { throw new Error("JSON no tiene estructura esperada."); }
+                    if (!importedData.students || typeof importedData.students !== 'object') { throw new Error("La sección 'students' en el JSON no es válida."); }
+                    if (importedData.prices && (typeof importedData.prices !== 'object' || isNaN(importedData.prices.duration40) || isNaN(importedData.prices.duration60))) { throw new Error("La sección 'prices' en el JSON no es válida o faltan precios."); }
                     Swal.fire({
-                        title: 'Confirmar Importación', html: `Datos encontrados.<br>¿Reemplazar <b>TODOS</b> los datos actuales? <br><b style='color:red;'>¡Irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Sí', cancelButtonText: 'Cancelar'
-                    }).then((result) => { if (result.isConfirmed) { students = importedData.students || {}; basePrices = importedData.prices || { ...defaultPrices }; saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Importado!', 'Datos actualizados.', 'success'); } });
-                } catch (error) { console.error("Error procesando:", error); Swal.fire('Error Importación', `No se procesó archivo. ¿JSON válido?\nError: ${error.message}`, 'error'); }
-                finally { fileInput.value = null; }
+                        title: 'Confirmar Importación', html: `Datos encontrados en <strong>${file.name}</strong>.<br>¿Reemplazar <b>TODOS</b> los datos actuales?<br><b style='color:red;'>¡Irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Sí, reemplazar', cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log("Iniciando importación..."); // DEBUG
+                            students = importedData.students || {}; basePrices = importedData.prices || { ...defaultPrices };
+                            for (const id in students) { if (!students[id].payments) students[id].payments = {}; }
+                            saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth);
+                            Swal.fire('¡Importado!', 'Datos actualizados.', 'success');
+                            console.log("Importación completada."); // DEBUG
+                        } else {
+                            console.log("Importación cancelada."); // DEBUG
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error procesando JSON:", error); // DEBUG
+                    Swal.fire('Error Importación', `No se procesó archivo. ¿JSON válido?\n<br><small>Error: ${error.message}</small>`, 'error');
+                } finally { fileInput.value = null; }
             };
-            reader.onerror = (e) => { Swal.fire('Error Lectura', 'No se leyó archivo.', 'error'); fileInput.value = null; }; reader.readAsText(file);
+            reader.onerror = (e) => {
+                console.error("Error leyendo archivo:", e); // DEBUG
+                Swal.fire('Error Lectura', 'No se leyó archivo.', 'error'); fileInput.value = null;
+            };
+            reader.readAsText(file);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -633,7 +1220,8 @@
             nextMonthBtn.addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderMonthlyView(currentYear, currentMonth); });
             document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
             document.getElementById('savePricesBtn').addEventListener('click', savePrices);
-            document.getElementById('savePaymentBtn').addEventListener('click', () => { /* La lógica está en la función asociada al botón dentro del modal, no aquí */ });
+            // --- Ensure the correct function is called for saving payment ---
+            document.getElementById('savePaymentBtn').addEventListener('click', savePayment);
             downloadReceiptImageBtn.addEventListener('click', downloadReceiptAsImage);
             downloadReceiptPdfBtn.addEventListener('click', downloadReceiptAsPdf);
             sendReceiptEmailBtn.addEventListener('click', sendReceiptEmail);
@@ -641,6 +1229,9 @@
             importDataBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', importData);
         });
+        // ===============================================================
+        // --- END: JavaScript Logic (Copied exactly as provided) ---
+        // ===============================================================
     </script>
 
 </body>
