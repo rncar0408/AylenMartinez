@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <!-- *** ADDED: Font Awesome for the icon *** -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -446,6 +450,60 @@
         }
 
         /* --- END: Copied styles --- */
+
+        /* *** ADDED: Styles for Back to Top Button *** */
+        #backToTopBtn {
+            display: none;
+            /* Hidden by default, JS controls visibility */
+            position: fixed;
+            /* Keep it fixed on the screen */
+            bottom: 20px;
+            /* Position from bottom */
+            right: 30px;
+            /* Position from right */
+            z-index: 99;
+            /* Ensure it's above other content */
+            border: none;
+            /* No border */
+            outline: none;
+            /* No outline */
+            background-color: #0d6efd;
+            /* Bootstrap primary color */
+            color: white;
+            /* Icon color */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            padding: 10px 15px;
+            /* Padding for size */
+            border-radius: 50%;
+            /* Make it round */
+            font-size: 18px;
+            /* Icon size */
+            opacity: 0;
+            /* Start transparent for fade-in */
+            transition: opacity 0.3s ease-in-out, background-color 0.2s ease;
+            /* Smooth transitions */
+            /* Use flexbox to center the icon inside */
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            /* Explicit width */
+            height: 50px;
+            /* Explicit height */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Add a little shadow */
+        }
+
+        #backToTopBtn:hover {
+            background-color: #0a58ca;
+            /* Darker shade on hover */
+        }
+
+        /* Override JS 'display: flex' when opacity is 0 to prevent flicker */
+        #backToTopBtn[style*="opacity: 0"] {
+            display: none !important;
+            /* Force hide when transparent */
+        }
     </style>
 </head>
 
@@ -468,21 +526,24 @@
             <div class="price-section">
                 <div class="price-display">40 min/mes: <span id="price40"></span></div>
                 <div class="price-display">60 min/mes: <span id="price60"></span></div>
-                <button id="editPricesBtn" class="btn btn-outline-secondary btn-sm">Editar Precios</button>
+                <button id="editPricesBtn" class="btn btn-sm"
+                    style="background-color: #f3a391; border-color: #f3a391; color: black;">Editar Precios</button>
             </div>
 
             <!-- Added Icons to Month Buttons -->
             <div class="month-navigation">
-                <button id="prevMonthBtn" class="btn btn-outline-secondary btn-sm">
+                <button id="prevMonthBtn" class="btn btn-sm"
+                    style="background-color: #fae39e; border-color: #fae39e; color: black;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-chevron-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                    </svg> Mes Anterior
+                    </svg> Anterior
                 </button>
                 <span id="monthDisplay" class="month-display">Cargando...</span>
-                <button id="nextMonthBtn" class="btn btn-outline-secondary btn-sm">
-                    Mes Siguiente <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                <button id="nextMonthBtn" class="btn btn-sm"
+                    style="background-color: #fae39e; border-color: #fae39e; color: black;">
+                    Siguiente <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-chevron-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
@@ -492,8 +553,12 @@
             <hr>
             <!-- Changed Main Buttons to solid -->
             <div class="action-buttons-main">
-                <button id="exportDataBtn" class="btn btn-success btn-sm">Exportar Datos (JSON)</button>
-                <button id="importDataBtn" class="btn btn-primary btn-sm">Importar Datos (JSON)</button>
+                <button id="exportDataBtn" class="btn btn-sm"
+                    style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">Exportar Datos
+                    (JSON)</button>
+                <button id="importDataBtn" class="btn btn-sm"
+                    style="background-color: #96a5c0; border-color: #96a5c0; color: black;">Importar Datos
+                    (JSON)</button>
                 <input type="file" id="fileInput" accept=".json" style="display: none;" />
             </div>
             <hr>
@@ -509,7 +574,7 @@
     <div class="modal fade" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
                     <h5 class="modal-title" id="priceModalLabel">Editar Precios Base Mensuales</h5> <button
                         type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -523,8 +588,9 @@
                                 min="0"> </div>
                     </form>
                 </div>
-                <div class="modal-footer"> <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary"
+                <div class="modal-footer"> <button type="button" class="btn" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
                         id="savePricesBtn">Guardar Precios</button> </div>
             </div>
         </div>
@@ -534,7 +600,7 @@
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
                     <h5 class="modal-title" id="paymentModalLabel">Registrar Pago</h5> <button type="button"
                         class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -566,8 +632,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer"> <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary"
+                <div class="modal-footer"> <button type="button" class="btn" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
                         id="savePaymentBtn">Guardar Pago</button> </div>
             </div>
         </div>
@@ -577,7 +644,7 @@
     <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg-receipt">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
                     <h5 class="modal-title" id="receiptModalLabel">Comprobante de Pago</h5> <button type="button"
                         class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -599,30 +666,42 @@
                 </div>
                 <!-- Added flex-wrap to modal footer -->
                 <div class="modal-footer justify-content-center flex-wrap">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="downloadReceiptImageBtn"> <svg
-                            class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #96a5c0; border-color: #96a5c0; color: black;"
+                        id="downloadReceiptImageBtn"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 16 16">
                             <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                             <path
                                 d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
                         </svg> Imagen </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" id="downloadReceiptPdfBtn"> <svg
-                            class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #fae39e; border-color: #fae39e; color: black;"
+                        id="downloadReceiptPdfBtn"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
                             <path
                                 d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.625c.49-.174.99-.326 1.493-.472a.5.5 0 0 1 .497.48.5.5 0 0 1-.497.51a6.7 6.7 0 0 0-1.442.439c-.56.2-.986.465-1.284.788-.297.322-.407.718-.383 1.152a.8.8 0 0 0 .438.42zM7.06 10.44a.3.3 0 0 1 .3-.295c.408 0 .76.162.993.402s.398.577.468.957a.3.3 0 0 1-.3.295c-.408 0-.76-.162-.993-.402a1.2 1.2 0 0 1-.468-.957z" />
                         </svg> PDF </button>
-                    <button type="button" class="btn btn-outline-primary btn-sm" id="sendReceiptEmailBtn"> <svg
-                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-envelope" viewBox="0 0 16 16">
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
+                        id="sendReceiptEmailBtn"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                             <path
                                 d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
                         </svg> Enviar Email </button>
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- *** ADDED: Back to Top Button HTML *** -->
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Volver arriba"
+        style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -811,11 +890,11 @@
                     }
                     // --- Changed to solid buttons with icons ---
                     actionsHTML = `
-                        <button class="btn btn-info btn-sm view-receipt-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" title="Ver Comprobante">
+                        <button class="btn btn-sm view-receipt-btn" style="background-color: #96a5c0; border-color: #96a5c0; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" title="Ver Comprobante">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-receipt" viewBox="0 0 16 16"><path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0L11 1.293l.646-.647a.5.5 0 0 1 .708 0L13 1.293l.646-.647a.5.5 0 0 1 .434-.14L15 1.5v13a.5.5 0 0 1-.053.224l-.5 2a.5.5 0 0 1-.447.276H1.5a.5.5 0 0 1-.447-.276l-.5-2A.5.5 0 0 1 1 14.5v-13Z M2 2v12h12V2z"/><path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m3 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/></svg>
                             Recibo
                         </button>
-                        <button class="btn btn-warning btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Modificar Pago">
+                        <button class="btn btn-sm register-payment-btn" style="background-color: #fae39e; border-color: #fae39e; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Modificar Pago">
                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11A1.5 1.5 0 0 0 15 13.5V6h-1v7.5a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H6v-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg>
                             Modificar
                         </button>`;
@@ -823,7 +902,7 @@
                     statusHTML = `<span class="status-pending">Pendiente</span>`;
                     // --- Changed to solid button with icon ---
                     actionsHTML = `
-                        <button class="btn btn-success btn-sm register-payment-btn" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Registrar Pago">
+                        <button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" title="Registrar Pago">
                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/><path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.935-1.37-1.169-.8-.193-1.425-.384-1.425-1.059 0-.517.397-.977 1.298-1.051v-.48h.375v.488c.77.07 1.216.548 1.216 1.184 0 .631-.373.929-.98 1.138-.554.132-1.116.312-1.116.91 0 .439.323.808 1.317.849z M1.01 1v1.66h.375v-1.66H1.01z M3.47 1v1.66h.375v-1.66h-.375zm2.133 1.66h.375v-1.66h-.375V1.66zm2.134 0h.375v-1.66h-.375V1.66zm2.133 0h.375v-1.66h-.375v-1.66zm1.734 0h.375v-1.66h-.375v1.66z M.5 1.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1zM1 11.88V15h15v-3.12A6.9 6.9 0 0 1 11 13c-1.34 0-2.61-.386-3.66-1.042a7 7 0 0 1-2.23-2.23C4.386 8.61 4 7.34 4 6a7 7 0 0 1 1.042-3.66A7 7 0 0 1 7.27.586 7 7 0 0 1 11 0a7 7 0 0 1 4.414 1.88A7 7 0 0 1 16 6c0 1.34-.386 2.61-1.042 3.66a7 7 0 0 1-2.23 2.23C11.73 11.413 10.34 11.88 9 11.88c-1.34 0-2.61-.386-3.66-1.042a7 7 0 0 1-2.23-2.23A7 7 0 0 1 .96 6H0a8 8 0 0 0 .04 1.042A8 8 0 0 0 2.3 9.27a8 8 0 0 0 2.23 2.23A8 8 0 0 0 6 12.04c1.042.96 2.414 1.46 3.88 1.46 1.466 0 2.838-.5 3.88-1.46A8 8 0 0 0 15.96 9H15a7 7 0 0 1-.04 1.042 7 7 0 0 1-1.88 3.23 7 7 0 0 1-2.23 2.23C9.838 15.614 8.466 16 7 16c-1.466 0-2.838-.5-3.88-1.46A8 8 0 0 0 1 11.88"/></svg>
                            Registrar Pago
                         </button>`;
@@ -1228,12 +1307,63 @@
             exportDataBtn.addEventListener('click', exportData);
             importDataBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', importData);
+
+            // --- Back to Top Button Logic Initialization ---
+            initializeBackToTopButton();
         });
         // ===============================================================
         // --- END: JavaScript Logic (Copied exactly as provided) ---
         // ===============================================================
-    </script>
 
+        // --- START: Back to Top Button Logic (Extracted & Improved) ---
+        let mybutton = null; // Initialize as null
+
+        function scrollFunction() {
+            // Check if button exists and scroll position
+            if (mybutton && (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) {
+                // If button is not already displayed or is fading out, fade it in
+                if (mybutton.style.display !== "flex" || mybutton.style.opacity === "0") {
+                    mybutton.style.display = "flex"; // Set display first
+                    // Use a tiny timeout to allow the display property to apply before starting the transition
+                    setTimeout(() => {
+                        mybutton.style.opacity = "1";
+                    }, 10);
+                }
+            } else if (mybutton) {
+                // If button is visible, fade it out
+                if (mybutton.style.opacity !== "0") {
+                    mybutton.style.opacity = "0";
+                    // The CSS rule [style*="opacity: 0"] { display: none !important; } handles hiding after fade
+                }
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Function to find the button and set up listeners
+        function initializeBackToTopButton() {
+            mybutton = document.getElementById("backToTopBtn");
+            if (mybutton) {
+                // Initial check in case the page loads already scrolled down
+                scrollFunction();
+                // Add scroll event listener
+                window.onscroll = scrollFunction;
+                // Ensure the click handler is set (it's already in the HTML via onclick)
+                // mybutton.addEventListener('click', scrollToTop); // Not strictly needed due to onclick
+            } else {
+                console.error("Elemento #backToTopBtn no encontrado al inicializar.");
+            }
+        }
+        // --- END: Back to Top Button Logic ---
+
+        // --- Other unrelated JS (if any) ---
+        // Note: Removed the duplicate Copyright setting and modal setup calls
+        // document.getElementById('copyright').innerHTML = '© ' + new Date().getFullYear() + ' Aylén Martínez Piano & Música'; // Assuming this is handled elsewhere or not needed here.
+
+    </script>
+    <!-- Removed redundant Bootstrap script call, it's already included above -->
 </body>
 
 </html>
