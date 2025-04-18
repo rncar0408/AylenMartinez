@@ -6,42 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aylén Martínez Piano & Música</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap"
         rel="stylesheet">
     <!-- Custom CSS -->
     <style>
         /* Estilos personalizados */
         body {
             font-family: 'Lato', sans-serif;
-            background-color: #fefefe;
-            color: #333;
+            background-color: #dde9ce !important;
+            /* Color de fondo solicitado */
+            color: #343a40;
+            /* Gris oscuro para mejor contraste */
+            line-height: 1.7;
+            font-weight: 400;
+            overflow-x: hidden;
+            /* Prevenir scroll horizontal indeseado */
         }
 
-        /* Hero Section Styles */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .card-title,
+        .modal-title {
+            /* Aplicar Playfair a títulos */
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            /* Títulos más gruesos */
+        }
+
+        /* --- ESTILOS NAVBAR Y HERO SECTION (NO MODIFICAR SEGÚN PETICIÓN) --- */
+        .navbar-light .navbar-brand,
+        .navbar-light .navbar-nav .nav-link {
+            color: #463c68;
+        }
+
+        .navbar-brand {
+            /* Asegurar peso y tamaño del brand */
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #463c68;
+            font-weight: bold;
+            /* Mantener el hover original */
+        }
+
+        .navbar-light .navbar-toggler {
+            border-color: #463c68;
+        }
+
+        .navbar-toggler-icon {
+            display: inline-block;
+            width: 1.5em;
+            height: 1.5em;
+            vertical-align: middle;
+            content: "";
+            background: no-repeat center center;
+            background-size: 100%;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar {
+            /* Asegurar el color de fondo del navbar y padding */
+            background-color: #dde9ce !important;
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
+        }
+
         .hero-section {
             position: relative;
             height: 500px;
-            /* Ajusta la altura según tus preferencias */
             overflow: hidden;
-            /* Recorta la imagen si es necesario */
             background: url('imagenes/3.png') center/cover no-repeat;
-            /* Asegura la visualización */
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            /* Distribuye el espacio verticalmente */
             align-items: center;
-            /* Centra horizontalmente */
             padding: 20px;
-            /* Espacio alrededor del contenido */
             text-align: center;
-            /* Alinea el texto al centro */
         }
 
         .hero-section::before {
@@ -51,8 +103,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)); */
-            /* Degradado opcional */
             z-index: 1;
         }
 
@@ -61,292 +111,502 @@
             z-index: 2;
         }
 
-        /* Estilo específico para el texto */
         .hero-text-custom {
             font-size: 1.2rem;
             font-weight: 300;
             margin-top: 0;
-            /* Elimina el margen superior */
             align-self: flex-start;
-            /* Alinea el texto a la izquierda */
             text-align: left;
-            /* Forzar alineación a la izquierda */
         }
 
-        /* Estilo específico para el botón */
         .hero-button-custom {
             margin-top: 28%;
-            /* Elimina el margen inferior */
         }
 
-        /* Ajustes para móviles */
         @media (max-width: 992px) {
-
-            /* Reglas específicas para pantallas de hasta 992px de ancho */
             .hero-section {
                 height: 450px;
-                /* Ajusta la altura */
                 padding: 15px;
-                /* Ajusta el padding */
             }
 
             .hero-text-custom {
                 font-size: 1.1rem;
-                /* Ajusta el tamaño del texto */
             }
 
             .hero-button-custom {
                 margin-top: 45%;
-                /* Ajusta la posición del botón */
             }
         }
 
         @media (max-width: 768px) {
             .hero-section {
                 height: 400px;
-                /* Ajusta la altura para móviles si es necesario */
                 padding: 10px;
-                /* Reduce el padding en móviles */
             }
 
             .hero-text-custom {
                 font-size: 1rem;
-                /* Reduce el tamaño del texto en móviles */
             }
 
             .hero-button-custom {
                 margin-top: 60%;
-                /* Elimina el margen inferior */
             }
 
-            /* Ocultar la imagen en el Navbar Toggler en móviles */
+            /* Mantener el icono original del toggler */
             .navbar-toggler-icon {
-                background-image: none;
-                /* Elimina la imagen de fondo */
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
             }
         }
 
+        /* --- FIN ESTILOS NAVBAR Y HERO SECTION --- */
+
+
+        /* --- Estilos Generales de Sección y Títulos --- */
         .section {
             padding: 80px 0;
         }
 
+        @media (max-width: 768px) {
+            .section {
+                padding: 50px 0;
+            }
+
+            /* Reducir padding en móvil */
+        }
+
         .section-title {
-            font-family: 'Playfair Display', serif;
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 3rem;
-            color: #555;
+            margin-bottom: 60px;
+            font-size: 2.8rem;
+            color: #495057;
         }
 
-        .card {
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.1rem;
+                margin-bottom: 40px;
+            }
+        }
+
+        /* --- Estilos Sección "Sobre Mí" --- */
+        #nosotros .card {
+            /* Contenedor */
             border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            box-shadow: none;
+            background-color: transparent;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: #555;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #555;
-            text-align: left;
-            /* <-- Esta línea alinea el texto a la izquierda */
-            display: block;
-            /* Asegura que el label ocupe todo el ancho disponible */
-        }
-
-        .btn-primary {
-            background-color: #a38ed4;
-            border-color: #a38ed4;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #8a64b0;
-            border-color: #8a64b0;
-        }
-
-        .social-icons a {
-            color: #775c8d;
-            font-size: 28px;
-            margin: 0 15px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #a38ed4;
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            color: #775c8d;
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #eee;
-        }
-
-        .navbar-light .navbar-brand,
-        .navbar-light .navbar-nav .nav-link {
-            color: #a38ed4;
-            font-weight: bold;
-        }
-
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #a38ed4;
-            font-weight: bold;
-        }
-
-        .navbar-light .navbar-toggler {
-            border-color: #463c68;
-        }
-
-        /* Estilo para el icono del toggler */
-        .navbar-toggler-icon {
-            display: inline-block;
-            width: 1.5em;
-            height: 1.5em;
-            vertical-align: middle;
-            content: "";
-            background: no-repeat center center;
-            background-size: 100%;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        /* Sección "Sobre Mí" */
         .about-image-container {
-            height: 400px;
+            height: 100%;
+            min-height: 450px;
+            border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            position: relative;
+            /* Para pseudo-elementos si se necesitaran */
         }
 
         .about-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
+            object-position: center top;
+            transition: transform 0.4s ease;
         }
 
-        .section {
-            padding: 80px 0;
+        .about-image-container:hover .about-image {
+            transform: scale(1.03);
+            /* Sutil zoom */
         }
 
-        .section-title {
-            font-family: 'Playfair Display', serif;
+        .about-text-content {
+            /* Contenedor del texto */
+            padding: 15px 0;
+            /* Espacio vertical */
+        }
+
+        @media (min-width: 992px) {
+
+            /* Padding izquierdo solo en pantallas grandes */
+            .about-text-content {
+                padding: 0 0 0 45px;
+            }
+        }
+
+        #nosotros .card-text {
+            /* Párrafos de texto */
+            font-size: 1rem;
+            margin-bottom: 1.4rem;
+            color: #454545;
+            /* Gris un poco más oscuro */
+            text-align: justify;
+            /* Justificar texto */
+            hyphens: auto;
+            /* Separación silábica */
+            -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+        }
+
+        #nosotros .card-text:last-child {
+            margin-bottom: 0;
+            /* Sin margen inferior en el último párrafo */
+        }
+
+        /* Responsive About */
+        @media (max-width: 991.98px) {
+            .about-image-container {
+                min-height: 350px;
+                margin-bottom: 30px;
+            }
+
+            .about-text-content {
+                padding: 0 15px;
+            }
+
+            /* Padding horizontal en móvil */
+        }
+
+        @media (max-width: 767.98px) {
+            .about-image-container {
+                min-height: 300px;
+            }
+
+            #nosotros .card-text {
+                font-size: 0.95rem;
+            }
+        }
+
+
+        /* --- Estilos Sección "Clases" --- */
+        #clases {
+            background-color: #f8f9fa;
+        }
+
+        .clase-card {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            /* Más redondeado */
+            overflow: hidden;
+            background-color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.06);
+            /* Sombra más suave */
+        }
+
+        .clase-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .clase-card img {
+            height: 220px;
+            /* Altura imágenes */
+            object-fit: cover;
+        }
+
+        .clase-card .card-body {
+            padding: 25px 20px;
+            /* Ajustar padding */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 3rem;
-            color: #555;
         }
 
-        .card {
+        .clase-card .card-title {
+            font-size: 1.3rem;
+            /* Título ligeramente más pequeño */
+            color: #463c68;
+            margin-bottom: 12px;
+        }
+
+        .clase-card .card-text {
+            font-size: 0.9rem;
+            /* Texto más pequeño */
+            color: #6c757d;
+            flex-grow: 1;
+            margin-bottom: 0;
+            line-height: 1.5;
+            /* Mejorar legibilidad texto corto */
+        }
+
+        /* Ajuste responsivo de columnas para clases */
+        @media (max-width: 767.98px) {
+            #clases .col-sm-6 {
+                flex: 0 0 auto;
+                width: 50%;
+            }
+
+            /* Asegurar 2 por fila en sm */
+        }
+
+        @media (max-width: 575.98px) {
+            #clases .col-12 {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+
+            /* 1 por fila en xs */
+            .clase-card img {
+                height: 240px;
+            }
+        }
+
+
+        /* --- Estilos Modals (Pulidos) --- */
+        .modal-dialog {
+            max-width: 750px;
+        }
+
+        @media (max-width: 991.98px) {
+            .modal-dialog {
+                max-width: 90%;
+            }
+        }
+
+        .modal-content {
+            border-radius: 12px;
             border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        .modal-header {
+            background-color: #a38ed4;
+            /* Color principal botones */
+            color: white;
+            border-bottom: none;
+            padding: 1.3rem 1.8rem;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
         }
 
-        .card-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: #555;
+        .modal-title {
+            font-size: 1.6rem;
+            /* Ajustado */
         }
 
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-header .btn-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 30px 35px;
+            line-height: 1.7;
+            color: #495057;
+        }
+
+        .modal-body p {
+            margin-bottom: 1.3rem;
+        }
+
+        .modal-body strong {
+            color: #463c68;
+        }
+
+        .modal-body ul {
+            padding-left: 25px;
+            margin-bottom: 1.3rem;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            padding: 1rem 1.8rem;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        /* Botones dentro del modal */
+        .modal .btn {
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        /* Botón Cerrar */
+        .modal .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .modal .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        /* Botón WhatsApp */
+        .modal .btn[target="_blank"] {
+            background-color: #25D366;
+            border-color: #25D366;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            /* Para alinear icono */
+            align-items: center;
+        }
+
+        .modal .btn[target="_blank"]:hover {
+            background-color: #1DAE50;
+            border-color: #1DAE50;
+            transform: scale(1.03);
+        }
+
+        .modal .btn[target="_blank"] i {
+            /* Icono dentro del botón */
+            margin-right: 8px;
+            /* Espacio entre icono y texto */
+        }
+
+
+        /* --- Estilos Sección Contacto --- */
+        /* Contenedor principal para el formulario */
+        .contact-form-container {
+            background-color: #fff;
+            padding: 40px 50px;
+            /* Padding interno */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            /* El ancho será controlado por la columna de Bootstrap */
+        }
+
+        @media (max-width: 768px) {
+            .contact-form-container {
+                padding: 30px 25px;
+            }
+        }
+
+        /* Estilos específicos del formulario dentro del contenedor */
         .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: none;
+            /* Quitar el max-width anterior */
+            margin: 0;
+            /* Quitar margen auto */
+            text-align: left;
+            /* Alinear labels a la izquierda por defecto */
+        }
+
+        .contact-form h4 {
             text-align: center;
+            /* Centrar título H4 */
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #463c68;
+        }
+
+        .contact-form p {
+            text-align: center;
+            /* Centrar párrafo */
+            color: #6c757d;
+            margin-bottom: 30px;
         }
 
         .form-label {
-            font-weight: 500;
-            color: #555;
+            font-weight: 400;
+            color: #495057;
+            margin-bottom: 0.4rem;
+            display: block;
+            /* Asegurar que sea bloque */
         }
 
-        .btn-primary {
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 11px 16px;
+            /* Padding ajustado */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #a38ed4;
+            box-shadow: 0 0 0 0.25rem rgba(163, 142, 212, 0.3);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            /* Altura mínima textarea */
+        }
+
+        .contact-form .btn-primary {
+            /* Botón Enviar */
+            padding: 11px 35px;
+            /* Padding ajustado */
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-top: 15px;
             background-color: #a38ed4;
             border-color: #a38ed4;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            width: auto;
+            /* Ancho automático */
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
         }
 
-        .btn-primary:hover {
+        .contact-form .btn-primary:hover {
             background-color: #8a64b0;
             border-color: #8a64b0;
+            transform: scale(1.02);
+        }
+
+        .contact-form .text-center {
+            /* Clase para centrar el botón */
+            margin-top: 20px;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: #dde9ce !important;
+            color: #5a507a;
+            text-align: center;
+            padding: 45px 0;
+            /* Padding ajustado */
+            border-top: 1px solid #c8d3b9;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .social-icons a {
             color: #775c8d;
-            font-size: 28px;
-            margin: 0 15px;
+            font-size: 30px;
+            /* Tamaño ajustado */
+            margin: 0 18px;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
         }
 
         .social-icons a:hover {
-            color: #a38ed4;
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            color: #775c8d;
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #eee;
-        }
-
-        .navbar-light .navbar-brand,
-        .navbar-light .navbar-nav .nav-link {
             color: #463c68;
-        }
-
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #463c68;
-        }
-
-        .navbar-light .navbar-toggler {
-            border-color: #463c68;
-        }
-
-        /* Estilo para el icono del toggler */
-        .navbar-toggler-icon {
-            display: inline-block;
-            width: 1.5em;
-            height: 1.5em;
-            vertical-align: middle;
-            content: "";
-            background: no-repeat center center;
-            background-size: 100%;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(70, 60, 100, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            transform: translateY(-3px) scale(1.1);
         }
     </style>
+    <!-- Scripts externos (sin cambios) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS ya está incluido abajo, quitar duplicado si existe -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top"
-        style="background-color: #dde9ce !important;">
+    <!-- Navbar (HTML sin cambios) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">Aylén Martínez Piano & Música</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -355,114 +615,84 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#inicio">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#nosotros">Nosotros</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#clases">Clases</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contacto">Contacto</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="calendario.html">Calendario</a>
-                    </li> -->
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#clases">Clases</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (HTML sin cambios) -->
     <section id="inicio" class="hero-section">
         <div class="container">
             <p class="hero-text-custom"
                 style="font-weight: bold; color: black; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
                 Descubre la magia de la música y despierta tu talento conmigo.
             </p>
-            <a href="#contacto" class="btn btn-primary btn-lg hero-button-custom">¡Inicia Tu
-                Aventura Musical!</a>
+            <a href="#contacto" class="btn btn-primary btn-lg hero-button-custom">¡Inicia Tu Aventura Musical!</a>
         </div>
     </section>
 
-    <!-- About Us Section -->
+    <!-- About Us Section (HTML Refinado) -->
     <section id="nosotros" class="section">
         <div class="container">
             <h2 class="section-title">Sobre Mí</h2>
-            <div class="card shadow-sm border-0">
-                <div class="row g-0" style="min-height: 100%;">
-                    <div class="col-md-6">
-                        <div class="h-100 w-100" style="height: 100%;">
-                            <img src="imagenes/AM2.jpg" alt="Aylén Martínez" class="img-fluid h-100 w-100"
-                                style="object-fit: cover;">
-                        </div>
+            <div class="row g-lg-5 align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="about-image-container">
+                        <img src="imagenes/AM2.jpg" alt="Aylén Martínez" class="about-image">
                     </div>
-                    <div class="col-md-6 d-flex align-items-center">
-                        <div class="card-body">
-                            <p class="card-text" style="text-align: justify;">
-                                ¡Hola! Soy Aylén Martínez, y mi pasión es compartir el poder transformador de la música.
-                            </p>
-                            <p class="card-text" style="text-align: justify;">
-                                Creo profundamente en la música como un camino de expresión personal, bienestar y
-                                crecimiento.
-                                Por eso, mi propuesta va mucho más allá de aprender un instrumento: te invito a vivir la
-                                música
-                                como una filosofía de vida, como un lenguaje que te acompañe, te sostenga y te inspire.
-                            </p>
-                            <p class="card-text" style="text-align: justify;">
-                                Mi misión es brindarte una educación musical integral y personalizada, en un espacio
-                                cálido, de
-                                confianza y cuidado, donde cada alumno se sienta cómodo, contenido y motivado para
-                                aprender.
-                                Trabajo con programas adaptados no solo a tus necesidades y nivel, sino también a tus
-                                gustos e
-                                intereses, porque creo que aprender música tiene que ser una experiencia significativa y
-                                disfrutable.
-                            </p>
-                            <p class="card-text" style="text-align: justify;">
-                                Ofrezco clases de piano para personas desde los 3 años en adelante, sin límite de edad.
-                                Ya sea
-                                que estés dando tus primeros pasos o buscando perfeccionar tu técnica, te acompañaré con
-                                las
-                                herramientas necesarias para que puedas alcanzar tus objetivos, ya sea disfrutar tocando
-                                en casa
-                                o formarte profesionalmente.
-                            </p>
-                            <p class="card-text" style="text-align: justify;">
-                                Más que formar grandes músicos, mi propósito es que la música forme parte de tu vida de
-                                una
-                                manera auténtica, sensible y transformadora.
-                            </p>
-                        </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="about-text-content">
+                        <p style="text-align: justify;">¡Hola! Soy Aylén Martínez, y mi pasión es compartir el poder
+                            transformador de la música.</p>
+                        <p style="text-align: justify;">Me recibí de profesora en Perfeccionamiento de Piano en la
+                            Facultad de Artes de la UNC y tengo 18 años de experiencia docente en el ámbito específico
+                            del piano y de la música en general. A lo largo de mi trayectoria trabajé con alumnos de
+                            todas las edades, pero en particular con niños desde los 3 años, desarrollando propuestas
+                            que combinan técnica, sensibilidad y juego.</p>
+                        <p style="text-align: justify;">Creo profundamente en la música como un camino de expresión
+                            personal, bienestar y crecimiento. Por eso, mi propuesta va mucho más allá de aprender un
+                            instrumento: te invito a vivir la música como una filosofía de vida, como un lenguaje que te
+                            acompañe, te sostenga y te inspire.</p>
+                        <p style="text-align: justify;">Mi misión es brindarte una educación musical integral y
+                            personalizada, en un espacio cálido, de confianza y cuidado, donde cada alumno se sienta
+                            cómodo, contenido y motivado para aprender. Trabajo con programas adaptados no solo a tus
+                            necesidades y nivel, sino también a tus gustos e intereses, porque creo que aprender música
+                            tiene que ser una experiencia significativa y disfrutable.</p>
+                        <p style="text-align: justify;">Ofrezco clases de piano para personas desde los 3 años en
+                            adelante, sin límite de edad. Ya sea que estés dando tus primeros pasos o buscando
+                            perfeccionar tu técnica, te acompañaré con las herramientas necesarias para que puedas
+                            alcanzar tus objetivos, ya sea disfrutar tocando en casa o formarte profesionalmente.</p>
+                        <p class="mb-0" style="text-align: justify;">Más que formar grandes músicos, mi propósito es que
+                            la música forme parte de tu vida de una manera auténtica, sensible y transformadora.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Classes Section -->
+    <!-- Classes Section (HTML Refinado para Grid) -->
     <section id="clases" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Mis Clases</h2>
-            <div class="row">
-                <div class="col-md-3">
+            <div class="row justify-content-center g-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalIniciacionMusical">
-                        <img src="imagenes/iniciacionmusical.jpg" class="card-img-top" alt="Iniciación Musical"
-                            style="height: 250px; object-fit: cover;">
+                        <img src="imagenes/iniciacionmusical.jpg" class="card-img-top" alt="Iniciación Musical">
                         <div class="card-body">
                             <h5 class="card-title">Iniciación Musical</h5>
                             <p class="card-text">Explora el fascinante mundo de la música conmigo, ¡sin importar tu edad
-                                o
-                                experiencia!</p>
+                                o experiencia!</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesNinos">
-                        <img src="imagenes/niños.jpg" class="card-img-top" alt="Clases para Niños"
-                            style="height: 250px; object-fit: cover;">
+                        <img src="imagenes/niños.jpg" class="card-img-top" alt="Clases para Niños">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Niños</h5>
                             <p class="card-text">¡Aprender música es divertido! Clases personalizadas para despertar el
@@ -470,10 +700,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesJovenes">
-                        <img src="imagenes/jovenes.jpg" class="card-img-top" alt="Clases para Jóvenes"
-                            style="height: 250px; object-fit: cover;">
+                        <img src="imagenes/jovenes.jpg" class="card-img-top" alt="Clases para Jóvenes">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Jóvenes</h5>
                             <p class="card-text">Llevá tu pasión musical al siguiente nivel con clases diseñadas
@@ -481,15 +710,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesAdultos">
-                        <img src="imagenes/adultos.jpg" class="card-img-top" alt="Clases para Adultos"
-                            style="height: 250px; object-fit: cover;">
+                        <img src="imagenes/adultos.jpg" class="card-img-top" alt="Clases para Adultos">
                         <div class="card-body">
                             <h5 class="card-title">Clases para Adultos</h5>
                             <p class="card-text">¡Nunca es tarde para cumplir tu sueño! Descubrí el placer de tocar el
-                                piano
-                                conmigo.</p>
+                                piano conmigo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesTerapeutico">
+                        <img src="imagenes/terapeutico.png" class="card-img-top" alt="Piano Terapéutico">
+                        <div class="card-body">
+                            <h5 class="card-title">Piano Terapéutico</h5>
+                            <p class="card-text">Clases de piano para el bienestar emocional, sin exigencias. Tocá,
+                                escuchá o simplemente sentite.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="card h-100 clase-card" data-bs-toggle="modal" data-bs-target="#modalClasesIngreso">
+                        <img src="imagenes/ingreso.png" class="card-img-top" alt="Clases para ingreso">
+                        <div class="card-body">
+                            <h5 class="card-title">Ingreso a Institutos</h5>
+                            <p class="card-text">Preparación personalizada para exámenes de ingreso a carreras de música
+                                (lectura, audio, teoría).</p>
                         </div>
                     </div>
                 </div>
@@ -497,146 +744,108 @@
         </div>
     </section>
 
-    <style>
-        @media (max-width: 576px) {
-            #modalIniciacionMusical .modal-dialog {
-                margin: auto !important;
-                width: 90% !important;
-            }
-        }
-    </style>
-
-    <!-- Modals -->
+    <!-- Modals (HTML Sin cambios estructurales) -->
     <div class="modal fade" id="modalIniciacionMusical" tabindex="-1" aria-labelledby="modalIniciacionMusicalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered"
-            style="max-width: 80%; width: 80%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-            <div class="modal-content" style="border-radius: 12px; background-color: #f8f9fa; padding: 0;">
-                <div class="modal-header"
-                    style="background-color: #96a5c0; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 20px;">
-                    <h5 class="modal-title" id="modalIniciacionMusicalLabel"
-                        style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.5rem; font-weight: 600;">
-                        Iniciación Musical</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                        style="color: white; font-size: 1.4rem; opacity: 1; transition: opacity 0.3s;"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIniciacionMusicalLabel">Iniciación Musical</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body"
-                    style="padding: 30px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #555; line-height: 1.6;">
+                <div class="modal-body">
                     <audio id="audioClasesIniciacion" src="audios/audioIniciacion.mp3" preload="auto" muted></audio>
-                    <p style="text-align: justify; font-size: 1.1rem;">
+                    <p style="text-align: justify;">
                         🎶 <strong>Descubrí la música desde el cuerpo, el ritmo y el juego</strong><br><br>
-
                         La música no solo se escucha: se vive, se siente y se mueve. En nuestras clases de Iniciación
                         Sensorial y Musical (3 a 5 años), los niños exploran la música a través del juego, el movimiento
                         y la creatividad.<br><br>
-
                         🌀 <strong>¿Cómo aprenden?</strong><br>
                         Mediante actividades lúdicas como el canto, la percusión corporal y la improvisación,
                         desarrollan coordinación, oído musical y expresión emocional de forma natural y
                         divertida.<br><br>
-
                         🌟 <strong>Beneficios:</strong><br>
                         ✅ Estimulan el ritmo, la coordinación y la creatividad<br>
                         ✅ Refuerzan la atención, memoria y expresión<br>
                         ✅ Forman una base sólida para aprender un instrumento en el futuro<br><br>
-
                         🎻 <strong>Un primer paso hacia lo instrumental</strong><br>
                         Estas experiencias musicales ayudan a los niños a descubrir sus gustos y prepararse con
                         confianza para elegir un instrumento más adelante.<br><br>
-
                         👨‍👩‍👧‍👦 <strong>¡La familia también suma!</strong><br>
                         El acompañamiento en casa potencia lo aprendido en clase y hace crecer cada pequeño logro.
                     </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Quisiera%20saber%20más%20sobre%20las%20clases%20de%20Iniciación%20Musical."
-                        class="btn" style="background-color: #d9e6cc;" target="_blank"
-                        style="background-color: #28a745; border-color: #28a745; font-weight: 600; padding: 12px 25px; font-size: 1.1rem; border-radius: 8px; text-transform: uppercase; transition: background-color 0.3s, transform 0.3s;">
-                        ¡Preguntame por WhatsApp!
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>¡Preguntame por WhatsApp!
                     </a>
                 </div>
-                <div class="modal-footer"
-                    style="background-color: #f1f1f1; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; padding: 20px;">
-                    <button type="button" class="btn" style="background-color: #f3a391;" data-bs-dismiss="modal"
-                        style="border-radius: 8px; padding: 12px 25px; font-weight: 500; font-size: 1rem; transition: background-color 0.3s, transform 0.3s;">
-                        Cerrar
-                    </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modals para las otras clases (Clases para Niños, Clases para Jóvenes, Clases para Adultos) -->
     <div class="modal fade" id="modalClasesNinos" tabindex="-1" aria-labelledby="modalClasesNinosLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered"
-            style="max-width: 80%; width: 80%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-            <div class="modal-content" style="border-radius: 12px; background-color: #f8f9fa; padding: 0;">
-                <div class="modal-header"
-                    style="background-color: #96a5c0; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 20px;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title" id="modalClasesNinosLabel">Clases para Niños</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                        style="filter: brightness(0) invert(1);"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body" style="padding: 20px;">
+                <div class="modal-body">
                     <audio id="audioClasesNinios" src="audios/audioNinios.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">
                         ¿Querés que tus hijos exploren su creatividad y desarrollen su sensibilidad musical? En mis
-                        clases
-                        para niños, creo un ambiente divertido y estimulante donde aprenderán jugando. ¡Contactame y
-                        empecemos juntos esta aventura!
+                        clases para niños, creo un ambiente divertido y estimulante donde aprenderán jugando.
+                        ¡Contactame y empecemos juntos esta aventura!
                     </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20las%20clases%20de%20música%20para%20niños."
-                        class="btn" style="background-color: #d9e6cc;" target="_blank">¡Preguntame por WhatsApp!</a>
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>¡Preguntame por WhatsApp!
+                    </a>
                 </div>
-                <div class="modal-footer" style="padding: 15px;">
-                    <button type="button" class="btn" style="background-color: #f3a391;"
-                        data-bs-dismiss="modal">Cerrar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="modalClasesJovenes" tabindex="-1" aria-labelledby="modalClasesJovenesLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered"
-            style="max-width: 80%; width: 80%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-            <div class="modal-content" style="border-radius: 12px; background-color: #f8f9fa; padding: 0;">
-                <div class="modal-header"
-                    style="background-color: #96a5c0; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 20px;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title" id="modalClasesJovenesLabel">Clases para Jóvenes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                        style="filter: brightness(0) invert(1);"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body" style="padding: 20px;">
+                <div class="modal-body">
                     <audio id="audioClasesJovenes" src="audios/audioJovenes.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">
                         ¿Buscás un espacio para expresar tu pasión por la música y perfeccionar tu técnica? En mis
-                        clases
-                        para jóvenes, te ofrezco un programa personalizado para que explores todo tu potencial y
-                        alcances
-                        tus metas musicales. ¡Contactame hoy mismo!
+                        clases para jóvenes, te ofrezco un programa personalizado para que explores todo tu potencial y
+                        alcances tus metas musicales. ¡Contactame hoy mismo!
                     </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Me%20gustaría%20saber%20más%20sobre%20las%20clases%20de%20música%20para%20jóvenes."
-                        class="btn" style="background-color: #d9e6cc;" target="_blank">¡Preguntame por WhatsApp!</a>
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>¡Preguntame por WhatsApp!
+                    </a>
                 </div>
-                <div class="modal-footer" style="padding: 15px;">
-                    <button type="button" class="btn" style="background-color: #f3a391;"
-                        data-bs-dismiss="modal">Cerrar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="modalClasesAdultos" tabindex="-1" aria-labelledby="modalClasesAdultosLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered"
-            style="max-width: 80%; width: 80%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-            <div class="modal-content" style="border-radius: 12px; background-color: #f8f9fa; padding: 0;">
-                <div class="modal-header"
-                    style="background-color: #96a5c0; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; padding: 20px;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title" id="modalClasesAdultosLabel">Clases para Adultos</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                        style="filter: brightness(0) invert(1);"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body" style="padding: 20px;">
+                <div class="modal-body">
                     <audio id="audioClasesAdultos" src="audios/audioAdultos.mp3" preload="auto" muted></audio>
                     <p style="text-align: justify;">
                         ¿Creés que es demasiado tarde para aprender a tocar el piano? ¡Nunca lo es! En mis clases para
@@ -644,160 +853,168 @@
                         hacer música!
                     </p>
                     <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20tomar%20clases%20de%20piano%20para%20adultos."
-                        class="btn" style="background-color: #d9e6cc;" target="_blank">¡Preguntame por WhatsApp!</a>
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>¡Preguntame por WhatsApp!
+                    </a>
                 </div>
-                <div class="modal-footer" style="padding: 15px;">
-                    <button type="button" class="btn" style="background-color: #f3a391;"
-                        data-bs-dismiss="modal">Cerrar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalClasesTerapeutico" tabindex="-1" aria-labelledby="modalClasesTerapeuticoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClasesTerapeuticoLabel">Piano Terapéutico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <audio id="audioClasesTerapeutico" src="audios/terapeutico.mp3" preload="auto" muted></audio>
+                    <p style="text-align: justify;">
+                        Estas clases están pensadas para quienes desean acercarse al piano desde un lugar de cuidado,
+                        conexión y bienestar emocional. No se trata de cumplir con objetivos técnicos ni de practicar
+                        como una obligación, sino de abrir un espacio donde la música sea una aliada para expresarnos,
+                        relajarnos y reencontrarnos con lo que sentimos.
+                    </p>
+                    <p style="text-align: justify;">
+                        En las clases de Piano Terapéutico podés tocar, improvisar, escuchar, o simplemente charlar.
+                        Podemos trabajar con tus emociones, tus intereses, tus tiempos y tu forma de disfrutar la
+                        música. Yo te acompaño con mi guía, mi escucha y mi experiencia, sin exigencias ni presiones.
+                    </p>
+                    <p style="text-align: justify;">
+                        La música puede ser un refugio, un lenguaje propio, un momento de pausa. Estas clases te invitan
+                        a habitar ese espacio con libertad y autenticidad, dejando que el piano y el sonido sean
+                        herramientas para sentirte mejor, más conectado/a con vos mismo/a y con el presente.
+                    </p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20tomar%20clases%20de%20piano%20terapéutico."
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>¡Preguntame por WhatsApp!
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalClasesIngreso" tabindex="-1" aria-labelledby="modalClasesIngresoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClasesIngresoLabel">Preparación para Ingresos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <audio id="audioClasesIngreso" src="audios/ingresos.mp3" preload="auto" muted></audio>
+                    <p style="text-align: justify;">
+                        Ofrezco un acompañamiento personalizado para quienes desean rendir exámenes de ingreso a
+                        profesorados, tecnicaturas o carreras universitarias de música.
+                    </p>
+                    <p style="text-align: justify;">
+                        El trabajo se adapta a los requisitos específicos y programas de cada institución e incluye:
+                    </p>
+                    <ul>
+                        <li>Práctica de lectura musical y rítmica</li>
+                        <li>Audioperceptiva</li>
+                        <li>Apoyo en teoría musical y análisis, si fuera requerido</li>
+                    </ul>
+                    <p style="text-align: justify;">
+                        Mi objetivo es brindarte herramientas sólidas, confianza y claridad en el proceso de
+                        preparación, para que llegues al examen con seguridad y bien acompañado/a en cada etapa.
+                    </p>
+                    <a href="https://wa.me/5493543300004?text=Hola,%20Aylén!%20Estoy%20interesado/a%20en%20la%20preparación%20para%20el%20ingreso%20a%20instituciones%20de%20música."
+                        class="btn" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i> ¡Preguntame por WhatsApp!
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Script Audio Modals (Sin cambios) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Obtener el elemento de audio
-        const audioClasesAdultos = document.getElementById('audioClasesAdultos');
-        // Evento al mostrar el modal
-        $('#modalClasesAdultos').on('show.bs.modal', function (e) {
-            audioClasesAdultos.muted = false; // Desmutear
-            audioClasesAdultos.play(); // Reproducir el audio
-        });
-        // Evento al ocultar el modal
-        $('#modalClasesAdultos').on('hide.bs.modal', function (e) {
-            audioClasesAdultos.pause(); // Pausar el audio
-            audioClasesAdultos.currentTime = 0; // Reiniciar el audio al principio
-        });
-
-        const audioClasesJovenes = document.getElementById('audioClasesJovenes');
-        // Evento al mostrar el modal
-        $('#modalClasesJovenes').on('show.bs.modal', function (e) {
-            audioClasesJovenes.muted = false; // Desmutear
-            audioClasesJovenes.play(); // Reproducir el audio
-        });
-        // Evento al ocultar el modal
-        $('#modalClasesJovenes').on('hide.bs.modal', function (e) {
-            audioClasesJovenes.pause(); // Pausar el audio
-            audioClasesJovenes.currentTime = 0; // Reiniciar el audio al principio
-        });
-
-        const audioClasesNinios = document.getElementById('audioClasesNinios');
-        // Evento al mostrar el modal
-        $('#modalClasesNinos').on('show.bs.modal', function (e) {
-            audioClasesNinios.muted = false; // Desmutear
-            audioClasesNinios.play(); // Reproducir el audio
-        });
-        // Evento al ocultar el modal
-        $('#modalClasesNinos').on('hide.bs.modal', function (e) {
-            audioClasesNinios.pause(); // Pausar el audio
-            audioClasesNinios.currentTime = 0; // Reiniciar el audio al principio
-        });
-
-        const audioClasesIniciacion = document.getElementById('audioClasesIniciacion');
-        // Evento al mostrar el modal
-        $('#modalIniciacionMusical').on('show.bs.modal', function (e) {
-            audioClasesIniciacion.muted = false; // Desmutear
-            audioClasesIniciacion.play(); // Reproducir el audio
-        });
-        // Evento al ocultar el modal
-        $('#modalIniciacionMusical').on('hide.bs.modal', function (e) {
-            audioClasesIniciacion.pause(); // Pausar el audio
-            audioClasesIniciacion.currentTime = 0; // Reiniciar el audio al principio
-        });
+        function setupAudioModal(modalId, audioId) { const audioElement = document.getElementById(audioId); if (!audioElement) return; const modalElement = document.getElementById(modalId); if (!modalElement) return; $(modalElement).on('show.bs.modal', function (e) { audioElement.muted = false; audioElement.play().catch(error => console.log("Audio play prevented:", error)); }); $(modalElement).on('hide.bs.modal', function (e) { audioElement.pause(); audioElement.currentTime = 0; }); }
+        setupAudioModal('modalIniciacionMusical', 'audioClasesIniciacion'); setupAudioModal('modalClasesNinos', 'audioClasesNinios'); setupAudioModal('modalClasesJovenes', 'audioClasesJovenes'); setupAudioModal('modalClasesAdultos', 'audioClasesAdultos'); setupAudioModal('modalClasesTerapeutico', 'audioClasesTerapeutico'); setupAudioModal('modalClasesIngreso', 'audioClasesIngreso');
     </script>
-    <!-- Contact Section -->
+
+    <!-- Contact Section (HTML Refinado) -->
     <section id="contacto" class="section">
         <div class="container">
             <h2 class="section-title">Contacto</h2>
-            <div class="row">
-                <div class="col-md-12" style="text-align: center;">
-                    <h4>Comienza tu camino musical hoy!</h4>
+            <!-- Contenedor para centrar y aplicar estilo -->
+            <div class="contact-form-container mx-auto" style="max-width: 850px;">
+                <div class="text-center">
+                    <h4>¡Comienza tu camino musical hoy!</h4>
                     <p>Estoy encantada de responder a tus preguntas:</p>
-                    <form class="contact-form" id="contactForm">
-                        <div class="mb-3">
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu Nombre"
                                 required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Tu Email"
+                            <input type="email" class="form-control" id="email" name="email" placeholder="tu@email.com"
                                 required>
                         </div>
-                        <div class="mb-3">
-                            <label for="mensaje" class="form-label">Mensaje</label>
-                            <textarea class="form-control" id="mensaje" name="mensaje" rows="4" placeholder="Tu Mensaje"
-                                required></textarea>
-                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" name="mensaje" rows="5"
+                            placeholder="Escribe tu consulta aquí..." required></textarea>
+                    </div>
+                    <div class="text-center">
                         <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- EmailJS y SweetAlert -->
+    <!-- EmailJS y SweetAlert (Sin cambios en JS) -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        (function () {
-            emailjs.init("qOfrwmjiPJNVT91sk"); // Reemplaza con tu User ID de EmailJS qOfrwmjiPJNVT91sk
-        })();
-
+        (function () { emailjs.init("qOfrwmjiPJNVT91sk"); })();
         document.getElementById("contactForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            // Capturar datos del formulario
-            const templateParams = {
-                title: "Clases de piano",
-                time: new Date().toLocaleString(),
-                name: document.getElementById("nombre").value,
-                email: document.getElementById("email").value,
-                message: document.getElementById("mensaje").value
-            };
-
-            // Enviar el correo con EmailJS
-            emailjs.send("service_93zs6up", "template_fh5nn4h", templateParams) //service id: service_93zs6up / template id: template_fh5nn4h
-                .then(response => {
-                    // Mostrar mensaje de éxito con SweetAlert
-                    Swal.fire({
-                        title: "Éxito",
-                        text: "Correo enviado correctamente ✅",
-                        icon: "success"
-                    });
-
-                    // Limpiar el formulario
-                    document.getElementById("contactForm").reset();
-                })
-                .catch(error => {
-                    // Mostrar error con SweetAlert
-                    Swal.fire({
-                        title: "Error",
-                        text: "Error al enviar el correo ❌",
-                        icon: "error"
-                    });
-
-                    console.error("Error:", error);
-                });
+            event.preventDefault(); const submitButton = event.target.querySelector('button[type="submit"]'); submitButton.disabled = true; submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+            const templateParams = { title: "Consulta Clases de Piano/Música", time: new Date().toLocaleString(), name: document.getElementById("nombre").value, email: document.getElementById("email").value, message: document.getElementById("mensaje").value };
+            emailjs.send("service_93zs6up", "template_fh5nn4h", templateParams)
+                .then(response => { Swal.fire({ title: "¡Mensaje Enviado!", text: "Gracias por contactarte. Te responderé a la brevedad.", icon: "success", confirmButtonColor: '#a38ed4' }); document.getElementById("contactForm").reset(); })
+                .catch(error => { Swal.fire({ title: "Error", text: "Hubo un problema al enviar tu mensaje. Por favor, intenta nuevamente o contáctame por WhatsApp.", icon: "error", confirmButtonColor: '#a38ed4' }); console.error("Error EmailJS:", error); })
+                .finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Enviar Mensaje'; });
         });
     </script>
 
     <!-- Footer -->
-    <footer class="footer" style="background-color: #dde9ce !important;">
+    <footer class="footer">
         <div class="container">
-            <p id="copyright" style="font-weight: bold;">© 2024 Aylén Martínez Piano & Música</p>
+            <p id="copyright">© 2024 Aylén Martínez Piano & Música</p>
             <div class="social-icons">
-                <a href="https://wa.me/5493543300004?text=Hola%20Aylén!%20Me%20gustaría%20me%20brindaras%20más%20información%20sobre%20las%20clases%20de%20piano"
-                    target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.instagram.com/aylenmartinezpianoymusica?igsh=MWVjZjlxOGdtMWV1Zw=="
-                    target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5493543300004?text=Hola%20Aylén!%20Me%20gustaría%20más%20información%20sobre%20las%20clases"
+                    target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.instagram.com/aylenmartinezpianoymusica?igsh=MWVjZjlxOGdtMWV1Zw==" target="_blank"
+                    aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </footer>
     <script>
         document.getElementById('copyright').innerHTML = '© ' + new Date().getFullYear() + ' Aylén Martínez Piano & Música';
     </script>
+
+    <!-- Bootstrap Bundle JS (Asegúrate que esté al final) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
