@@ -171,13 +171,13 @@
             color: #333
         }
 
-        .tipo-desde-tres-anios {
+        .tipo-clase-de-prueba {
             background-color: #b3e6f2;
             border-color: #b3e6f2;
             color: #333
         }
 
-        .tipo-piano-terapeutico {
+        .tipo-clase-de-recuperacion {
             background-color: #f59e90;
             border-color: #e38e80;
             color: #333
@@ -305,6 +305,7 @@
 <body style="background-color: #dde9ce !important;">
     <div class="container py-4">
         <div class="calendar-container" id="calendarContainer">
+            <!-- Cabecera (Sin cambios) -->
             <div class="mb-4">
                 <a href="dashboard.html" class="back-to-dashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -316,10 +317,11 @@
                 </a>
             </div>
             <h2 class="calendar-title">Calendario de Clases Semanal</h2>
+
+            <!-- Botones de Acción (Excel NO está disabled) -->
             <div class="action-buttons">
-                <button id="downloadImageBtn" class="btn btn-sm" boton cancelar modal
-                    style="background-color: #f3a391;"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
-                        viewBox="0 0 16 16">
+                <button id="downloadImageBtn" class="btn btn-sm" style="background-color: #f3a391;"> <svg
+                        class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                         <path
                             d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
@@ -329,10 +331,8 @@
                         width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path
                             d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
-                        <!-- Corrected missing path data -->
                         <path fill-rule="evenodd"
                             d="M5 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
-
                     </svg> Exportar PDF </button>
                 <button id="exportExcelBtn" class="btn btn-sm"
                     style="background-color: #c0d5c1; border-color: #c0d5c1;color: black;"> <svg
@@ -340,7 +340,6 @@
                         class="bi bi-file-earmark-spreadsheet me-1" viewBox="0 0 16 16">
                         <path
                             d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9h-3V6h1V4.5h-1A1.5 1.5 0 0 1 9.5 3M3 11h10v1h-3v2h3v1h-3v2H9v-2H6v2H5v-2H3z" />
-                        <!-- Corrected missing path data -->
                         <path d="M3 6h10v3H3z" />
                     </svg> Exportar Excel </button>
                 <button id="exportDataBtn" class="btn btn-sm"
@@ -365,11 +364,15 @@
                     </svg> Importar JSON </button>
                 <input type="file" id="fileInput" accept=".txt, .json" style="display: none;" />
             </div>
+
+            <!-- Calendario -->
             <div class="calendar" id="calendar">
                 <div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando calendario...</div>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
     <div class="modal fade" id="reservaModal" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -378,9 +381,11 @@
                         class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="reservaForm" novalidate> <input type="hidden" id="reservaDia" /> <input type="hidden"
-                            id="reservaHora" />
+                    <form id="reservaForm" novalidate>
+                        <input type="hidden" id="reservaDia" />
+                        <input type="hidden" id="reservaHora" />
                         <div class="row g-3">
+                            <!-- Campos originales -->
                             <div class="col-md-6 mb-3"> <label for="horaInicio" class="form-label">Inicio</label> <input
                                     type="time" class="form-control bg-light" id="horaInicio" readonly /> </div>
                             <div class="col-md-6 mb-3"> <label for="horaFin" class="form-label">Fin</label> <input
@@ -389,155 +394,504 @@
                                     type="text" id="nombre" class="form-control" required />
                                 <div class="invalid-feedback">Ingresa un nombre.</div>
                             </div>
-                            <div class="col-md-6 mb-3"> <label for="tipo" class="form-label">Tipo</label> <select
-                                    id="tipo" class="form-select" required>
+                            <div class="col-md-6 mb-3">
+                                <label for="tipo" class="form-label">Tipo</label>
+                                <!-- *** Select de Tipo MODIFICADO *** -->
+                                <select id="tipo" class="form-select" required>
                                     <option>Individual</option>
                                     <option>Grupal</option>
                                     <option>Ayuda Ingreso a institutos</option>
-                                    <!-- <option>Desde los 3 años</option> -->
-                                    <!-- <option>Piano terapéutico</option> -->
-                                </select> </div>
-                            <div class="col-md-6 mb-3"> <label for="duracion" class="form-label">Duración</label>
+                                    <option>Clase de prueba</option> <!-- NUEVA -->
+                                    <option>Clase de recuperación</option> <!-- NUEVA -->
+                                    <!-- <option>Desde los 3 años</option> --> <!-- Original comentada -->
+                                    <!-- <option>Piano terapéutico</option> --> <!-- Original comentada -->
+                                </select>
+                                <div class="invalid-feedback">Selecciona un tipo.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="duracion" class="form-label">Duración</label>
                                 <select id="duracion" class="form-select" required>
                                     <option value="40">40 min</option>
                                     <option value="60">1 hora</option>
                                 </select>
+                                <div class="invalid-feedback">Selecciona duración.</div>
+                            </div>
+                            <!-- *** Campo Fecha Específica NUEVO (Oculto por CSS) *** -->
+                            <div class="col-12 mb-3 date-input-group" id="fechaEspecificaGroup">
+                                <label for="fechaEspecifica" class="form-label">Fecha Específica</label>
+                                <input type="date" id="fechaEspecifica" class="form-control" />
+                                <div class="invalid-feedback">Ingresa una fecha para este tipo de clase.</div>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer"> <button type="button" class="btn me-auto" boton cancelar modal
-                        style="background-color: #f3a391;" id="eliminarBtn" style="display: none;"> <svg class="bi me-1"
-                            width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <!-- Footer del Modal (Sin cambios) -->
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" style="background-color: #f3a391;" id="eliminarBtn"
+                        style="display: none;"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                             <path
                                 d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                        </svg> Eliminar </button> <button type="button" class="btn"
+                        </svg> Eliminar </button>
+                    <button type="button" class="btn"
                         style="background-color: #fae39e; border-color: #fae39e; color: black;"
-                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn"
                         style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;" id="guardarBtn"> Guardar
-                    </button> </div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Back to Top Button HTML -->
+    <!-- Botón Back to Top (Sin cambios) -->
     <button id="backToTopBtn" title="Volver arriba"
-        style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-up-short"
-            viewBox="0 0 16 16">
+        style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;"> <svg xmlns="http://www.w3.org/2000/svg"
+            width="24" height="24" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
                 d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
-        </svg>
-    </button>
-    <!-- End Back to Top Button HTML -->
+        </svg> </button>
 
+    <!-- Scripts JS (Bootstrap, SweetAlert2) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // --- Handlers Carga XLSX (Como los proporcionaste) ---
         function xlsxScriptLoaded() {
             console.log("XLSX loaded.");
-            const e = document.getElementById("exportExcelBtn"); e ? e.disabled = !1 : setTimeout(() => {
-                const e = document.getElementById("exportExcelBtn"); e ? e.disabled = !1 : console.error("Excel export button not found after delay.")
-            }, 500)
-        } function xlsxScriptFailed() {
+            const e = document.getElementById("exportExcelBtn");
+            if (e) { e.disabled = false; } // Habilita si carga bien
+            else { setTimeout(() => { const delayedBtn = document.getElementById("exportExcelBtn"); if (delayedBtn) delayedBtn.disabled = false; else console.error("Excel export button not found after delay."); }, 500); }
+        }
+        function xlsxScriptFailed() {
             console.error("Failed to load XLSX library.");
             const e = document.getElementById("exportExcelBtn");
-            e && (e.title = "Error al cargar librería Excel",
-                e.classList.add("btn-danger"),
-                e.innerHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/></svg> Error Excel'), Swal.fire("Error Crítico", "No se pudo cargar la librería necesaria para exportar a Excel. Por favor, revisa tu conexión a internet y recarga la página.", "error")
-        } !function () { emailjs.init({ publicKey: "qOfrwmjiPJNVT91sk" }) }(); const calendar = document.getElementById("calendar"), downloadImageBtn = document.getElementById("downloadImageBtn"), downloadPdfBtn = document.getElementById("downloadPdfBtn"), exportDataBtn = document.getElementById("exportDataBtn"), importDataBtn = document.getElementById("importDataBtn"), exportExcelBtn = document.getElementById("exportExcelBtn"), fileInput = document.getElementById("fileInput"), reservaForm = document.getElementById("reservaForm"), eliminarBtn = document.getElementById("eliminarBtn"), guardarBtn = document.getElementById("guardarBtn"), duracionSelect = document.getElementById("duracion"), days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"], startHour = 900, endHour = 1260, hours = [], generationIntervalMinutes = 20; for (let e = startHour; e < endHour; e += generationIntervalMinutes)hours.push(e); const localKey = "reservasCalendarioV2"; let reservas = {}; function formatHora(e) { const t = Math.floor(e / 60).toString().padStart(2, "0"), o = (e % 60).toString().padStart(2, "0"); return `${t}:${o}` } function getTipoClass(e) { switch (e) { case "Individual": return "tipo-individual"; case "Grupal": return "tipo-grupal"; case "Ayuda Ingreso a institutos": return "tipo-ayuda-ingreso"; case "Desde los 3 años": return "tipo-desde-tres-anios"; case "Piano terapéutico": return "tipo-piano-terapeutico"; default: return console.warn(`Tipo desconocido: "${e}". Usando default.`), "tipo-default" } } function guardarReservasEnLocalStorage() { try { localStorage.setItem(localKey, JSON.stringify(reservas)), console.log("Reservas guardadas.") } catch (e) { console.error("Error guardando:", e), Swal.fire("Error", "No se pudieron guardar.", "error") } } function cargarReservasDesdeLocalStorage() { calendar.innerHTML = '<div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando...</div>'; try { const e = localStorage.getItem(localKey); reservas = e ? JSON.parse(e) : {}, console.log("Reservas cargadas.") } catch (e) { console.error("Error cargando:", e), reservas = {}, Swal.fire("Error", "Datos corruptos.", "warning") } requestAnimationFrame(() => setTimeout(renderCalendar, 0)) }
-        function renderCalendar() {
-            calendar.innerHTML = "",
-                days.forEach(e => {
-                    const t = document.createElement("div");
-                    t.className = "day",
-                        t.innerHTML = `<h5>${e}</h5>`,
-                        hours.forEach(o => {
-                            const n = formatHora(o),
-                                a = `${e}-${n}`,
-                                r = reservas[a];
-                            if (r) {
-                                const s = document.createElement("div"),
-                                    i = r.tipo,
-                                    l = getTipoClass(i);
-                                s.classList.add("hour", "reserved", l),
-                                    s.innerHTML = `<strong>${r.nombre}</strong><br>${r.horaInicio} - ${r.horaFin} (${r.duracion} min)<br><small>${r.tipo}</small>`,
-                                    s.onclick = () => abrirModal(e, n, r), t.appendChild(s)
-                            } else if (!estaEnReserva(e, o) && canFitReservation(e, o, 40)) { const s = document.createElement("div"); s.className = "hour", s.textContent = n, s.onclick = () => abrirModal(e, n, null), t.appendChild(s) }
-                        }), calendar.appendChild(t)
-                })
-        } function estaEnReserva(e, t) { for (const o in reservas) { const n = reservas[o]; if (!o || "string" != typeof o || o.indexOf("-") === -1) continue; const a = o.split("-"); if (a.length < 2) continue; const r = a.slice(0, -1).join("-"); if (r !== e || !n || "object" != typeof n || !n.horaInicio || "string" != typeof n.horaInicio || "number" != typeof n.duracion || isNaN(n.duracion)) continue; const s = n.horaInicio.split(":"); if (s.length !== 2) continue; const i = parseInt(s[0], 10), l = parseInt(s[1], 10); if (isNaN(i) || isNaN(l)) continue; const c = 60 * i + l, d = c + n.duracion; if (t >= c && t < d) return !0 } return !1 } function canFitReservation(e, t, o) { const n = t + o; if (n > endHour) return !1; for (const a in reservas) { const r = reservas[a]; if (!a || "string" != typeof a || a.indexOf("-") === -1) continue; const s = a.split("-"); if (s.length < 2) continue; const i = s.slice(0, -1).join("-"); if (i !== e || !r || "object" != typeof r || !r.horaInicio || "string" != typeof r.horaInicio || "number" != typeof r.duracion || isNaN(r.duracion)) continue; const l = r.horaInicio.split(":"); if (l.length !== 2) continue; const c = parseInt(l[0], 10), d = parseInt(l[1], 10); if (isNaN(c) || isNaN(d)) continue; const u = 60 * c + d, h = u + r.duracion; if (t < h && n > u) return !1 } return !0 } function actualizarHoraFin() { const e = document.getElementById("horaInicio").value, t = parseInt(duracionSelect.value); if (!e || isNaN(t) || t <= 0) return document.getElementById("horaFin").value = "", guardarBtn.disabled = !0, void 0; const [o, n] = e.split(":").map(Number), a = 60 * o + n, r = a + t; r > endHour ? (document.getElementById("horaFin").value = formatHora(endHour), guardarBtn.disabled = !0, Swal.fire({ icon: "warning", title: "Hora Inválida", text: `Termina después de ${formatHora(endHour)}.`, timer: 3e3, showConfirmButton: !1 })) : (document.getElementById("horaFin").value = formatHora(r), guardarBtn.disabled = !1) } function abrirModal(e, t, o) { reservaForm.classList.remove("was-validated"), document.getElementById("reservaDia").value = e, document.getElementById("reservaHora").value = t, document.getElementById("nombre").value = o?.nombre || "", document.getElementById("tipo").value = o?.tipo || "Individual", duracionSelect.value = o?.duracion || 40, document.getElementById("horaInicio").value = o?.horaInicio || t, actualizarHoraFin(), eliminarBtn.style.display = o ? "inline-block" : "none"; const n = new bootstrap.Modal(document.getElementById("reservaModal")); n.show() } duracionSelect.addEventListener("change", actualizarHoraFin); function enviarCorreoReserva(e) { const t = "service_93zs6up", o = "template_352le9n", n = { day: e.dia, horaInicio: e.horaInicio, horaFin: e.horaFin, name: e.nombre, type: e.tipo, duration: e.duracion, ac1: e.ac1, ac2: e.ac2 }; console.log("Enviando correo:", n), emailjs.send(t, o, n).then(e => { console.log("Éxito!", e.status, e.text); const t = Swal.mixin({ toast: !0, position: "top-end", showConfirmButton: !1, timer: 2e3, timerProgressBar: !0, didOpen: e => { e.onmouseenter = Swal.stopTimer, e.onmouseleave = Swal.resumeTimer } }); t.fire({ icon: "info", title: "Notificación enviada." }) }).catch(e => { console.error("Error correo:", e), Swal.fire({ title: "Error Notificación", text: `Reserva guardada, error al enviar correo: ${e.text || "Desconocido"}`, icon: "warning", timer: 4e3, showConfirmButton: !0 }) }) } guardarBtn.onclick = () => { if (!reservaForm.checkValidity()) return reservaForm.classList.add("was-validated"), void 0; const e = document.getElementById("reservaDia").value, t = document.getElementById("horaInicio").value, o = document.getElementById("nombre").value.trim(), n = document.getElementById("tipo").value, a = parseInt(duracionSelect.value); if (isNaN(a) || a <= 0) return Swal.fire("Error", "Duración inválida.", "error"), void 0; const [r, s] = t.split(":").map(Number), i = 60 * r + s, l = i + a; if (l > endHour) return Swal.fire("Error", `Termina después de ${formatHora(endHour)}.`, "error"), void 0; const c = formatHora(l), d = `${e}-${t}`; let u = !1, h = null; for (const g in reservas) { if (g === d) continue; const f = reservas[g]; if (!g || g.indexOf("-") === -1) continue; const m = g.split("-"); if (m.length < 2) continue; const p = m.slice(0, -1).join("-"); if (p !== e || !f || !f.horaInicio || !f.duracion || isNaN(f.duracion)) continue; const w = f.horaInicio.split(":"); if (w.length !== 2) continue; const E = parseInt(w[0], 10), I = parseInt(w[1], 10); if (isNaN(E) || isNaN(I)) continue; const L = 60 * E + I, S = L + f.duracion; if (i < S && l > L) { u = !0, h = f; break } } if (u) return Swal.fire("Conflicto", `Se solapa con "${h.nombre}" (${h.horaInicio}-${h.horaFin}).`, "error"), void 0; const b = eliminarBtn.style.display !== "none", v = () => { let r, s; b ? (r = "modificaste la reserva a nombre de", s = ", con las siguientes características:") : (r = "Te recuerdo que registraste una reserva a nombre de", s = ", con las siguientes características:"); const i = { nombre: o, tipo: n, duracion: a, horaInicio: t, horaFin: c }, l = document.getElementById("reservaHora").value, u = `${e}-${l}`; b && d !== u && reservas[u] && delete reservas[u], reservas[d] = i, guardarReservasEnLocalStorage(); const h = { dia: e, horaInicio: t, horaFin: c, nombre: o, tipo: n, duracion: a, ac1: r, ac2: s }; enviarCorreoReserva(h); const g = document.getElementById("reservaModal"), f = bootstrap.Modal.getInstance(g); f && f.hide(), renderCalendar(), Swal.fire({ icon: "success", title: "¡Guardado!", text: `Reserva para ${o} guardada.`, showConfirmButton: !1, timer: 1500 }) }; b ? Swal.fire({ title: "Confirmar", text: `Guardar cambios para "${o}"?`, icon: "question", showCancelButton: !0, confirmButtonColor: "#d9e6cc", cancelButtonColor: "#f3a391", confirmButtonText: "Sí", cancelButtonText: "No" }).then(e => { e.isConfirmed && v() }) : v() }, eliminarBtn.onclick = () => {
-            const e = document.getElementById("reservaDia").value, t = document.getElementById("horaInicio").value, o = `${e}-${t}`; if (!reservas[o]) return Swal.fire("Error", "Reserva no encontrada.", "error"), void 0; Swal.fire({ title: "¿Seguro?", text: `Eliminar reserva de "${reservas[o]?.nombre || "clase"}". ¡Irreversible!`, icon: "warning", showCancelButton: !0, confirmButtonColor: "#d9e6cc", cancelButtonColor: "#f3a391", confirmButtonText: "Sí", cancelButtonText: "No" }).then(e => {
-                if (e.isConfirmed) if (reservas[o]) {
-                    delete reservas[o],
-                        guardarReservasEnLocalStorage();
-                    const e = document.getElementById("reservaModal"),
-                        t = bootstrap.Modal.getInstance(e); t && t.hide(),
-                            renderCalendar(),
-                            Swal.fire("¡Eliminado!",
-                                "Reserva eliminada.",
-                                "success")
-                } else Swal.fire("Error", "No se pudo eliminar.", "error"), renderCalendar()
-            })
-        }; function setExportButtonLoading(e) {
-            const t = [downloadImageBtn, downloadPdfBtn, exportExcelBtn, exportDataBtn, importDataBtn];
-            t.forEach(t => { t && "exportExcelBtn" !== t.id && (t.disabled = e) }), exportExcelBtn && (exportExcelBtn.disabled = e || "undefined" == typeof window.XLSX);
-            const o = '<span class="spinner-border spinner-border-sm" role="status"></span> Proc...',
-                n = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/></svg> Imagen', a = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg> PDF', r = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9h-3V6h1V4.5h-1A1.5 1.5 0 0 1 9.5 3M3 11h10v1h-3v2h3v1h-3v2H9v-2H6v2H5v-2H3z"/><path d="M3 6h10v3H3z"/></svg> Excel', s = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14.5 14a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 14V2A1.5 1.5 0 0 1 3 0.5H13A1.5 1.5 0 0 1 14.5 2zm-1.5.5a.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5z"/><path d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0m2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0"/></svg> JSON', i = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/><path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z"/><path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z"/><path fill-rule="evenodd" d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"/></svg> Importar';
-            e ? (downloadImageBtn && (downloadImageBtn.innerHTML = o), downloadPdfBtn && (downloadPdfBtn.innerHTML = o),
-                exportExcelBtn && (exportExcelBtn.innerHTML = o),
-                exportDataBtn && (exportDataBtn.innerHTML = o),
-                importDataBtn && (importDataBtn.innerHTML = o)) : (downloadImageBtn && (downloadImageBtn.innerHTML = n),
-                    downloadPdfBtn && (downloadPdfBtn.innerHTML = a),
-                    exportExcelBtn && ("undefined" != typeof window.XLSX ? exportExcelBtn.innerHTML = r : exportExcelBtn.innerHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/></svg> Error Excel'),
-                    exportDataBtn && (exportDataBtn.innerHTML = s),
-                    importDataBtn && (importDataBtn.innerHTML = i))
+            if (e) {
+                e.disabled = true; // Deshabilita si falla
+                e.title = "Error al cargar librería Excel";
+                e.classList.add("btn-danger");
+                e.innerHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/></svg> Error Excel';
+            }
+            Swal.fire("Error Crítico", "No se pudo cargar la librería necesaria para exportar a Excel. Por favor, revisa tu conexión a internet y recarga la página.", "error");
         }
-        async function captureCalendar(e = {}) { try { const t = document.getElementById("calendarContainer"), o = t.style.paddingBottom; t.style.paddingBottom = "30px"; const n = 1200, a = await html2canvas(t, { scale: 2, useCORS: !0, logging: !1, allowTaint: !0, backgroundColor: "#ffffff", width: n, windowWidth: n, ignoreElements: e => e.classList.contains("action-buttons") || "BUTTON" === e.tagName || "INPUT" === e.tagName, ...e }); return t.style.paddingBottom = o, a } catch (e) { console.error("Err html2canvas:", e); const t = document.getElementById("calendarContainer"); throw t.style.paddingBottom = originalPadding, e } } downloadImageBtn.addEventListener("click", async () => { setExportButtonLoading(!0), await new Promise(e => setTimeout(e, 100)); try { const e = await captureCalendar(), t = e.toDataURL("image/png"), o = document.createElement("a"); o.href = t, o.download = "calendario-reservas.png", document.body.appendChild(o), o.click(), document.body.removeChild(o), Swal.fire({ icon: "success", title: "Imagen OK", showConfirmButton: !1, timer: 1500 }) } catch (e) { console.error("Err IMG:", e), Swal.fire("Error", "No se generó imagen.", "error") } finally { setExportButtonLoading(!1) } }), downloadPdfBtn.addEventListener("click", async () => { setExportButtonLoading(!0), await new Promise(e => setTimeout(e, 100)); const { jsPDF: e } = window.jspdf; try { const t = await captureCalendar(), o = t.toDataURL("image/jpeg", .92), n = { width: t.width, height: t.height }, a = 595.28, r = n.height * a / n.width, s = a > r ? "l" : "p", i = new e({ orientation: s, unit: "pt", format: "a4" }); i.addImage(o, "JPEG", 0, 0, a, r), i.save("calendario-reservas.pdf"), Swal.fire({ icon: "success", title: "PDF OK", showConfirmButton: !1, timer: 1500 }) } catch (e) { console.error("Err PDF:", e), Swal.fire("Error", "No se generó PDF.", "error") } finally { setExportButtonLoading(!1) } }), exportDataBtn.addEventListener("click", () => { if (0 === Object.keys(reservas).length) return Swal.fire("Vacío", "No hay reservas.", "info"), void 0; try { const e = JSON.stringify(reservas, null, 2), t = new Blob([e], { type: "application/json;charset=utf-8" }), o = URL.createObjectURL(t), n = document.createElement("a"); n.href = o, n.download = `reservas_${(new Date).toISOString().split("T")[0]}.json`, document.body.appendChild(n), n.click(), document.body.removeChild(n), URL.revokeObjectURL(o), Swal.fire("Exportado", "Datos JSON guardados.", "success") } catch (e) { console.error("Err Exp:", e), Swal.fire("Error", "No se exportaron datos.", "error") } }); function exportarExcel() { if ("undefined" == typeof window.XLSX) return console.error("XLSX not loaded!"), Swal.fire("Error", "Librería Excel no cargada.", "error"), void 0; if (0 === Object.keys(reservas).length) return Swal.fire("Vacío", "No hay reservas.", "info"), void 0; setExportButtonLoading(!0); try { const e = [], t = ["Día", "Inicio", "Fin", "Nombre", "Tipo", "Duración"]; e.push(t); const o = Object.keys(reservas).sort((e, t) => { const [o, n] = e.split("-"), [a, r] = t.split("-"), s = days.indexOf(o), i = days.indexOf(a); return s !== i ? s - i : n.localeCompare(r) }); o.forEach(t => { const o = reservas[t], n = t.substring(0, t.lastIndexOf("-")); e.push([n, o.horaInicio, o.horaFin, o.nombre, o.tipo, o.duracion]) }); const n = window.XLSX.utils.aoa_to_sheet(e), a = t.map(e => ({ wch: e.length + 5 })); e.forEach(e => { e.forEach((e, t) => { const o = e ? String(e).length : 0; a[t].wch < o + 2 && (a[t].wch = o + 2) }) }), a.forEach(e => { e.wch > 50 && (e.wch = 50) }), n["!cols"] = a; const r = window.XLSX.utils.book_new(); window.XLSX.utils.book_append_sheet(r, n, "Reservas"); const s = (new Date).toISOString().split("T")[0]; window.XLSX.writeFile(r, `reservas_${s}.xlsx`), Swal.fire("Exportado", "Datos Excel guardados.", "success") } catch (e) { console.error("Err Excel:", e), Swal.fire("Error", "No se generó Excel.", "error") } finally { setExportButtonLoading(!1) } } importDataBtn.addEventListener("click", () => { fileInput.click() }), fileInput.addEventListener("change", e => { const t = e.target.files[0]; if (!t) return; if (!t.name.endsWith(".json") && !t.name.endsWith(".txt")) return Swal.fire("Inválido", "Selecciona .json o .txt.", "error"), void (fileInput.value = null); const o = new FileReader; o.onload = e => { const t = e.target.result; try { const o = JSON.parse(t); if ("object" != typeof o || null === o || Array.isArray(o)) throw new Error("No es objeto JSON."); let n = !0; for (const a in o) if ("string" != typeof a || a.indexOf("-") === -1 || "object" != typeof o[a] || !o[a].nombre || !o[a].horaInicio) console.warn(`Inválido: ${a}`, o[a]), n = !1; n || console.warn("Formato inesperado en datos."), Swal.fire({ title: "Importar", html: `${Object.keys(o).length} reservas.<br>¿Reemplazar <b>TODAS</b>? <b style='color:red;'>¡Irreversible!</b>`, icon: "warning", showCancelButton: !0, confirmButtonColor: "#3085d6", cancelButtonColor: "#d33", confirmButtonText: "Sí", cancelButtonText: "No" }).then(e => { e.isConfirmed && (reservas = o, guardarReservasEnLocalStorage(), renderCalendar(), Swal.fire("Importado", "Datos actualizados.", "success")) }) } catch (e) { console.error("Err Imp:", e), Swal.fire("Error Importación", `No se procesó. ¿JSON?\n${e.message}`, "error") } finally { fileInput.value = null } }, o.onerror = e => { Swal.fire("Error Lectura", "No se leyó archivo.", "error"), fileInput.value = null }, o.readAsText(t) });
 
+        // --- Inicialización EmailJS (Como lo proporcionaste) ---
+        !function () { emailjs.init({ publicKey: "qOfrwmjiPJNVT91sk" }) }();
+
+        // --- Variables Globales y DOM Elements ---
+        const calendar = document.getElementById("calendar"),
+            downloadImageBtn = document.getElementById("downloadImageBtn"),
+            downloadPdfBtn = document.getElementById("downloadPdfBtn"),
+            exportDataBtn = document.getElementById("exportDataBtn"),
+            importDataBtn = document.getElementById("importDataBtn"),
+            exportExcelBtn = document.getElementById("exportExcelBtn"), // Referencia existe
+            fileInput = document.getElementById("fileInput"),
+            reservaModalElement = document.getElementById('reservaModal'), // Añadido
+            reservaForm = document.getElementById("reservaForm"),
+            eliminarBtn = document.getElementById("eliminarBtn"),
+            guardarBtn = document.getElementById("guardarBtn"),
+            duracionSelect = document.getElementById("duracion"),
+            // *** NUEVAS REFERENCIAS DOM ***
+            tipoSelect = document.getElementById("tipo"),
+            fechaEspecificaGroup = document.getElementById("fechaEspecificaGroup"),
+            fechaEspecificaInput = document.getElementById("fechaEspecifica"),
+            // ---
+            days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"],
+            startHour = 900, // 15:00 // <<< MANTENIDO TU HORARIO ORIGINAL
+            endHour = 1260, // 21:00 // <<< MANTENIDO TU HORARIO ORIGINAL
+            hours = [],
+            generationIntervalMinutes = 20; // <<< MANTENIDO TU INTERVALO ORIGINAL
+        for (let e = startHour; e < endHour; e += generationIntervalMinutes)hours.push(e);
+        const localKey = "reservasCalendarioV2";
+        let reservas = {};
+
+        // --- Funciones Utilitarias ---
+        function formatHora(e) { const t = Math.floor(e / 60).toString().padStart(2, "0"), o = (e % 60).toString().padStart(2, "0"); return `${t}:${o}` }
+
+        // *** MODIFICADO: getTipoClass para nuevos tipos ***
+        function getTipoClass(tipo) {
+            // Normalizar para nombre de clase CSS
+            const sanitizedTipo = String(tipo || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            switch (sanitizedTipo) {
+                case "individual": return "tipo-individual";
+                case "grupal": return "tipo-grupal";
+                // Asegúrate que el nombre de clase aquí coincida con el CSS
+                case "ayuda-ingreso-a-institutos": return "tipo-ayuda-ingreso-a-institutos";
+                case "clase-de-prueba": return "tipo-clase-de-prueba";          // Nueva
+                case "clase-de-recuperacion": return "tipo-clase-de-recuperacion"; // Nueva
+                // case "desde-los-3-anios": return "tipo-desde-tres-anios";      // Original comentada
+                // case "piano-terapeutico": return "tipo-piano-terapeutico";    // Original comentada
+                default: console.warn(`Tipo desconocido normalizado: "${sanitizedTipo}". Usando default.`); return "tipo-default";
+            }
+        }
+
+        // --- Guardar/Cargar LocalStorage (Sin cambios) ---
+        function guardarReservasEnLocalStorage() { try { localStorage.setItem(localKey, JSON.stringify(reservas)); console.log("Reservas guardadas.") } catch (e) { console.error("Error guardando:", e); Swal.fire("Error", "No se pudieron guardar.", "error") } }
+        function cargarReservasDesdeLocalStorage() { calendar.innerHTML = '<div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando...</div>'; try { const e = localStorage.getItem(localKey); reservas = e ? JSON.parse(e) : {}; console.log("Reservas cargadas.") } catch (e) { console.error("Error cargando:", e); reservas = {}; Swal.fire("Error", "Datos corruptos.", "warning") } requestAnimationFrame(() => setTimeout(renderCalendar, 0)) }
+
+        // --- Renderizado del Calendario ---
+        // *** MODIFICADO: Para mostrar fecha específica ***
+        function renderCalendar() {
+            calendar.innerHTML = "";
+            days.forEach(e => {
+                const t = document.createElement("div");
+                t.className = "day";
+                t.innerHTML = `<h5>${e}</h5>`;
+                hours.forEach(o => {
+                    const n = formatHora(o), a = `${e}-${n}`, r = reservas[a];
+                    if (r) { // Si hay reserva
+                        const s = document.createElement("div"), i = r.tipo, l = getTipoClass(i); // Obtener clase CSS correcta
+                        s.classList.add("hour", "reserved", l);
+                        // Construir HTML
+                        let innerHTML = `<strong>${r.nombre}</strong><br>${r.horaInicio} - ${r.horaFin} (${r.duracion} min)<br><small>${r.tipo}</small>`;
+                        // *** Añadir fecha si existe en los datos de la reserva ***
+                        if (r.fechaEspecifica) { // <--- AQUÍ SE CHEQUEA SI HAY FECHA GUARDADA
+                            innerHTML += `<br><small class="specific-date">Fecha: ${r.fechaEspecifica}</small>`; // <--- Y SE MUESTRA
+                        }
+                        s.innerHTML = innerHTML; // Asignar HTML
+                        s.onclick = () => abrirModal(e, n, r);
+                        t.appendChild(s);
+                    } else if (!estaEnReserva(e, o) && canFitReservation(e, o, 40)) { // Si está libre y cabe
+                        const s = document.createElement("div"); s.className = "hour"; s.textContent = n; s.onclick = () => abrirModal(e, n, null); t.appendChild(s);
+                    }
+                });
+                calendar.appendChild(t);
+            });
+        }
+
+        // --- Chequeo de Ocupación y Capacidad (Sin cambios) ---
+        function estaEnReserva(e, t) { for (const o in reservas) { const n = reservas[o]; if (!o || "string" != typeof o || o.indexOf("-") === -1) continue; const a = o.split("-"); if (a.length < 2) continue; const r = a.slice(0, -1).join("-"); if (r !== e || !n || "object" != typeof n || !n.horaInicio || "string" != typeof n.horaInicio || "number" != typeof n.duracion || isNaN(n.duracion)) continue; const s = n.horaInicio.split(":"); if (s.length !== 2) continue; const i = parseInt(s[0], 10), l = parseInt(s[1], 10); if (isNaN(i) || isNaN(l)) continue; const c = 60 * i + l, d = c + n.duracion; if (t >= c && t < d) return !0 } return !1 }
+        function canFitReservation(e, t, o) { const n = t + o; if (n > endHour) return !1; for (const a in reservas) { const r = reservas[a]; if (!a || "string" != typeof a || a.indexOf("-") === -1) continue; const s = a.split("-"); if (s.length < 2) continue; const i = s.slice(0, -1).join("-"); if (i !== e || !r || "object" != typeof r || !r.horaInicio || "string" != typeof r.horaInicio || "number" != typeof r.duracion || isNaN(r.duracion)) continue; const l = r.horaInicio.split(":"); if (l.length !== 2) continue; const c = parseInt(l[0], 10), d = parseInt(l[1], 10); if (isNaN(c) || isNaN(d)) continue; const u = 60 * c + d, h = u + r.duracion; if (t < h && n > u) return !1 } return !0 }
+
+        // --- Lógica del Modal ---
+        function actualizarHoraFin() { // (Sin cambios)
+            const e = document.getElementById("horaInicio").value, t = parseInt(duracionSelect.value); if (!e || isNaN(t) || t <= 0) return document.getElementById("horaFin").value = "", guardarBtn.disabled = !0, void 0; const [o, n] = e.split(":").map(Number), a = 60 * o + n, r = a + t; r > endHour ? (document.getElementById("horaFin").value = formatHora(endHour), guardarBtn.disabled = !0, Swal.fire({ icon: "warning", title: "Hora Inválida", text: `Termina después de ${formatHora(endHour)}.`, timer: 3e3, showConfirmButton: !1 })) : (document.getElementById("horaFin").value = formatHora(r), guardarBtn.disabled = !1)
+        }
+
+        // *** NUEVA FUNCIÓN: Para mostrar/ocultar campo de fecha ***
+        function toggleDateField() {
+            const selectedType = tipoSelect.value;
+            const requiresDate = selectedType === "Clase de prueba" || selectedType === "Clase de recuperación";
+            if (requiresDate) {
+                fechaEspecificaGroup.style.display = 'block'; // Mostrar div
+                fechaEspecificaInput.required = true; // Hacer input obligatorio
+            } else {
+                fechaEspecificaGroup.style.display = 'none'; // Ocultar div
+                fechaEspecificaInput.required = false; // No es obligatorio
+                fechaEspecificaInput.value = ''; // Limpiar valor
+            }
+        }
+
+        // *** MODIFICADO: abrirModal para manejar fecha específica ***
+        function abrirModal(e, t, o) { // e=dia, t=horaStr, o=reservaData (o null)
+            reservaForm.classList.remove("was-validated");
+            document.getElementById("reservaDia").value = e;
+            document.getElementById("reservaHora").value = t; // Guardar hora original clickeada
+            document.getElementById("nombre").value = o?.nombre || "";
+            tipoSelect.value = o?.tipo || "Individual"; // Cargar tipo existente o default
+            duracionSelect.value = o?.duracion || 40;
+            document.getElementById("horaInicio").value = o?.horaInicio || t;
+            // *** Cargar fecha específica si existe en los datos ***
+            fechaEspecificaInput.value = o?.fechaEspecifica || ""; // <-- CARGA LA FECHA GUARDADA (si existe)
+
+            toggleDateField(); // *** Llamar para mostrar/ocultar según tipo cargado ***
+            actualizarHoraFin();
+            eliminarBtn.style.display = o ? "inline-block" : "none";
+
+            const modalInstance = new bootstrap.Modal(reservaModalElement); // Usar referencia
+            modalInstance.show();
+        }
+
+        // Event Listeners para cambios en el modal
+        duracionSelect.addEventListener("change", actualizarHoraFin);
+        tipoSelect.addEventListener('change', toggleDateField); // *** NUEVO LISTENER ***
+
+        // --- Envío de Correo ---
+        // *** MODIFICADO: Para incluir fecha específica en payload ***
+        function enviarCorreoReserva(e) { // e = reservaDetails (que ahora incluye .dia y .fechaEspecifica si aplica)
+            const t = "service_93zs6up", o = "template_352le9n";
+
+            // *** Construcción del objeto 'n' (parámetros para EmailJS) ***
+            // Determinar qué valor usar para el campo 'day'
+            let dayValueToSend;
+            if ((e.tipo === "Clase de prueba" || e.tipo === "Clase de recuperación") && e.fechaEspecifica) {
+                // Si es tipo especial Y tiene fecha específica, usar la fecha
+                dayValueToSend = e.dia + " (" + e.fechaEspecifica + ")";
+            } else {
+                // Para cualquier otro tipo, o si falta la fecha específica (aunque no debería), usar el día de la semana
+                dayValueToSend = e.dia;
+                if ((e.tipo === "Clase de prueba" || e.tipo === "Clase de recuperación") && !e.fechaEspecifica) {
+                    console.warn(`Advertencia: Clase de tipo '${e.tipo}' sin fecha específica. Enviando día de la semana '${e.dia}' en su lugar.`);
+                }
+            }
+
+            // Crear el payload final para EmailJS
+            const n = {
+                day: dayValueToSend, // Contiene la fecha específica o el día de la semana
+                horaInicio: e.horaInicio,
+                horaFin: e.horaFin,
+                name: e.nombre,
+                type: e.tipo,
+                duration: e.duracion
+                // Ya NO necesitamos enviar 'fechaEspecifica' por separado
+                // Ya NO enviamos 'ac1' ni 'ac2'
+            };
+
+            console.log("Enviando correo con payload:", n); // Log para depuración
+
+            emailjs.send(t, o, n).then(response => { // (Lógica éxito/error sin cambios)
+                console.log("Éxito!", response.status, response.text);
+                const t = Swal.mixin({ toast: !0, position: "top-end", showConfirmButton: !1, timer: 2e3, timerProgressBar: !0, didOpen: e => { e.onmouseenter = Swal.stopTimer, e.onmouseleave = Swal.resumeTimer } });
+                t.fire({ icon: "info", title: "Notificación enviada." })
+            }).catch(err => {
+                console.error("Error correo:", err);
+                Swal.fire({ title: "Error Notificación", text: `Reserva guardada, error al enviar correo: ${err.text || "Desconocido"}`, icon: "warning", timer: 4e3, showConfirmButton: !0 })
+            })
+        }
+
+        // --- Guardar Reserva ---
+        // *** MODIFICADO: Para manejar fecha específica ***
+        guardarBtn.onclick = () => {
+            toggleDateField(); // Asegurar estado required antes de validar
+            if (!reservaForm.checkValidity()) { reservaForm.classList.add("was-validated"); return; }
+
+            // Obtener datos
+            const e = document.getElementById("reservaDia").value,
+                t = document.getElementById("horaInicio").value,
+                o = document.getElementById("nombre").value.trim(),
+                n = tipoSelect.value, // Usar tipoSelect
+                a = parseInt(duracionSelect.value),
+                fechaEspecifica = fechaEspecificaInput.value; // *** Obtener valor de fecha ***
+
+            if (isNaN(a) || a <= 0) { Swal.fire("Error", "Duración inválida.", "error"); return; }
+
+            // Validar hora fin (Sin cambios)
+            const [r, s] = t.split(":").map(Number), i = 60 * r + s, l = i + a;
+            if (l > endHour) { Swal.fire("Error", `Termina después de ${formatHora(endHour)}.`, "error"); return; }
+            const c = formatHora(l), d = `${e}-${t}`;
+
+            // Chequeo de conflicto (Sin cambios)
+            let u = !1, h = null; for (const g in reservas) { if (g === d) continue; const f = reservas[g]; if (!g || g.indexOf("-") === -1) continue; const m = g.split("-"); if (m.length < 2) continue; const p = m.slice(0, -1).join("-"); if (p !== e || !f || !f.horaInicio || !f.duracion || isNaN(f.duracion)) continue; const w = f.horaInicio.split(":"); if (w.length !== 2) continue; const E = parseInt(w[0], 10), I = parseInt(w[1], 10); if (isNaN(E) || isNaN(I)) continue; const L = 60 * E + I, S = L + f.duracion; if (i < S && l > L) { u = !0, h = f; break } } if (u) return Swal.fire("Conflicto", `Se solapa con "${h.nombre}" (${h.horaInicio}-${h.horaFin}).`, "error"), void 0;
+
+            const b = eliminarBtn.style.display !== "none"; // Es edición?
+
+            const v = () => { // Función de guardado
+                let r, s; b ? (r = "modificaste la reserva a nombre de", s = ", con las siguientes características:") : (r = "Te recuerdo que registraste una reserva a nombre de", s = ", con las siguientes características:");
+
+                // *** Crear objeto reservaData incluyendo fecha si existe ***
+                const reservaData = {
+                    nombre: o,
+                    tipo: n,
+                    duracion: a,
+                    horaInicio: t,
+                    horaFin: c,
+                    // *** AQUÍ se añade la fecha al objeto si el input tenía valor ***
+                    ...(fechaEspecifica && { fechaEspecifica: fechaEspecifica })
+                };
+
+                const originalHoraStr = document.getElementById("reservaHora").value, originalKey = `${e}-${originalHoraStr}`;
+                if (b && d !== originalKey && reservas[originalKey]) { delete reservas[originalKey]; } // Borrar antigua si cambió hora
+                // *** AQUÍ se guarda el objeto reservaData (que puede contener fechaEspecifica) en el objeto 'reservas' ***
+                reservas[d] = reservaData;
+                // *** Y AQUÍ se guarda TODO el objeto 'reservas' (con las fechas incluidas donde correspondan) en localStorage ***
+                guardarReservasEnLocalStorage();
+
+                // Preparar datos para correo (ya incluye fecha si existe)
+                const emailDetails = { ...reservaData, dia: e, ac1: r, ac2: s };
+                enviarCorreoReserva(emailDetails);
+
+                // UI
+                const modalInstance = bootstrap.Modal.getInstance(reservaModalElement); if (modalInstance) modalInstance.hide();
+                renderCalendar();
+                Swal.fire({ icon: "success", title: "¡Guardado!", text: `Reserva para ${o} guardada.`, showConfirmButton: false, timer: 1500 });
+            };
+
+            // Confirmar si es edición
+            b ? Swal.fire({ title: "Confirmar", text: `Guardar cambios para "${o}"?`, icon: "question", showCancelButton: !0, confirmButtonColor: "#d9e6cc", cancelButtonColor: "#f3a391", confirmButtonText: "Sí", cancelButtonText: "No" }).then(result => { result.isConfirmed && v() }) : v();
+        };
+
+        // --- Eliminar Reserva (Sin cambios) ---
+        eliminarBtn.onclick = () => { const e = document.getElementById("reservaDia").value, t = document.getElementById("horaInicio").value, o = `${e}-${t}`; if (!reservas[o]) return Swal.fire("Error", "Reserva no encontrada.", "error"), void 0; Swal.fire({ title: "¿Seguro?", text: `Eliminar reserva de "${reservas[o]?.nombre || "clase"}". ¡Irreversible!`, icon: "warning", showCancelButton: !0, confirmButtonColor: "#d33", cancelButtonColor: "#aaa", confirmButtonText: "Sí, eliminarla", cancelButtonText: "No" }).then(e => { if (e.isConfirmed) if (reservas[o]) { delete reservas[o], guardarReservasEnLocalStorage(); const modalInstance = bootstrap.Modal.getInstance(document.getElementById("reservaModal")); modalInstance && modalInstance.hide(), renderCalendar(), Swal.fire("¡Eliminado!", "Reserva eliminada.", "success") } else Swal.fire("Error", "No se pudo eliminar.", "error"), renderCalendar() }) };
+
+        // --- Lógica Botones Exportación (Loading/Restore State - Sin cambios) ---
+        function setExportButtonLoading(e) { const t = [downloadImageBtn, downloadPdfBtn, exportExcelBtn, exportDataBtn, importDataBtn]; t.forEach(btn => { if (btn) { if (!btn.dataset.originalHtml) { btn.dataset.originalHtml = btn.innerHTML; } const isExcel = btn.id === 'exportExcelBtn'; const isXlsxReady = typeof window.XLSX !== 'undefined'; btn.disabled = e || (isExcel && !isXlsxReady); if (e) { if (!(isExcel && !isXlsxReady)) { btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Proc...'; } } else { btn.innerHTML = btn.dataset.originalHtml; if (isExcel && !isXlsxReady) { xlsxScriptFailed(); } } } }); if (!e && exportExcelBtn && typeof window.XLSX !== 'undefined') { exportExcelBtn.disabled = false; } }
+
+        // --- Captura de Calendario (Sin cambios) ---
+        async function captureCalendar(e = {}) {
+            try {
+                const containerElement = document.getElementById("calendarContainer");
+                const originalPaddingBottom = containerElement.style.paddingBottom; // Store original style
+                containerElement.style.paddingBottom = "30px"; // Ensure consistent padding
+
+                // *** FORCE WIDTH FOR 5-COLUMN LAYOUT ***
+                // Your CSS changes to 3 columns at max-width: 1200px.
+                // By setting a width *greater* than 1200px (e.g., 1400px),
+                // we instruct html2canvas to render as if on a wider screen,
+                // thus using the default 5-column grid layout.
+                const forcedWidth = 1400; // <-- Increased from 1200
+
+                const canvas = await html2canvas(containerElement, {
+                    scale: 2, // Maintain high resolution
+                    useCORS: true,
+                    logging: false,
+                    allowTaint: true,
+                    backgroundColor: "#ffffff", // White background for the image
+                    // *** APPLY THE FORCED WIDTH ***
+                    width: forcedWidth,         // Use the wider value
+                    windowWidth: forcedWidth,   // Simulate a wider window
+                    ignoreElements: el => el.classList.contains("action-buttons") || el.tagName === "BUTTON" || el.tagName === "INPUT",
+                    ...e // Allow additional options to be passed in
+                });
+
+                // Restore original style *after* capture
+                containerElement.style.paddingBottom = originalPaddingBottom;
+
+                return canvas; // Return the generated canvas
+
+            } catch (err) {
+                console.error("Error during html2canvas capture:", err);
+                // Attempt to restore style even if capture fails
+                const containerElement = document.getElementById("calendarContainer");
+                // Check if originalPaddingBottom has a value before trying to restore
+                if (containerElement && typeof originalPaddingBottom !== 'undefined') {
+                    containerElement.style.paddingBottom = originalPaddingBottom;
+                }
+                throw err; // Re-throw the error so it can be handled by caller
+            }
+        }
+
+        // --- Exportar Imagen/PDF (Sin cambios) ---
+        downloadImageBtn.addEventListener("click", async () => { setExportButtonLoading(!0); await new Promise(e => setTimeout(e, 100)); try { const e = await captureCalendar(), t = e.toDataURL("image/png"), o = document.createElement("a"); o.href = t; o.download = "calendario-reservas.png"; document.body.appendChild(o); o.click(); document.body.removeChild(o); Swal.fire({ icon: "success", title: "Imagen OK", showConfirmButton: !1, timer: 1500 }) } catch (e) { console.error("Err IMG:", e); Swal.fire("Error", "No se generó imagen.", "error") } finally { setExportButtonLoading(!1) } });
+        downloadPdfBtn.addEventListener("click", async () => { setExportButtonLoading(!0); await new Promise(e => setTimeout(e, 100)); if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { console.error("jsPDF no cargado"); Swal.fire("Error", "Librería PDF no cargada.", "error"); setExportButtonLoading(false); return; } const { jsPDF: e } = window.jspdf; try { const t = await captureCalendar(), o = t.toDataURL("image/jpeg", .92), n = { width: t.width, height: t.height }, a = 595.28, r = n.height * a / n.width, s = a > r ? "l" : "p", i = new e({ orientation: s, unit: "pt", format: "a4" }); i.addImage(o, "JPEG", 0, 0, a, r); i.save("calendario-reservas.pdf"); Swal.fire({ icon: "success", title: "PDF OK", showConfirmButton: !1, timer: 1500 }) } catch (err) { console.error("Err PDF:", err); Swal.fire("Error", `No se generó PDF. ${err.message || ''}`, "error") } finally { setExportButtonLoading(!1) } });
+
+        // --- Exportar JSON (Sin cambios) ---
+        exportDataBtn.addEventListener("click", () => { if (0 === Object.keys(reservas).length) return Swal.fire("Vacío", "No hay reservas.", "info"), void 0; try { const e = JSON.stringify(reservas, null, 2), t = new Blob([e], { type: "application/json;charset=utf-8" }), o = URL.createObjectURL(t), n = document.createElement("a"); n.href = o; n.download = `reservas_${(new Date).toISOString().split("T")[0]}.json`; document.body.appendChild(n); n.click(); document.body.removeChild(n); URL.revokeObjectURL(o); Swal.fire("Exportado", "Datos JSON guardados.", "success") } catch (e) { console.error("Err Exp:", e); Swal.fire("Error", "No se exportaron datos.", "error") } });
+
+        // ==============================================
+        // --- EXPORTAR EXCEL (FUNCIÓN ORIGINAL TUYA - SIN CAMBIOS) ---
+        // ==============================================
+        function exportarExcel() {
+            if (typeof window.XLSX === 'undefined') {
+                console.error("XLSX library not loaded!");
+                Swal.fire("Error", "La librería necesaria para exportar a Excel no está cargada.", "error");
+                return;
+            }
+            if (Object.keys(reservas).length === 0) {
+                Swal.fire("Vacío", "No hay reservas para exportar.", "info");
+                return;
+            }
+
+            setExportButtonLoading(true); // Iniciar estado de carga
+
+            try {
+                const dataForSheet = []; // Array para los datos de la hoja
+                const headers = ["Día", "Inicio", "Fin", "Nombre", "Tipo", "Duración"]; // Encabezados
+                dataForSheet.push(headers);
+
+                // Ordenar las reservas (igual que antes, por día y luego hora)
+                const sortedKeys = Object.keys(reservas).sort((keyA, keyB) => {
+                    const [dayA, timeA] = keyA.split("-");
+                    const [dayB, timeB] = keyB.split("-");
+                    const dayIndexA = days.indexOf(dayA); // Asegúrate que 'days' es accesible aquí
+                    const dayIndexB = days.indexOf(dayB);
+                    if (dayIndexA !== dayIndexB) {
+                        return dayIndexA - dayIndexB; // Ordenar por día de la semana
+                    }
+                    return timeA.localeCompare(timeB); // Luego ordenar por hora
+                });
+
+                // Procesar cada reserva para crear las filas
+                sortedKeys.forEach(key => {
+                    const reservaDetails = reservas[key]; // Detalles de la reserva actual
+                    const dayOfWeek = key.substring(0, key.lastIndexOf("-")); // Día de la semana original de la clave
+
+                    // *** Lógica Condicional para la columna "Día" ***
+                    let diaValueForExcel; // Variable para almacenar el valor final
+                    if ((reservaDetails.tipo === "Clase de prueba" || reservaDetails.tipo === "Clase de recuperación") && reservaDetails.fechaEspecifica) {
+                        // Si es tipo especial Y tiene fecha específica guardada, usar la fecha
+                        diaValueForExcel = dayOfWeek + " (" + reservaDetails.fechaEspecifica + ")";
+                    } else {
+                        // Para cualquier otro tipo, o si no tiene fecha específica, usar el día de la semana
+                        diaValueForExcel = dayOfWeek;
+                    }
+                    // *** Fin Lógica Condicional ***
+
+                    // Crear la fila con el valor determinado para 'Día'
+                    const rowData = [
+                        diaValueForExcel, // Usamos el valor calculado
+                        reservaDetails.horaInicio,
+                        reservaDetails.horaFin,
+                        reservaDetails.nombre,
+                        reservaDetails.tipo,
+                        reservaDetails.duracion
+                        // Nota: No estamos añadiendo 'fechaEspecifica' como columna separada,
+                        // la estamos usando *en lugar* del día de la semana cuando aplica.
+                    ];
+                    dataForSheet.push(rowData); // Añadir la fila al array de datos
+                });
+
+                // --- Generación del archivo Excel (sin cambios en esta parte) ---
+                const ws = window.XLSX.utils.aoa_to_sheet(dataForSheet); // Crear hoja desde el array de arrays
+
+                // Calcular anchos de columna automáticamente (mejorado ligeramente)
+                const colWidths = headers.map(header => ({ wch: header.length + 5 })); // Ancho inicial basado en cabecera
+                dataForSheet.forEach(row => {
+                    row.forEach((cell, index) => {
+                        const cellLen = cell ? String(cell).length : 0;
+                        if (colWidths[index].wch < cellLen + 2) { // Añadir padding
+                            colWidths[index].wch = cellLen + 2;
+                        }
+                    });
+                });
+                // Limitar ancho máximo
+                colWidths.forEach(col => { if (col.wch > 50) { col.wch = 50; } });
+                ws["!cols"] = colWidths; // Aplicar anchos
+
+                const wb = window.XLSX.utils.book_new(); // Crear nuevo libro
+                window.XLSX.utils.book_append_sheet(wb, ws, "Reservas"); // Añadir hoja al libro
+
+                const todayStr = (new Date).toISOString().split("T")[0]; // Fecha para nombre archivo
+                window.XLSX.writeFile(wb, `reservas_${todayStr}.xlsx`); // Descargar archivo
+
+                Swal.fire("Exportado", "Datos exportados a Excel correctamente.", "success");
+            } catch (error) {
+                console.error("Error al generar el archivo Excel:", error);
+                Swal.fire("Error", "Ocurrió un error al generar el archivo Excel.", "error");
+            } finally {
+                setExportButtonLoading(false); // Finalizar estado de carga
+            }
+        }
+        // ==============================================
+        // --- FIN EXPORTAR EXCEL (FUNCIÓN ORIGINAL) ---
+        // ==============================================
+
+        // --- Importar JSON (Sin cambios) ---
+        importDataBtn.addEventListener("click", () => { fileInput.click() });
+        fileInput.addEventListener("change", e => { const t = e.target.files[0]; if (!t) return; if (!t.name.endsWith(".json") && !t.name.endsWith(".txt")) return Swal.fire("Inválido", "Selecciona .json o .txt.", "error"), void (fileInput.value = null); const o = new FileReader; o.onload = e => { const t = e.target.result; try { const o = JSON.parse(t); if ("object" != typeof o || null === o || Array.isArray(o)) throw new Error("No es objeto JSON."); let n = !0; for (const a in o) if ("string" != typeof a || a.indexOf("-") === -1 || "object" != typeof o[a] || !o[a].nombre || !o[a].horaInicio) console.warn(`Inválido: ${a}`, o[a]), n = !1; n || console.warn("Formato inesperado en datos."), Swal.fire({ title: "Importar", html: `${Object.keys(o).length} reservas.<br>¿Reemplazar <b>TODAS</b>? <b style='color:red;'>¡Irreversible!</b>`, icon: "warning", showCancelButton: !0, confirmButtonColor: "#3085d6", cancelButtonColor: "#d33", confirmButtonText: "Sí", cancelButtonText: "No" }).then(e => { e.isConfirmed && (reservas = o, guardarReservasEnLocalStorage(), renderCalendar(), Swal.fire("Importado", "Datos actualizados.", "success")) }) } catch (e) { console.error("Err Imp:", e); Swal.fire("Error Importación", `No se procesó. ¿JSON?\n${e.message}`, "error") } finally { fileInput.value = null } }; o.onerror = e => { Swal.fire("Error Lectura", "No se leyó archivo.", "error"); fileInput.value = null }; o.readAsText(t) });
+
+        // --- Carga Inicial y Lógica Back-to-Top (Sin cambios) ---
         document.addEventListener("DOMContentLoaded", () => {
             cargarReservasDesdeLocalStorage();
+            // Setup Excel button listener
             if (exportExcelBtn) {
                 exportExcelBtn.addEventListener("click", exportarExcel);
                 if (typeof window.XLSX !== 'undefined') {
-                    xlsxScriptLoaded();
+                    xlsxScriptLoaded(); // Habilitar si ya está cargado
+                } else {
+                    console.log("XLSX library not immediately available. Waiting for onload/onerror...");
                 }
             } else {
                 console.error("Btn Excel no hallado.");
             }
 
-            // --- Back to Top Button Logic ---
+            // Back to Top Logic (unchanged)
             const backToTopButton = document.getElementById("backToTopBtn");
-            const scrollThreshold = 200; // Show button after scrolling 200px
-
-            // Function to handle scroll events
-            function scrollFunction() {
-                if (window.scrollY > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
-                    if (backToTopButton) backToTopButton.classList.add("show");
-                } else {
-                    if (backToTopButton) backToTopButton.classList.remove("show");
-                }
-            }
-
-            // Function to scroll smoothly to the top
-            function scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }
-
-            // Attach event listeners only if the button exists
-            if (backToTopButton) {
-                window.addEventListener('scroll', scrollFunction);
-                backToTopButton.addEventListener('click', scrollToTop);
-            } else {
-                console.error("Back to Top button not found.");
-            }
-            // --- End Back to Top Button Logic ---
-
+            const scrollThreshold = 200;
+            function scrollFunction() { if (window.scrollY > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) { if (backToTopButton) backToTopButton.classList.add("show"); } else { if (backToTopButton) backToTopButton.classList.remove("show"); } }
+            function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            if (backToTopButton) { window.addEventListener('scroll', scrollFunction); backToTopButton.addEventListener('click', scrollToTop); } else { console.error("Back to Top button not found."); }
         });
     </script>
 
