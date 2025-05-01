@@ -902,7 +902,7 @@
         // --- Carga Inicial y Lógica Back-to-Top (Unchanged) ---
         document.addEventListener("DOMContentLoaded", () => { cargarReservasDesdeLocalStorage(); if (exportExcelBtn) { exportExcelBtn.addEventListener("click", exportarExcel); "undefined" != typeof window.XLSX ? xlsxScriptLoaded() : console.log("XLSX library not immediately available. Waiting for onload/onerror...") } else console.error("Botón Exportar Excel no encontrado en el DOM."); const e = document.getElementById("backToTopBtn"), t = 200; function o() { (window.scrollY > t || document.documentElement.scrollTop > t) ? e && e.classList.add("show") : e && e.classList.remove("show") } function n() { window.scrollTo({ top: 0, behavior: "smooth" }) } e ? (window.addEventListener("scroll", o), e.addEventListener("click", n)) : console.error("Back to Top button not found.") });
     </script>
-
+ 
 </body>
 
 </html>
