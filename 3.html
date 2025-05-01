@@ -3,13 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Dashboard - Control de Clases</title>
+    <title>Calendario de Reservas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -22,615 +19,890 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()"
         onerror="xlsxScriptFailed()"></script>
     <style>
+        /* --- ESTILOS CSS (Sin cambios respecto a la versión anterior) --- */
         body {
             background-color: #dde9ce !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
             line-height: 1.6;
+            color: #495057
         }
 
-        .dashboard-container {
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.09);
-            margin-top: 2rem;
-            border: 1px solid #d8e0cc;
-        }
-
-        .dashboard-nav {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #ced4da;
-        }
-
-        .nav-card {
-            text-align: center;
-            padding: 25px;
-            border-radius: 12px;
-            background-color: #ffffff;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-            text-decoration: none;
-            color: inherit;
-            min-width: 210px;
-            border: 1px solid #e0e7d1;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
-            background-color: #f8f9fa;
-        }
-
-        .nav-card svg {
-            width: 45px;
-            height: 45px;
-            margin-bottom: 12px;
-            color: #5a7d2a;
-        }
-
-        .nav-card h5 {
-            margin-bottom: 0;
-            font-size: 1.15rem;
-            font-weight: 500;
-            color: #343a40;
-        }
-
-        .summary-section {
-            background-color: #fdfdfd;
+        .calendar-container {
+            background: #fff;
             padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #e0e7d1;
-        }
-
-        .summary-title {
-            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .09);
             margin-bottom: 30px;
-            font-weight: 600;
-            font-size: 1.6rem;
-            color: #495057;
+            border: 1px solid #d8e0cc;
+            position: relative
         }
 
-        .summary-metrics .row {
-            margin-bottom: 1.5rem;
-        }
-
-        .metric-item {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
-            border: 1px solid #f0f0f0;
-            margin-bottom: 1rem;
-        }
-
-        .metric-item-full-width {
-            border-left: 5px solid #0d6efd;
-            padding-left: 25px;
-        }
-
-        .metric-value {
-            display: block;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .metric-label {
-            font-size: 0.95rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-
-        .metric-paid .metric-value {
-            color: #198754;
-        }
-
-        .metric-pending .metric-value {
-            color: #dc3545;
-        }
-
-        .metric-partial .metric-value {
-            color: #ffc107;
-        }
-
-        .metric-total .metric-value {
+        .back-to-dashboard {
             color: #0d6efd;
-        }
-
-        .payment-bar-container {
-            height: 30px;
-            background-color: #e9ecef;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            margin-bottom: 25px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: relative;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-        }
-
-        .bar-segment {
-            height: 100%;
-            transition: width 0.6s ease-in-out;
-            display: flex;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 0 5px;
+            gap: 4px;
+            transition: color 0.2s ease;
         }
 
-        .bar-paid {
-            background-color: #198754;
+        .back-to-dashboard:hover {
+            color: #5a7d2a
         }
 
-        .bar-partial {
-            background-color: #ffc107;
-            color: #333;
-            text-shadow: none;
+        .back-to-dashboard svg {
+            width: 1em;
+            height: 1em;
+            margin-right: 3px;
+            vertical-align: text-bottom
         }
 
-        .bar-pending {
-            background-color: #dc3545;
-        }
-
-        .table-summary {
-            font-size: 0.95rem;
-            border: 1px solid #dee2e6;
-        }
-
-        .table-summary th {
-            background-color: #e9ecef;
+        .calendar-title {
+            text-align: center;
+            margin-bottom: 15px;
             font-weight: 600;
+            color: #5a7d2a;
+            padding-top: 25px
         }
 
-        .payment-row-clickable {
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-top: 25px;
+            overflow: visible
+        }
+
+        @media (max-width:1200px) {
+            .calendar {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media (max-width:768px) {
+            .calendar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem
+            }
+        }
+
+        @media (max-width:576px) {
+            .calendar {
+                grid-template-columns: 1fr;
+                gap: 1rem
+            }
+
+            .action-buttons .btn {
+                width: calc(50% - 10px)
+            }
+        }
+
+        .day {
+            background: #fdfdfd;
+            border: 1px solid #e0e7d1;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+            min-height: 380px
+        }
+
+        .day h5 {
+            border-bottom: 1px solid #e0e7d1;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #5a7d2a;
+            text-align: center;
+            font-size: 1.1rem
+        }
+
+        .hour {
+            background: #f8f9fa;
+            color: #495057;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: background-color .2s ease, transform .1s ease, box-shadow .2s ease;
+            border: 1px solid #dee2e6;
+            font-size: .9rem
         }
 
-        .payment-row-clickable:hover {
-            background-color: #f0f8ff !important;
+        .hour:hover:not(.reserved) {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .08)
         }
 
-        #paidClassesList {
-            padding-left: 20px;
-            max-height: 180px;
-            overflow-y: auto;
+        .reserved {
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            padding: 12px;
+            font-size: .9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: filter .2s ease, transform .1s ease, box-shadow .2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .1)
+        }
+
+        .tipo-individual {
+            background-color: #ffe0b3;
+            border-color: #ffe0b3;
+            color: #333
+        }
+
+        .tipo-grupal {
+            background-color: #c7e89b;
+            border-color: #c7e89b;
+            color: #333
+        }
+
+        .tipo-ayuda-ingreso-a-institutos {
+            background-color: #b3e6f2;
+            border-color: #b3e6f2;
+            color: #333
+        }
+
+        .tipo-clase-de-prueba {
+            background-color: #b3e6f2;
+            border-color: #b3e6f2;
+            color: #333
+        }
+
+        .tipo-clase-de-recuperacion {
+            background-color: #f59e90;
+            border-color: #e38e80;
+            color: #333
+        }
+
+        .tipo-default {
+            background-color: #6c757d;
+            border-color: #5c636a;
+            color: #fff
+        }
+
+        .reserved strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: .95rem
+        }
+
+        .reserved small {
+            font-weight: 400;
+            font-style: italic;
+            display: block;
+            margin-top: 3px;
+            font-size: .8rem;
+            opacity: .9
+        }
+
+        .reserved .specific-date {
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .reserved .participant-info {
+            font-weight: normal;
+            font-style: normal;
+            opacity: 0.8;
+        }
+
+        .reserved:hover {
+            filter: brightness(95%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, .15)
+        }
+
+        .modal-header {
+            background-color: #8fa376;
+            color: #fff;
+            border-bottom: none;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 1rem 1.5rem
+        }
+
+        .modal-content {
+            border-radius: 13px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .2)
+        }
+
+        .modal-body {
+            padding: 1.5rem
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            padding: 1rem 1.5rem
+        }
+
+        .swal2-container {
+            z-index: 1060;
+            justify-content: center !important;
+            align-items: center !important
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px
+        }
+
+        .action-buttons .btn {
+            flex-grow: 0;
+            flex-shrink: 0
         }
 
         #backToTopBtn {
+            display: none;
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 1030;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
             border: none;
             outline: none;
             background-color: #5a7d2a;
             color: white;
             cursor: pointer;
-            width: 48px;
-            height: 48px;
+            padding: 0;
             border-radius: 50%;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, background-color 0.3s ease, transform 0.2s ease;
-            display: flex;
-            align-items: center;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease-in-out, background-color 0.2s;
             justify-content: center;
-        }
-
-        #backToTopBtn.show {
-            opacity: 1;
-            visibility: visible;
+            align-items: center;
         }
 
         #backToTopBtn:hover {
-            background-color: #7a9d4a;
-            transform: scale(1.1);
+            background-color: #486623;
         }
 
-        @media (max-width: 575.98px) {
-            #backToTopBtn {
-                bottom: 15px;
-                right: 15px;
-                width: 42px;
-                height: 42px;
-                font-size: 18px;
-            }
+        #backToTopBtn.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        #grupalParticipantsGroup {
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .participant-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-end;
+        }
+
+        .participant-row .form-group {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+
+        .participant-row .btn-remove-participant {
+            flex-shrink: 0;
+            height: calc(1.5em + .75rem + 2px);
+        }
+
+        #participantsListContainer .participant-row:first-child .btn-remove-participant {
+            visibility: hidden;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="..."
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
+        </script>
 </head>
 
-<body>
+<body style="background-color: #dde9ce !important;">
     <div class="container py-4">
-        <div class="dashboard-container">
-
-            <h1 class="text-center mb-4">Dashboard Principal</h1>
-
-            <div class="dashboard-nav">
-                <a href="calendario.html" class="nav-card"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                        height="16" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
-                        <path
-                            d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
-                        <path
-                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
-                    </svg>
-                    <h5>Calendario Reservas</h5>
-                </a>
-                <a href="calendariodepagos.html" class="nav-card"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                        height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+        <div class="calendar-container" id="calendarContainer">
+            <!-- Cabecera (Unchanged) -->
+            <div class="mb-4">
+                <a href="dashboard.html" class="back-to-dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
-                            d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0" />
-                        <path
-                            d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.935-1.37-1.293-.963-.37-1.68-.67-1.68-1.277 0-.62.51-1.077 1.268-1.142v-.44h-.375v.443c-.78.043-1.31.59-1.31 1.23 0 .631.38 1.002 1.467 1.411.98.388 1.625.699 1.625 1.34 0 .678-.56 1.17-1.414 1.174v.447h.375v-.443c.83-.041 1.316-.523 1.316-1.22 0-.612-.41-.99-1.432-1.374-.98-.374-1.57-.667-1.57-1.313 0-.64.543-1.114 1.394-1.158V8.11h-.375v.447c-.782.043-1.31.59-1.31 1.23zm-2.377-1.374c.353-.324.83-.532 1.418-.532.61 0 1.11.226 1.46.616l.04.053c.254.336.418.787.418 1.313 0 .495-.16.918-.418 1.277a1.9 1.9 0 0 1-1.46.61c-.588 0-1.065-.208-1.418-.532l-.04-.05a.5.5 0 0 1 0-.634l.644-.645a.5.5 0 0 1 .636 0c.09.081.212.186.43.288.25.116.53.174.85.174.46 0 .82-.142 1.03-.42.23-.302.34-.69.34-1.153 0-.462-.11-.851-.34-1.154a1.4 1.4 0 0 0-1.03-.42c-.32 0-.59.058-.85.174-.218.102-.34.207-.43.288a.5.5 0 0 1-.636 0l-.644-.645a.5.5 0 0 1 0-.634z" />
-                        <path
-                            d="M0 4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm12 1V4H1v1zM1 7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm12 1V7H1v1z" />
+                            d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                     </svg>
-                    <h5>Calendario Pagos</h5>
-                </a>
-                <a href="index.html" class="nav-card"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                        fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
-                        <path
-                            d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354l-6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207z" />
-                    </svg>
-                    <h5>Ver página comercial</h5>
+                    Volver al Dashboard
                 </a>
             </div>
+            <h2 class="calendar-title">Calendario de Clases Semanal</h2>
 
-            <div class="summary-section">
-                <h3 class="summary-title" id="summaryTitle">Resumen de Pagos - Mes Actual</h3>
+            <!-- Botones de Acción (Unchanged) -->
+            <div class="action-buttons">
+                <button id="downloadImageBtn" class="btn btn-sm" style="background-color: #f3a391;"> <svg
+                        class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                        <path
+                            d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z" />
+                    </svg> Exportar Imagen </button>
+                <button id="downloadPdfBtn" class="btn btn-sm"
+                    style="background-color: #fae39e; border-color: #fae39e; color: black;"> <svg class="bi me-1"
+                        width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                        <path fill-rule="evenodd"
+                            d="M5 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                    </svg> Exportar PDF </button>
+                <button id="exportExcelBtn" class="btn btn-sm"
+                    style="background-color: #c0d5c1; border-color: #c0d5c1;color: black;"> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-spreadsheet me-1" viewBox="0 0 16 16">
+                        <path
+                            d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9h-3V6h1V4.5h-1A1.5 1.5 0 0 1 9.5 3M3 11h10v1h-3v2h3v1h-3v2H9v-2H6v2H5v-2H3z" />
+                        <path d="M3 6h10v3H3z" />
+                    </svg> Exportar Excel </button>
+                <button id="exportDataBtn" class="btn btn-sm"
+                    style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-code me-1" viewBox="0 0 16 16">
+                        <path
+                            d="M14.5 14a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 14V2A1.5 1.5 0 0 1 3 0.5H13A1.5 1.5 0 0 1 14.5 2zm-1.5.5a.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5z" />
+                        <path
+                            d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0m2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0" />
+                    </svg> Exportar JSON </button>
+                <button id="importDataBtn" class="btn btn-sm"
+                    style="background-color: #96a5c0; border-color: #96a5c0; color: black;"> <svg class="bi me-1"
+                        width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M3.5 10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.5-3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m0 3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5" />
+                        <path d="M4 1a1 1 0 0 0-1 1v1h1V2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1h1V2a1 1 0 0 0-1-1z" />
+                        <path
+                            d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 7.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m1 4v1H4v-1zm4 0v1H8v-1zm4 0v1h-1v-1z" />
+                        <path fill-rule="evenodd"
+                            d="M1.5 3A1.5 1.5 0 0 0 0 4.5v7A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 3zm13 1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z" />
+                    </svg> Importar JSON </button>
+                <input type="file" id="fileInput" accept=".txt, .json" style="display: none;" />
+            </div>
 
-                <div class="summary-metrics">
-                    <div class="row justify-content-center">
-                        <div class="col-12 mb-4">
-                            <div class="metric-item metric-item-full-width metric-total"> <span class="metric-value"
-                                    id="totalCollected">--</span> <span class="metric-label">Total Recaudado</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row text-center">
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-item metric-paid h-100"> <span class="metric-value"
-                                    id="paidCount">--</span> <span class="metric-label">Pagados (Completo/Prueba)</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-item metric-partial h-100"> <span class="metric-value"
-                                    id="partialCount">--</span> <span class="metric-label">Pagados (Parcial)</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-item metric-pending h-100"> <span class="metric-value"
-                                    id="pendingCount">--</span> <span class="metric-label">Pendientes</span> </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="payment-bar-container">
-                    <div id="barPaid" class="bar-segment bar-paid" title="Pagado Completo/Prueba"></div>
-                    <div id="barPartial" class="bar-segment bar-partial" title="Pago Parcial"></div>
-                    <div id="barPending" class="bar-segment bar-pending" title="Pendiente"></div>
-                </div>
-
-                <h5 class="text-center mt-4 mb-3">Detalle de Pagos del Mes</h5>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm table-summary table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Alumno</th>
-                                <th>Estado</th>
-                                <th>Monto Abonado</th>
-                                <th>Clases Pagadas</th>
-                                <th>Fecha Pago</th>
-                            </tr>
-                        </thead>
-                        <tbody id="summaryTableBody">
-                            <tr>
-                                <td colspan="5" class="text-center p-3">Cargando datos...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Calendario (Unchanged) -->
+            <div class="calendar" id="calendar">
+                <div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando calendario...</div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Detalle de Pago -->
-    <div class="modal fade" id="paymentDetailModal" tabindex="-1" aria-labelledby="paymentDetailModalLabel"
-        aria-hidden="true">
+    <!-- Modal (Unchanged) -->
+    <div class="modal fade" id="reservaModal" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="paymentDetailModalLabel">Detalle</h5> <button type="button"
-                        class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
+                    <h5 class="modal-title" id="reservaModalLabel">Detalles Clase</h5><button type="button"
+                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6"><strong>Alumno:</strong> <span id="detailStudentName"></span></div>
-                        <div class="col-md-6"><strong>Mes/Año:</strong> <span id="detailMonthYear"></span></div>
-                    </div>
-                    <!-- NUEVOS CAMPOS PARA TIPO Y FECHA -->
-                    <div class="row mb-3">
-                        <div class="col-md-6"><strong>Tipo Clase:</strong> <span id="detailClassType"></span></div>
-                        <div class="col-md-6"><strong>Fecha Específica:</strong> <span id="detailSpecificDate"></span>
+                    <form id="reservaForm" novalidate>
+                        <input type="hidden" id="reservaDia" />
+                        <input type="hidden" id="reservaHora" />
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3"> <label for="horaInicio" class="form-label">Inicio</label> <input
+                                    type="time" class="form-control bg-light" id="horaInicio" readonly /> </div>
+                            <div class="col-md-6 mb-3"> <label for="horaFin" class="form-label">Fin</label> <input
+                                    type="time" class="form-control bg-light" id="horaFin" readonly /> </div>
+                            <div class="col-12 mb-3"> <label for="nombre" class="form-label">Nombre
+                                    (Principal/Grupo)</label> <input type="text" id="nombre" class="form-control"
+                                    required />
+                                <div class="invalid-feedback">Ingresa un nombre principal o de grupo.</div>
+                            </div>
+                            <div class="col-md-6 mb-3"> <label for="tipo" class="form-label">Tipo</label> <select
+                                    id="tipo" class="form-select" required>
+                                    <option>Individual</option>
+                                    <option>Grupal</option>
+                                    <option>Ayuda Ingreso a institutos</option>
+                                    <option>Clase de prueba</option>
+                                    <option>Clase de recuperación</option>
+                                </select>
+                                <div class="invalid-feedback">Selecciona un tipo.</div>
+                            </div>
+                            <div class="col-md-6 mb-3"> <label for="duracion" class="form-label">Duración</label>
+                                <select id="duracion" class="form-select" required>
+                                    <option value="40">40 min</option>
+                                    <option value="60">1 hora</option>
+                                </select>
+                                <div class="invalid-feedback">Selecciona duración.</div>
+                            </div>
+                            <div class="col-12 mb-3" id="emailGroup"> <label for="email"
+                                    class="form-label">Email</label> <input type="email" id="email" class="form-control"
+                                    placeholder="ejemplo@correo.com" />
+                                <div class="invalid-feedback">Ingresa un email válido.</div>
+                            </div>
+                            <div class="col-12 mb-3" id="fechaEspecificaGroup" style="display: none;"> <label
+                                    for="fechaEspecifica" class="form-label">Fecha Específica</label> <input type="date"
+                                    id="fechaEspecifica" class="form-control" />
+                                <div class="invalid-feedback">Ingresa una fecha para este tipo de clase.</div>
+                            </div>
+                            <div class="col-12 mb-3" id="grupalParticipantsGroup" style="display: none;">
+                                <h6>Participantes (Clase Grupal)</h6>
+                                <div id="participantsListContainer"></div> <button type="button"
+                                    class="btn btn-sm btn-outline-success mt-2" id="addParticipantBtn"> <svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                    </svg> Añadir Participante </button>
+                                <div class="invalid-feedback" id="grupalParticipantsFeedback">Debes añadir al menos un
+                                    participante con nombre y email para la clase grupal.</div>
+                            </div>
                         </div>
-                    </div>
-                    <hr>
-                    <h6>Detalles del Pago</h6>
-                    <div class="row mb-3">
-                        <div class="col-md-6"><strong>Monto Pagado:</strong> <span id="detailAmountPaid"></span></div>
-                        <div class="col-md-6"><strong>Fecha Pago:</strong> <span id="detailPaymentDate"></span></div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6"><strong>Tipo Pago:</strong> <span id="detailPaymentType"></span></div>
-                        <div class="col-md-6"><strong>Clases Pagadas:</strong> <span id="detailClassesPaidCount"></span>
-                        </div>
-                    </div>
-                    <hr>
-                    <!-- Encabezado de la sección de fechas -->
-                    <h6 id="paidClassesHeader">Fechas de Clase Cubiertas (Estimado):</h6>
-                    <ul id="paidClassesList" class="list-group list-group-flush">
-                        <li class="list-group-item text-muted">Calculando fechas...</li>
-                    </ul>
+                    </form>
                 </div>
-                <div class="modal-footer"> <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cerrar</button> </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" style="background-color: #f3a391;" id="eliminarBtn"
+                        style="display: none;"> <svg class="bi me-1" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                            <path
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                        </svg> Eliminar </button>
+                    <button type="button" class="btn"
+                        style="background-color: #fae39e; border-color: #fae39e; color: black;"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;" id="guardarBtn"> Guardar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    <!-- FIN Modal Detalle de Pago -->
 
-    <!-- Back to Top Button -->
-    <button onclick="scrollToTop()" id="backToTopBtn" title="Volver arriba"> <i class="fas fa-arrow-up"></i> </button>
+    <!-- Botón Back to Top (Unchanged) -->
+    <button id="backToTopBtn" title="Volver arriba"
+        style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;"> <svg xmlns="http://www.w3.org/2000/svg"
+            width="24" height="24" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
+        </svg> </button>
 
+    <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
     <script>
-        function xlsxScriptLoaded() { console.log("XLSX loaded."); }
-        function xlsxScriptFailed() { console.error("Failed to load XLSX."); }
+        // --- Handlers Carga XLSX (Unchanged) ---
+        function xlsxScriptLoaded() { console.log("XLSX loaded."); const e = document.getElementById("exportExcelBtn"); e && (e.disabled = !1) } function xlsxScriptFailed() { console.error("Failed to load XLSX library."); const e = document.getElementById("exportExcelBtn"); e && (e.disabled = !0, e.title = "Error al cargar librería Excel", e.classList.add("btn-danger"), e.innerHTML = '<svg class="bi me-1" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/></svg> Error Excel'), Swal.fire("Error Crítico", "No se pudo cargar la librería necesaria para exportar a Excel. Por favor, revisa tu conexión a internet y recarga la página.", "error") }
 
-        const paymentDataKey = 'studentPaymentDataV2';
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        // --- Inicialización EmailJS (Unchanged) ---
+        !function () { emailjs.init({ publicKey: "qOfrwmjiPJNVT91sk" }) }();
 
-        const summaryTitle = document.getElementById('summaryTitle');
-        const totalCollectedEl = document.getElementById('totalCollected');
-        const paidCountEl = document.getElementById('paidCount');
-        const partialCountEl = document.getElementById('partialCount');
-        const pendingCountEl = document.getElementById('pendingCount');
-        const barPaidEl = document.getElementById('barPaid');
-        const barPartialEl = document.getElementById('barPartial');
-        const barPendingEl = document.getElementById('barPending');
-        const summaryTableBody = document.getElementById('summaryTableBody');
-        const paymentDetailModalEl = document.getElementById('paymentDetailModal');
-        const paymentDetailModal = new bootstrap.Modal(paymentDetailModalEl);
+        // --- Variables Globales y DOM Elements (Unchanged) ---
+        const calendar = document.getElementById("calendar"), downloadImageBtn = document.getElementById("downloadImageBtn"), downloadPdfBtn = document.getElementById("downloadPdfBtn"), exportDataBtn = document.getElementById("exportDataBtn"), importDataBtn = document.getElementById("importDataBtn"), exportExcelBtn = document.getElementById("exportExcelBtn"), fileInput = document.getElementById("fileInput"), reservaModalElement = document.getElementById("reservaModal"), reservaForm = document.getElementById("reservaForm"), eliminarBtn = document.getElementById("eliminarBtn"), guardarBtn = document.getElementById("guardarBtn"), duracionSelect = document.getElementById("duracion"), tipoSelect = document.getElementById("tipo"), fechaEspecificaGroup = document.getElementById("fechaEspecificaGroup"), fechaEspecificaInput = document.getElementById("fechaEspecifica"), emailGroup = document.getElementById("emailGroup"), emailInput = document.getElementById("email"), grupalParticipantsGroup = document.getElementById("grupalParticipantsGroup"), participantsListContainer = document.getElementById("participantsListContainer"), addParticipantBtn = document.getElementById("addParticipantBtn"), grupalParticipantsFeedback = document.getElementById("grupalParticipantsFeedback"), days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"], startHour = 900, endHour = 1260, hours = [], generationIntervalMinutes = 20; for (let e = startHour; e < endHour; e += generationIntervalMinutes)hours.push(e); const localKey = "reservasCalendarioV2_1"; let reservas = {};
 
-        let students = {};
-        let basePrices = {};
-        const defaultPrices = { duration40: 0, duration60: 0 }; // Los precios reales se cargan
+        // --- Funciones Utilitarias (Unchanged) ---
+        function formatHora(e) { const t = Math.floor(e / 60).toString().padStart(2, "0"), o = (e % 60).toString().padStart(2, "0"); return `${t}:${o}` }
+        function getTipoClass(e) { const t = String(e || "").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""); switch (t) { case "individual": return "tipo-individual"; case "grupal": return "tipo-grupal"; case "ayuda-ingreso-a-institutos": return "tipo-ayuda-ingreso-a-institutos"; case "clase-de-prueba": return "tipo-clase-de-prueba"; case "clase-de-recuperacion": return "tipo-clase-de-recuperacion"; default: return console.warn(`Tipo desconocido normalizado: "${t}". Usando default.`), "tipo-default" } }
 
-        function getYearMonthKey(year, month) { return `${year}-${(month + 1).toString().padStart(2, '0')}`; }
-        function formatCurrency(amount) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(amount); }
-        function formatDate(dateString) { if (!dateString) return '-'; try { const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } catch (e) { return dateString; } }
-        function countWeekdaysInMonth(year, month, targetDayName) { const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return 0; let count = 0; const date = new Date(Date.UTC(year, month, 1)); const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate(); for (let day = 1; day <= daysInMonth; day++) { date.setUTCDate(day); if (date.getUTCDay() === targetDayIndex) { count++; } } return count; }
+        // --- Guardar/Cargar LocalStorage (Unchanged) ---
+        function guardarReservasEnLocalStorage() { try { localStorage.setItem(localKey, JSON.stringify(reservas)), console.log("Reservas guardadas.") } catch (e) { console.error("Error guardando:", e), Swal.fire("Error", "No se pudieron guardar.", "error") } }
+        function cargarReservasDesdeLocalStorage() { calendar.innerHTML = '<div class="text-center w-100" style="grid-column: 1 / -1; padding: 20px;">Cargando...</div>'; try { const e = localStorage.getItem(localKey); reservas = e ? JSON.parse(e) : {}, console.log("Reservas cargadas.") } catch (e) { console.error("Error cargando:", e), reservas = {}, Swal.fire("Error", "Datos corruptos.", "warning") } requestAnimationFrame(() => setTimeout(renderCalendar, 0)) }
 
-        function getCoveredClassDates(year, month, targetDayName, classesPaid, isFullMonth) {
-            if (targetDayName === "Clase de recuperación" && classesPaid === 0 && !isFullMonth) { return []; } // No calcular para recuperación sin pago
-            const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return [];
-            const dates = []; const date = new Date(Date.UTC(year, month, 1));
-            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-            for (let day = 1; day <= daysInMonth; day++) { date.setUTCDate(day); if (date.getUTCDay() === targetDayIndex) { dates.push(new Date(date.getTime())); } }
-            let coveredDates = [];
-            if (isFullMonth) { coveredDates = dates; } else { coveredDates = dates.slice(0, classesPaid); }
-            return coveredDates.map(d => { const day = d.getUTCDate().toString().padStart(2, '0'); const month = (d.getUTCMonth() + 1).toString().padStart(2, '0'); const year = d.getUTCFullYear(); const dayName = dayNames[d.getUTCDay()]; return `${dayName} ${day}/${month}/${year}`; });
-        }
+        // --- Renderizado del Calendario (Unchanged) ---
+        function renderCalendar() { calendar.innerHTML = ""; days.forEach(e => { const t = document.createElement("div"); t.className = "day", t.innerHTML = `<h5>${e}</h5>`, hours.forEach(o => { const n = formatHora(o), a = `${e}-${n}`, r = reservas[a]; if (r) { const s = document.createElement("div"), i = r.tipo, l = getTipoClass(i); s.classList.add("hour", "reserved", l); let c = `<strong>${r.nombre}</strong><br>${r.horaInicio} - ${r.horaFin} (${r.duracion} min)<br><small>${r.tipo}</small>`; r.fechaEspecifica && (c += `<br><small class="specific-date">Fecha: ${r.fechaEspecifica}</small>`), "Grupal" === r.tipo ? c += `<br><small class="participant-info">Grupo (${Array.isArray(r.participantes) ? r.participantes.length : 0} part.)</small>` : r.email && (c += `<br><small class="participant-info">${r.email}</small>`), s.innerHTML = c, s.onclick = () => abrirModal(e, n, r), t.appendChild(s) } else if (!estaEnReserva(e, o) && canFitReservation(e, o, 40)) { const s = document.createElement("div"); s.className = "hour", s.textContent = n, s.onclick = () => abrirModal(e, n, null), t.appendChild(s) } }), calendar.appendChild(t) }) }
 
-        // --- MODIFICADO: Ajusta estado y contadores para Recuperación y Prueba ---
-        function loadAndProcessDashboardData() {
-            summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3">Cargando datos...</td></tr>';
-            try { // Carga de datos (sin cambios)
-                const storedData = localStorage.getItem(paymentDataKey);
-                if (storedData) { const parsedData = JSON.parse(storedData); students = parsedData.students || {}; basePrices = parsedData.prices || { ...defaultPrices }; console.log("Datos cargados."); }
-                else { console.log("No se encontraron datos."); students = {}; basePrices = { ...defaultPrices }; summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-muted">No hay datos guardados.</td></tr>'; updateSummaryMetrics(0, 0, 0, 0, 0); return; }
-            } catch (error) { console.error("Error cargando:", error); students = {}; basePrices = { ...defaultPrices }; summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-danger">Error al cargar datos.</td></tr>'; updateSummaryMetrics(0, 0, 0, 0, 0); return; }
+        // --- Chequeo de Ocupación y Capacidad (Unchanged) ---
+        function estaEnReserva(e, t) { for (const o in reservas) { const n = reservas[o]; if (!o || "string" != typeof o || -1 === o.indexOf("-")) continue; const a = o.split("-"); if (a.length < 2) continue; const r = a.slice(0, -1).join("-"); if (r !== e || !n || "object" != typeof n || !n.horaInicio || "string" != typeof n.horaInicio || "number" != typeof n.duracion || isNaN(n.duracion)) continue; const s = n.horaInicio.split(":"); if (2 !== s.length) continue; const i = parseInt(s[0], 10), l = parseInt(s[1], 10); if (isNaN(i) || isNaN(l)) continue; const c = 60 * i + l, d = c + n.duracion; if (t >= c && t < d) return !0 } return !1 }
+        function canFitReservation(e, t, o) { const n = t + o; if (n > endHour) return !1; for (const a in reservas) { const r = reservas[a]; if (!a || "string" != typeof a || -1 === a.indexOf("-")) continue; const s = a.split("-"); if (s.length < 2) continue; const i = s.slice(0, -1).join("-"); if (i !== e || !r || "object" != typeof r || !r.horaInicio || "string" != typeof r.horaInicio || "number" != typeof r.duracion || isNaN(r.duracion)) continue; const l = r.horaInicio.split(":"); if (2 !== l.length) continue; const c = parseInt(l[0], 10), d = parseInt(l[1], 10); if (isNaN(c) || isNaN(d)) continue; const u = 60 * c + d, h = u + r.duracion; if (t < h && n > u) return !1 } return !0 }
 
-            const now = new Date(); const currentYear = now.getFullYear(); const currentMonth = now.getMonth();
-            const currentYearMonthKey = getYearMonthKey(currentYear, currentMonth);
-            summaryTitle.textContent = `Resumen de Pagos - ${monthNames[currentMonth]} ${currentYear}`;
+        // --- Lógica del Modal (Unchanged) ---
+        function actualizarHoraFin() { const e = document.getElementById("horaInicio").value, t = parseInt(duracionSelect.value); if (!e || isNaN(t) || t <= 0) return document.getElementById("horaFin").value = "", void (guardarBtn.disabled = !0); const [o, n] = e.split(":").map(Number), a = 60 * o + n, r = a + t; r > endHour ? (document.getElementById("horaFin").value = formatHora(endHour), guardarBtn.disabled = !0, Swal.fire({ icon: "warning", title: "Hora Inválida", text: `Termina después de ${formatHora(endHour)}.`, timer: 3e3, showConfirmButton: !1 })) : (document.getElementById("horaFin").value = formatHora(r), guardarBtn.disabled = !1) }
+        function addParticipantRow(e = "", t = "") { const o = document.createElement("div"); o.className = "participant-row mb-2", o.innerHTML = `\n                <div class="form-group flex-grow-1">\n                    <input type="text" class="form-control form-control-sm grupal-name" placeholder="Nombre participante" value="${e}" required>\n                     <div class="invalid-feedback">Nombre requerido.</div>\n                </div>\n                <div class="form-group flex-grow-1">\n                    <input type="email" class="form-control form-control-sm grupal-email" placeholder="Email participante" value="${t}" required>\n                    <div class="invalid-feedback">Email válido requerido.</div>\n                </div>\n                <button type="button" class="btn btn-danger btn-sm btn-remove-participant" title="Eliminar participante">\n                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">\n                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>\n                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>\n                    </svg>\n                </button>\n            `, o.querySelector(".btn-remove-participant").addEventListener("click", e => { e.target.closest(".participant-row").remove(), updateModalFieldsVisibility() }), participantsListContainer.appendChild(o) }
+        function updateModalFieldsVisibility() { const e = tipoSelect.value, t = "Clase de prueba" === e || "Clase de recuperación" === e, o = "Grupal" === e; emailInput.required = !1, fechaEspecificaInput.required = !1, grupalParticipantsGroup.classList.remove("is-invalid"), participantsListContainer.querySelectorAll(".grupal-name, .grupal-email").forEach(e => e.required = !1), emailGroup.style.display = o ? "none" : "block", emailInput.required = !o, fechaEspecificaGroup.style.display = t ? "block" : "none", fechaEspecificaInput.required = t, grupalParticipantsGroup.style.display = o ? "block" : "none", o ? (0 === participantsListContainer.children.length && addParticipantRow(), participantsListContainer.querySelectorAll(".grupal-name, .grupal-email").forEach(e => e.required = !0)) : participantsListContainer.querySelectorAll(".grupal-name, .grupal-email").forEach(e => e.required = !1) }
+        function abrirModal(e, t, o) { reservaForm.classList.remove("was-validated"), document.getElementById("reservaDia").value = e, document.getElementById("reservaHora").value = t, document.getElementById("horaInicio").value = o?.horaInicio || t, document.getElementById("nombre").value = o?.nombre || "", tipoSelect.value = o?.tipo || "Individual", duracionSelect.value = o?.duracion || 40, fechaEspecificaInput.value = o?.fechaEspecifica || "", emailInput.value = "", participantsListContainer.innerHTML = "", o ? "Grupal" === o.tipo && Array.isArray(o.participantes) ? (o.participantes.forEach(e => addParticipantRow(e.nombre, e.email)), 0 === participantsListContainer.children.length && addParticipantRow()) : o.email && (emailInput.value = o.email) : "Grupal" === tipoSelect.value && addParticipantRow(), updateModalFieldsVisibility(), actualizarHoraFin(), eliminarBtn.style.display = o ? "inline-block" : "none"; const n = new bootstrap.Modal(reservaModalElement); n.show() }
+        duracionSelect.addEventListener("change", actualizarHoraFin); tipoSelect.addEventListener("change", updateModalFieldsVisibility); addParticipantBtn.addEventListener("click", () => addParticipantRow());
 
-            let totalCollected = 0; let paidFullCount = 0; let paidPartialCount = 0; let pendingCount = 0; let recoveryCount = 0; // <<< Contador para recuperaciones
-            const tableRows = [];
-            const validStudentIds = Object.keys(students).filter(id => students[id] && students[id].name && students[id].classDay && students[id].duration);
-            const totalValidStudents = validStudentIds.length;
+        // --- Envío de Correo (Modificado para formato participant_details) ---
+        function enviarCorreoReserva(e) {
+            const t = "service_93zs6up", o = "template_352le9n";
+            let dayValueToSend;
+            if (("Clase de prueba" === e.tipo || "Clase de recuperación" === e.tipo) && e.fechaEspecifica) {
+                dayValueToSend = e.dia + " (" + e.fechaEspecifica + ")";
+            } else {
+                dayValueToSend = e.dia;
+            }
 
-            validStudentIds.forEach((studentId) => {
-                const student = students[studentId];
-                const classType = student.classType || 'Desconocido';
-                if (!student.classDay || !student.duration || !student.name) { console.warn(`Saltando alumno ${studentId}`); return; }
-
-                const classesInMonth = countWeekdaysInMonth(currentYear, currentMonth, student.classDay);
-                const payment = student.payments?.[currentYearMonthKey];
-                let statusText = 'Pendiente'; let rowClass = 'table-danger'; let dataAttributes = ''; let amountPaidDisplay = '-'; let classesPaidDisplay = '-'; let paymentDateDisplay = '-';
-
-                // --- Lógica de Estado y Contadores MODIFICADA ---
-                if (!payment && classType === "Clase de recuperación") { // Recuperación SIN pago registrado
-                    statusText = 'Recuperación';
-                    rowClass = 'table-info payment-row-clickable'; // Azul y clickeable
-                    dataAttributes = `data-studentid="${studentId}" data-yearmonth="${currentYearMonthKey}"`;
-                    recoveryCount++; // Contar como recuperación
-                } else if (payment) { // CON pago registrado
-                    rowClass = 'payment-row-clickable';
-                    dataAttributes = `data-studentid="${studentId}" data-yearmonth="${currentYearMonthKey}"`;
-                    amountPaidDisplay = formatCurrency(payment.amountPaid);
-                    classesPaidDisplay = payment.isFullMonthPayment ? `Mes Completo (${payment.classesPaid || classesInMonth})` : `${payment.classesPaid || 0}`;
-                    paymentDateDisplay = formatDate(payment.paymentDate);
-
-                    if (classType === "Clase de prueba") { // Pago de Clase de Prueba
-                        statusText = 'Pagado (Prueba)'; rowClass += ' table-success';
-                        paidFullCount++; // <<< Contar como COMPLETO
-                        totalCollected += payment.amountPaid;
-                        classesPaidDisplay = '1 (Prueba)'; // Mostrar explícitamente
-                    } else if (classType === "Clase de recuperación" && payment.amountPaid === 0) { // Pago $0 de Recuperación
-                        statusText = 'Recuperación (Registrada)'; rowClass += ' table-info';
-                        recoveryCount++;
-                        // No sumar a totalCollected
-                    } else { // Pago normal
-                        totalCollected += payment.amountPaid;
-                        const paidClasses = payment.classesPaid || 0;
-                        if (payment.isFullMonthPayment || (paidClasses >= classesInMonth && classesInMonth > 0)) {
-                            statusText = 'Pagado (Completo)'; rowClass += ' table-success'; paidFullCount++;
-                        } else if (paidClasses > 0) {
-                            statusText = `Parcial (${paidClasses}/${classesInMonth})`; rowClass += ' table-warning'; paidPartialCount++;
-                        } else { // Pago $0 o sin clases (no recuperación)
-                            statusText = 'Pendiente (Info Parcial)'; rowClass += ' table-secondary'; pendingCount++;
-                        }
+            // +++ Construcción de participant_details MODIFICADA (Solo nombres en lista HTML para grupal) +++
+            let participantDetailsText = "";
+            if (e.tipo === "Grupal" && Array.isArray(e.participantes) && e.participantes.length > 0) {
+                participantDetailsText = "Lista de participantes: <ul>";
+                e.participantes.forEach(p => {
+                    const name = p.nombre ? p.nombre.trim() : '';
+                    if (name) {
+                        participantDetailsText += `<li>${name}</li>`;
+                    } else {
+                        participantDetailsText += `<li>(Nombre no registrado)</li>`;
                     }
-                } else { // Sin pago Y NO es recuperación -> Pendiente normal
-                    pendingCount++;
-                    // rowClass ya es 'table-danger'
-                }
-                tableRows.push(`<tr class="${rowClass}" ${dataAttributes}><td>${student.name}</td><td>${statusText}</td><td>${amountPaidDisplay}</td><td>${classesPaidDisplay}</td><td>${paymentDateDisplay}</td></tr>`);
-            });
+                });
+                participantDetailsText += "</ul>";
+            }
+            // +++ Fin de la modificación +++
 
-            updateSummaryMetrics(totalCollected, paidFullCount, paidPartialCount, pendingCount, totalValidStudents, recoveryCount);
+            const n = {
+                day: dayValueToSend,
+                horaInicio: e.horaInicio,
+                horaFin: e.horaFin,
+                name: e.nombre,
+                type: e.tipo,
+                duration: e.duracion,
+                participant_details: participantDetailsText, // Lista HTML o vacío
+                ac1: e.ac1,
+                ac2: e.ac2
+            };
 
-            if (tableRows.length > 0) { summaryTableBody.innerHTML = tableRows.join(''); }
-            else if (Object.keys(students).length === 0) { summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-muted">No hay alumnos registrados.</td></tr>'; }
-            else { summaryTableBody.innerHTML = '<tr><td colspan="5" class="text-center p-3 text-warning">No hay datos de pago para el mes actual.</td></tr>'; }
+            console.log("Enviando correo con payload:", n);
+            emailjs.send(t, o, n).then(response => {
+                console.log("Éxito!", response.status, response.text);
+                const toast = Swal.mixin({ toast: !0, position: "top-end", showConfirmButton: !1, timer: 2500, timerProgressBar: !0, didOpen: e => { e.onmouseenter = Swal.stopTimer, e.onmouseleave = Swal.resumeTimer } });
+                toast.fire({ icon: "info", title: "Notificación enviada por correo." })
+            }).catch(err => {
+                console.error("Error correo:", err);
+                Swal.fire({ title: "Error Notificación", text: `Reserva guardada, pero hubo un error al enviar el correo: ${err.text || "Desconocido"}`, icon: "warning", timer: 5000, showConfirmButton: !0 })
+            })
         }
 
-        // --- MODIFICADO: Ajusta base de porcentajes en barra ---
-        function updateSummaryMetrics(total, paid, partial, pending, totalStudents, recovery) {
-            totalCollectedEl.textContent = formatCurrency(total);
-            paidCountEl.textContent = paid;
-            partialCountEl.textContent = partial;
-            pendingCountEl.textContent = pending;
+        // +++ NUEVAS FUNCIONES PARA GENERAR Y DESCARGAR .ICS +++
 
-            // Base para porcentaje: total de alumnos MENOS las recuperaciones
-            const totalExpectedToPay = totalStudents - recovery;
-            console.log(`Metrics - Total: ${totalStudents}, Recovery: ${recovery}, Expected Pay: ${totalExpectedToPay}, Paid: ${paid}, Partial: ${partial}, Pending: ${pending}`);
+        /**
+         * Calcula la próxima fecha para un día de la semana dado a una hora específica.
+         * @param {string} nombreDia Ej: "Lunes", "Martes"...
+         * @param {string} horaMinutosStr Ej: "15:00"
+         * @returns {Date|null} Objeto Date de la próxima ocurrencia o null si hay error.
+         */
+        function getProximaFechaParaDia(nombreDia, horaMinutosStr) {
+            const mapDias = { "Lunes": 1, "Martes": 2, "Miércoles": 3, "Jueves": 4, "Viernes": 5, "Sábado": 6, "Domingo": 0 };
+            const diaSemanaTarget = mapDias[nombreDia];
 
-            if (totalExpectedToPay > 0) { // Calcular porcentajes sobre los que deben pagar
-                const paidPercent = (paid / totalExpectedToPay) * 100;
-                const partialPercent = (partial / totalExpectedToPay) * 100;
-                const pendingPercent = (pending / totalExpectedToPay) * 100;
-                // Asegurarse que la suma no exceda 100% por redondeos (ajustar el último)
-                const totalPercent = paidPercent + partialPercent + pendingPercent;
-                let finalPendingPercent = pendingPercent;
-                if (totalPercent > 100.1) { // Margen pequeño para errores de flotantes
-                    finalPendingPercent = 100 - paidPercent - partialPercent;
+            if (typeof diaSemanaTarget === 'undefined') {
+                console.error("Nombre de día inválido:", nombreDia);
+                return null;
+            }
+
+            const [horas, minutos] = horaMinutosStr.split(':').map(Number);
+            if (isNaN(horas) || isNaN(minutos)) {
+                console.error("Formato de hora inválido:", horaMinutosStr);
+                return null;
+            }
+
+            const hoy = new Date();
+            const diaSemanaHoy = hoy.getDay(); // 0 = Domingo, 1 = Lunes...
+            let diasHastaProximo = (diaSemanaTarget - diaSemanaHoy + 7) % 7;
+
+            const proximaFecha = new Date(hoy);
+            proximaFecha.setDate(hoy.getDate() + diasHastaProximo);
+            proximaFecha.setHours(horas, minutos, 0, 0); // Establecer hora y minutos
+
+            // Si el día calculado es hoy pero la hora ya pasó, calcular para la semana siguiente
+            if (diasHastaProximo === 0 && proximaFecha < hoy) {
+                proximaFecha.setDate(proximaFecha.getDate() + 7);
+            }
+
+            return proximaFecha;
+        }
+
+        /**
+        * Parsea una fecha específica (YYYY-MM-DD) y hora (HH:MM) a un objeto Date local.
+        * @param {string} fechaStr Ej: "2024-08-15"
+        * @param {string} horaStr Ej: "10:30"
+        * @returns {Date|null} Objeto Date o null si el formato es inválido.
+        */
+        function parsearFechaEspecifica(fechaStr, horaStr) {
+            if (!fechaStr || !horaStr) return null;
+            try {
+                // Construye una cadena ISO 8601 parcial y la parsea.
+                // new Date() con esta cadena generalmente asume la zona horaria local.
+                const fechaHoraCompleta = `${fechaStr}T${horaStr}:00`;
+                const fecha = new Date(fechaHoraCompleta);
+                // Verifica si la fecha resultante es válida
+                if (isNaN(fecha.getTime())) {
+                    throw new Error("Fecha inválida generada");
                 }
-
-
-                barPaidEl.style.width = `${paidPercent}%`;
-                barPartialEl.style.width = `${partialPercent}%`;
-                barPendingEl.style.width = `${finalPendingPercent}%`;
-
-                barPaidEl.textContent = paid > 0 && paidPercent > 5 ? `${paid} (${paidPercent.toFixed(0)}%)` : '';
-                barPartialEl.textContent = partial > 0 && partialPercent > 5 ? `${partial} (${partialPercent.toFixed(0)}%)` : '';
-                barPendingEl.textContent = pending > 0 && finalPendingPercent > 5 ? `${pending} (${finalPendingPercent.toFixed(0)}%)` : '';
-
-                barPaidEl.title = `${paid} (${paidPercent.toFixed(1)}%) Pagado Completo/Prueba`;
-                barPartialEl.title = `${partial} (${partialPercent.toFixed(1)}%) Pago Parcial`;
-                barPendingEl.title = `${pending} (${finalPendingPercent.toFixed(1)}%) Pendiente`;
-            } else { // Nadie debe pagar
-                barPaidEl.style.width = '0%'; barPartialEl.style.width = '0%'; barPendingEl.style.width = '0%';
-                barPaidEl.textContent = ''; barPartialEl.textContent = ''; barPendingEl.textContent = 'N/A (Pago no aplica)';
-                barPaidEl.title = 'Sin pagos esperados'; barPartialEl.title = 'Sin pagos esperados'; barPendingEl.title = 'Sin pagos esperados';
+                return fecha;
+            } catch (error) {
+                console.error("Error parseando fecha específica:", fechaStr, horaStr, error);
+                return null;
             }
         }
 
-        // --- MODIFICADO: Oculta sección fechas para Recuperación, ajusta tipo para Prueba ---
-        function openPaymentDetailModal(studentId, yearMonth) {
-            const student = students[studentId];
-            if (!student) { console.error(`No data for student ${studentId}`); Swal.fire('Error', 'Info alumno no encontrada.', 'error'); return; }
 
-            const payment = student.payments?.[yearMonth];
-            const [year, monthNum] = yearMonth.split('-').map(Number); const month = monthNum - 1; const monthName = monthNames[month];
-            const classType = student.classType || 'Desconocido';
-            const specificDate = student.specificDate || null;
-
-            const modalLabel = document.getElementById('paymentDetailModalLabel');
-            const detailStudentName = document.getElementById('detailStudentName');
-            const detailMonthYear = document.getElementById('detailMonthYear');
-            const detailClassType = document.getElementById('detailClassType');
-            const detailSpecificDate = document.getElementById('detailSpecificDate');
-            const detailAmountPaid = document.getElementById('detailAmountPaid');
-            const detailPaymentDate = document.getElementById('detailPaymentDate');
-            const detailPaymentType = document.getElementById('detailPaymentType');
-            const detailClassesPaidCount = document.getElementById('detailClassesPaidCount');
-            const paidClassesList = document.getElementById('paidClassesList');
-            const paidClassesHeader = paidClassesList.previousElementSibling; // El <h6>
-
-            detailStudentName.textContent = student.name || 'N/A';
-            detailMonthYear.textContent = `${monthName} ${year}`;
-            detailClassType.textContent = classType;
-            detailSpecificDate.textContent = specificDate ? formatDate(specificDate) : '-';
-            paidClassesList.innerHTML = '';
-            paidClassesList.style.display = 'block'; // Mostrar por defecto
-            if (paidClassesHeader) paidClassesHeader.style.display = 'block'; // Mostrar <h6> por defecto
-
-            if (payment) { // SI hay pago
-                modalLabel.textContent = "Detalle del Pago";
-                detailAmountPaid.textContent = formatCurrency(payment.amountPaid || 0);
-                detailPaymentDate.textContent = formatDate(payment.paymentDate);
-                detailClassesPaidCount.textContent = payment.classesPaid || '0';
-
-                if (classType === "Clase de prueba") {
-                    detailPaymentType.textContent = "Clase de Prueba"; // <-- Ajuste Tipo Pago
-                    const coveredDates = getCoveredClassDates(year, month, student.classDay, 1, false);
-                    if (coveredDates.length > 0) { coveredDates.forEach(dateStr => { const li = document.createElement('li'); li.className = 'list-group-item py-1'; li.textContent = dateStr; paidClassesList.appendChild(li); }); }
-                    else if (specificDate) { paidClassesList.innerHTML = `<li class="list-group-item py-1">${formatDate(specificDate)} (Fecha específica)</li>`; }
-                    else { paidClassesList.innerHTML = '<li class="list-group-item text-muted py-1">No se pudo determinar la fecha.</li>'; }
-                } else if (classType === "Clase de recuperación" && payment.amountPaid === 0) {
-                    modalLabel.textContent = "Detalle de Clase de Recuperación (Registrada)";
-                    detailPaymentType.textContent = "Recuperación (Sin Costo)";
-                    paidClassesList.style.display = 'none'; // <-- Ocultar lista fechas
-                    if (paidClassesHeader) paidClassesHeader.style.display = 'none'; // <-- Ocultar <h6>
-                } else { // Pago normal
-                    detailPaymentType.textContent = payment.isFullMonthPayment ? 'Mes Completo' : 'Parcial';
-                    const coveredDates = getCoveredClassDates(year, month, student.classDay, payment.classesPaid, payment.isFullMonthPayment);
-                    if (coveredDates.length > 0) { coveredDates.forEach(dateStr => { const li = document.createElement('li'); li.className = 'list-group-item py-1'; li.textContent = dateStr; paidClassesList.appendChild(li); }); }
-                    else { paidClassesList.innerHTML = '<li class="list-group-item text-muted py-1">No se calcularon fechas cubiertas.</li>'; }
-                }
-            } else if (classType === "Clase de recuperación") { // NO hay pago Y ES recuperación
-                modalLabel.textContent = "Detalle de Clase de Recuperación";
-                detailAmountPaid.textContent = "Sin Costo"; detailPaymentDate.textContent = "-"; detailPaymentType.textContent = "Recuperación"; detailClassesPaidCount.textContent = "N/A";
-                paidClassesList.style.display = 'none'; // <-- Ocultar lista fechas
-                if (paidClassesHeader) paidClassesHeader.style.display = 'none'; // <-- Ocultar <h6>
-            } else { // No debería llegar aquí si la fila no era clickeable
-                console.error(`Intento de abrir modal sin pago para tipo ${classType}`); Swal.fire('Error', 'No hay detalles de pago.', 'error'); return;
+        /**
+         * Formatea un objeto Date al formato UTC YYYYMMDDTHHMMSSZ para iCalendar.
+         * @param {Date} fecha
+         * @returns {string} Fecha formateada.
+         */
+        function formatoFechaICS(fecha) {
+            if (!(fecha instanceof Date) || isNaN(fecha)) {
+                console.error("formatoFechaICS recibió una fecha inválida:", fecha);
+                // Devolver una fecha/hora por defecto o lanzar un error más explícito
+                return "20000101T000000Z"; // Placeholder
             }
-            paymentDetailModal.show();
+            const pad = (num) => (num < 10 ? '0' : '') + num;
+            return fecha.getUTCFullYear() +
+                pad(fecha.getUTCMonth() + 1) +
+                pad(fecha.getUTCDate()) + 'T' +
+                pad(fecha.getUTCHours()) +
+                pad(fecha.getUTCMinutes()) +
+                pad(fecha.getUTCSeconds()) + 'Z';
         }
 
-        // --- Event Listener Setup y Otros (Sin cambios) ---
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAndProcessDashboardData();
-            summaryTableBody.addEventListener('click', (event) => {
-                const clickedRow = event.target.closest('tr.payment-row-clickable');
-                if (clickedRow?.dataset.studentid && clickedRow?.dataset.yearmonth) {
-                    openPaymentDetailModal(clickedRow.dataset.studentid, clickedRow.dataset.yearmonth);
-                } else { console.log("Clic en fila no procesable:", event.target.closest('tr')); }
-            });
-            initializeBackToTopButton();
-        });
+        /**
+         * Genera el contenido de un archivo .ics para una reserva.
+         * @param {object} reservaCompleta Objeto con detalles: { dia, nombre, tipo, duracion, horaInicio, horaFin, fechaEspecifica?, participantes?, email? }
+         * @returns {string|null} Contenido del archivo .ics o null si hay error.
+         */
+        function generarICS(reservaCompleta) {
+            try {
+                let fechaInicio, fechaFin;
 
-        // --- Lógica Botón Volver Arriba (Sin cambios) ---
-        let mybutton = null; function scrollFunction() { const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; if (mybutton) { if (scrollPosition > 100) { if (!mybutton.classList.contains('show')) { mybutton.classList.add('show'); } } else { if (mybutton.classList.contains('show')) { mybutton.classList.remove('show'); } } } } function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); } function initializeBackToTopButton() { mybutton = document.getElementById("backToTopBtn"); if (mybutton) { console.log("Botón 'Volver Arriba' OK."); scrollFunction(); window.onscroll = scrollFunction; } else { console.error("#backToTopBtn no encontrado."); } }
+                // Determinar fecha de inicio
+                if (reservaCompleta.fechaEspecifica) {
+                    fechaInicio = parsearFechaEspecifica(reservaCompleta.fechaEspecifica, reservaCompleta.horaInicio);
+                } else {
+                    fechaInicio = getProximaFechaParaDia(reservaCompleta.dia, reservaCompleta.horaInicio);
+                }
+
+                if (!fechaInicio || isNaN(fechaInicio)) {
+                    throw new Error("No se pudo determinar la fecha de inicio válida.");
+                }
+
+                // Calcular fecha de fin
+                fechaFin = new Date(fechaInicio.getTime() + reservaCompleta.duracion * 60000); // duracion en minutos
+
+                if (isNaN(fechaFin)) {
+                    throw new Error("No se pudo calcular la fecha de fin válida.");
+                }
+
+                const ahoraUTC = formatoFechaICS(new Date());
+                const inicioUTC = formatoFechaICS(fechaInicio);
+                const finUTC = formatoFechaICS(fechaFin);
+                // UID único para el evento (simple basado en timestamp)
+                const uid = `reserva-${Date.now()}@mi-calendario.com`; // Cambia el dominio si quieres
+
+                const resumen = `Clase ${reservaCompleta.tipo} - ${reservaCompleta.nombre}`;
+                // Descripción opcional con más detalles
+                let descripcion = `Detalles de la clase:\\nTipo: ${reservaCompleta.tipo}\\nDuración: ${reservaCompleta.duracion} min`;
+                if (reservaCompleta.tipo === 'Grupal' && Array.isArray(reservaCompleta.participantes)) {
+                    descripcion += '\\nParticipantes: ' + reservaCompleta.participantes.map(p => p.nombre).join(', ');
+                } else if (reservaCompleta.email) {
+                    descripcion += '\\nEmail contacto: ' + reservaCompleta.email;
+                }
+
+                // Construir el contenido ICS
+                const contenidoICS = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'PRODID:-//MiAppDeReservas//Calendario//ES', // Identificador de tu aplicación
+                    'BEGIN:VEVENT',
+                    `UID:${uid}`,
+                    `DTSTAMP:${ahoraUTC}`,
+                    `DTSTART:${inicioUTC}`,
+                    `DTEND:${finUTC}`,
+                    `SUMMARY:${resumen}`,
+                    `DESCRIPTION:${descripcion.replace(/\n/g, '\\n')}`, // Escapar saltos de línea para ICS
+                    // Alarma 2 horas antes
+                    'BEGIN:VALARM',
+                    'ACTION:DISPLAY',
+                    `DESCRIPTION:Recordatorio: ${resumen}`,
+                    'TRIGGER:-PT2H', // P=Period, T=Time, 2H=2 Hours (antes del DTSTART)
+                    'END:VALARM',
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n'); // ICS usa CRLF para saltos de línea
+
+                return contenidoICS;
+
+            } catch (error) {
+                console.error("Error generando ICS:", error, reservaCompleta);
+                Swal.fire("Error", `No se pudo generar el archivo de calendario (.ics): ${error.message}`, "error");
+                return null;
+            }
+        }
+
+        /**
+         * Inicia la descarga de un archivo de texto.
+         * @param {string} nombreArchivo Nombre del archivo a descargar (ej. "evento.ics").
+         * @param {string} contenido Contenido del archivo.
+         */
+        function descargarArchivo(nombreArchivo, contenido) {
+            if (!contenido) {
+                console.error("Contenido vacío para descargar.");
+                return;
+            }
+            const blob = new Blob([contenido], { type: 'text/calendar;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombreArchivo;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        // +++ FIN NUEVAS FUNCIONES ICS +++
+
+
+        // --- Guardar Reserva (Modificado para ofrecer descarga .ics) ---
+        guardarBtn.onclick = () => {
+            updateModalFieldsVisibility();
+
+            let grupalValid = true;
+            if (tipoSelect.value === "Grupal") {
+                const participantRows = participantsListContainer.querySelectorAll('.participant-row');
+                if (participantRows.length === 0) {
+                    grupalValid = false;
+                } else {
+                    participantRows.forEach(row => {
+                        const nameInput = row.querySelector('.grupal-name');
+                        const emailInput = row.querySelector('.grupal-email');
+                        if (!nameInput.checkValidity() || !emailInput.checkValidity()) {
+                            grupalValid = false;
+                        }
+                    });
+                }
+                if (!grupalValid) {
+                    grupalParticipantsGroup.classList.add('is-invalid');
+                    reservaForm.classList.add("was-validated");
+                    return;
+                } else {
+                    grupalParticipantsGroup.classList.remove('is-invalid');
+                }
+            }
+
+            if (!reservaForm.checkValidity()) {
+                reservaForm.classList.add("was-validated");
+                return;
+            }
+
+            const e = document.getElementById("reservaDia").value, // dia
+                t = document.getElementById("horaInicio").value, // horaInicioStr
+                o = document.getElementById("nombre").value.trim(), // nombre principal/grupo
+                n = tipoSelect.value, // tipo
+                a = parseInt(duracionSelect.value), // duracionInt
+                fechaEspecifica = fechaEspecificaInput.value; // fecha
+
+            if (isNaN(a) || a <= 0) { Swal.fire("Error", "Duración inválida.", "error"); return; }
+
+            const [r, s] = t.split(":").map(Number), i = 60 * r + s, l = i + a;
+            if (l > endHour) { Swal.fire("Error", `Termina después de ${formatHora(endHour)}.`, "error"); return; }
+            const c = formatHora(l), // horaFinStr
+                d = `${e}-${t}`; // key
+
+            // Conflicto (sin cambios)
+            let u = !1, h = null; for (const g in reservas) { if (g === d) continue; const f = reservas[g]; if (!g || g.indexOf("-") === -1) continue; const m = g.split("-"); if (m.length < 2) continue; const p = m.slice(0, -1).join("-"); if (p !== e || !f || !f.horaInicio || !f.duracion || isNaN(f.duracion)) continue; const w = f.horaInicio.split(":"); if (w.length !== 2) continue; const E = parseInt(w[0], 10), I = parseInt(w[1], 10); if (isNaN(E) || isNaN(I)) continue; const L = 60 * E + I, S = L + f.duracion; if (i < S && l > L) { u = !0, h = f; break } } if (u) return Swal.fire("Conflicto", `Se solapa con "${h.nombre}" (${h.horaInicio}-${h.horaFin}).`, "error"), void 0;
+
+            const b = eliminarBtn.style.display !== "none"; // Es edición?
+
+            const v = () => { // Función de guardado
+                let ac1, ac2; b ? (ac1 = "modificaste la reserva a nombre de", ac2 = ", con las siguientes características:") : (ac1 = "Te recuerdo que registraste una reserva a nombre de", ac2 = ", con las siguientes características:");
+
+                // Crear reservaData (sin cambios)
+                const reservaData = {
+                    nombre: o, tipo: n, duracion: a, horaInicio: t, horaFin: c,
+                    ...(fechaEspecifica && { fechaEspecifica: fechaEspecifica })
+                };
+                if (n === "Grupal") {
+                    reservaData.participantes = [];
+                    participantsListContainer.querySelectorAll('.participant-row').forEach(row => {
+                        const nameVal = row.querySelector('.grupal-name').value.trim();
+                        const emailVal = row.querySelector('.grupal-email').value.trim();
+                        if (nameVal && emailVal) {
+                            reservaData.participantes.push({ nombre: nameVal, email: emailVal });
+                        }
+                    });
+                } else {
+                    reservaData.email = emailInput.value.trim() || null;
+                }
+
+                // Guardar en local storage (sin cambios)
+                const originalHoraStr = document.getElementById("reservaHora").value, originalKey = `${e}-${originalHoraStr}`;
+                if (b && d !== originalKey && reservas[originalKey]) { delete reservas[originalKey]; }
+                reservas[d] = reservaData;
+                guardarReservasEnLocalStorage();
+
+                // Preparar y enviar correo (sin cambios)
+                const emailDetails = { ...reservaData, dia: e, ac1: ac1, ac2: ac2 };
+                enviarCorreoReserva(emailDetails);
+
+                // UI update (sin cambios)
+                const modalInstance = bootstrap.Modal.getInstance(reservaModalElement); if (modalInstance) modalInstance.hide();
+                renderCalendar();
+
+                // +++ Mostrar SweetAlert de éxito Y PREGUNTAR por .ics +++
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Guardado!",
+                    text: `Reserva para ${o} guardada correctamente.`,
+                    showConfirmButton: true, // Botón OK
+                    confirmButtonText: 'Ok',
+                    showDenyButton: true, // Botón para .ics
+                    denyButtonText: '<i class="bi bi-calendar-plus"></i> Añadir al Calendario', // Texto para el botón .ics
+                    denyButtonColor: '#5a7d2a' // Color verde para el botón .ics
+                }).then((result) => {
+                    if (result.isDenied) { // Si el usuario hizo clic en "Añadir al Calendario"
+                        // Crear objeto completo para la función ICS (necesita el día)
+                        const reservaParaICS = { ...reservaData, dia: e };
+                        const contenidoICS = generarICS(reservaParaICS);
+                        if (contenidoICS) {
+                            const nombreArchivo = `clase_${reservaData.tipo}_${reservaData.nombre.replace(/\s+/g, '_')}_${d.replace(':', '_')}.ics`
+                                .replace(/[^a-z0-9_.-]/gi, ''); // Limpiar nombre archivo
+                            descargarArchivo(nombreArchivo, contenidoICS);
+                        }
+                        // No se necesita un mensaje extra aquí, el navegador iniciará la descarga.
+                    }
+                    // Si hace clic en OK (result.isConfirmed) o cierra el diálogo, no hacemos nada más.
+                });
+                // +++ Fin Modificación SweetAlert +++
+            };
+
+            // Confirmar edición (sin cambios)
+            b ? Swal.fire({ title: "Confirmar", text: `Guardar cambios para "${o}"?`, icon: "question", showCancelButton: !0, confirmButtonColor: "#d9e6cc", cancelButtonColor: "#f3a391", confirmButtonText: "Sí", cancelButtonText: "No" }).then(result => { result.isConfirmed && v() }) : v();
+        };
+
+
+        // --- Eliminar Reserva (Unchanged) ---
+        eliminarBtn.onclick = () => { const e = document.getElementById("reservaDia").value, t = document.getElementById("horaInicio").value, o = `${e}-${t}`; reservas[o] ? Swal.fire({ title: "¿Seguro?", text: `Eliminar reserva de "${reservas[o]?.nombre || "clase"}". ¡Irreversible!`, icon: "warning", showCancelButton: !0, confirmButtonColor: "#d33", cancelButtonColor: "#aaa", confirmButtonText: "Sí, eliminarla", cancelButtonText: "No" }).then(e => { if (e.isConfirmed) if (reservas[o]) { delete reservas[o], guardarReservasEnLocalStorage(); const t = bootstrap.Modal.getInstance(document.getElementById("reservaModal")); t && t.hide(), renderCalendar(), Swal.fire("¡Eliminado!", "Reserva eliminada.", "success") } else Swal.fire("Error", "No se pudo eliminar.", "error"), renderCalendar() }) : Swal.fire("Error", "Reserva no encontrada.", "error") };
+
+        // --- Lógica Botones Exportación (Loading/Restore State - Unchanged) ---
+        function setExportButtonLoading(e) { const t = [downloadImageBtn, downloadPdfBtn, exportExcelBtn, exportDataBtn, importDataBtn]; t.forEach(t => { if (t) { t.dataset.originalHtml || (t.dataset.originalHtml = t.innerHTML); const o = "exportExcelBtn" === t.id, n = "undefined" != typeof window.XLSX; t.disabled = e || o && !n, e ? o && !n || (t.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Proc...') : (t.innerHTML = t.dataset.originalHtml, o && !n && xlsxScriptFailed()) } }), !e && exportExcelBtn && "undefined" != typeof window.XLSX && (exportExcelBtn.disabled = !1) }
+
+        // --- Captura de Calendario (Unchanged) ---
+        async function captureCalendar(e = {}) { try { const t = document.getElementById("calendarContainer"), o = t.style.paddingBottom; t.style.paddingBottom = "30px"; const n = 1400, a = await html2canvas(t, { scale: 2, useCORS: !0, logging: !1, allowTaint: !0, backgroundColor: "#ffffff", width: n, windowWidth: n, ignoreElements: e => e.classList.contains("action-buttons") || "BUTTON" === e.tagName || "INPUT" === e.tagName, ...e }); return t.style.paddingBottom = o, a } catch (t) { console.error("Error during html2canvas capture:", t); const o = document.getElementById("calendarContainer"); if (o && "undefined" != typeof originalPaddingBottom) o.style.paddingBottom = originalPaddingBottom; throw t } }
+
+        // --- Exportar Imagen/PDF (Unchanged) ---
+        downloadImageBtn.addEventListener("click", async () => { setExportButtonLoading(!0), await new Promise(e => setTimeout(e, 100)); try { const e = await captureCalendar(), t = e.toDataURL("image/png"), o = document.createElement("a"); o.href = t, o.download = "calendario-reservas.png", document.body.appendChild(o), o.click(), document.body.removeChild(o), Swal.fire({ icon: "success", title: "Imagen OK", showConfirmButton: !1, timer: 1500 }) } catch (e) { console.error("Err IMG:", e), Swal.fire("Error", "No se generó imagen.", "error") } finally { setExportButtonLoading(!1) } });
+        downloadPdfBtn.addEventListener("click", async () => { setExportButtonLoading(!0), await new Promise(e => setTimeout(e, 100)); if ("undefined" == typeof window.jspdf || "undefined" == typeof window.jspdf.jsPDF) return console.error("jsPDF no cargado"), Swal.fire("Error", "Librería PDF no cargada.", "error"), void setExportButtonLoading(!1); const { jsPDF: e } = window.jspdf; try { const t = await captureCalendar(), o = t.toDataURL("image/jpeg", .92), n = { width: t.width, height: t.height }, a = 595.28, r = n.height * a / n.width, s = a > r ? "l" : "p", i = new e({ orientation: s, unit: "pt", format: "a4" }); i.addImage(o, "JPEG", 0, 0, a, r), i.save("calendario-reservas.pdf"), Swal.fire({ icon: "success", title: "PDF OK", showConfirmButton: !1, timer: 1500 }) } catch (e) { console.error("Err PDF:", e), Swal.fire("Error", `No se generó PDF. ${e.message || ""}`, "error") } finally { setExportButtonLoading(!1) } });
+
+        // --- Exportar JSON (Unchanged) ---
+        exportDataBtn.addEventListener("click", () => { if (0 === Object.keys(reservas).length) return Swal.fire("Vacío", "No hay reservas.", "info"), void 0; try { const e = JSON.stringify(reservas, null, 2), t = new Blob([e], { type: "application/json;charset=utf-8" }), o = URL.createObjectURL(t), n = document.createElement("a"); n.href = o, n.download = `reservas_${(new Date).toISOString().split("T")[0]}.json`, document.body.appendChild(n), n.click(), document.body.removeChild(n), URL.revokeObjectURL(o), Swal.fire("Exportado", "Datos JSON guardados.", "success") } catch (e) { console.error("Err Exp:", e), Swal.fire("Error", "No se exportaron datos.", "error") } });
+
+        // --- Exportar Excel (Unchanged) ---
+        function exportarExcel() { if ("undefined" == typeof window.XLSX) return console.error("XLSX library not loaded!"), void Swal.fire("Error", "La librería necesaria para exportar a Excel no está cargada.", "error"); if (0 === Object.keys(reservas).length) return void Swal.fire("Vacío", "No hay reservas para exportar.", "info"); setExportButtonLoading(!0); try { const e = [], t = ["Día", "Inicio", "Fin", "Nombre Principal/Grupo", "Tipo", "Duración (min)", "Email(s) / Participantes"]; e.push(t); const o = Object.keys(reservas).sort((e, t) => { const [o, n] = e.split("-"), [a, r] = t.split("-"), s = days.indexOf(o), i = days.indexOf(a); return s !== i ? s - i : n.localeCompare(r) }); o.forEach(t => { const o = reservas[t], n = t.substring(0, t.lastIndexOf("-")); let a; "Clase de prueba" !== o.tipo && "Clase de recuperación" !== o.tipo || !o.fechaEspecifica ? a = n : a = n + " (" + o.fechaEspecifica + ")"; let r = ""; "Grupal" === o.tipo && Array.isArray(o.participantes) ? r = o.participantes.map(e => `${e.nombre || "?"} (${e.email || "sin email"})`).join("; ") : o.email && (r = o.email); const s = [a, o.horaInicio, o.horaFin, o.nombre, o.tipo, o.duracion, r]; e.push(s) }); const n = window.XLSX.utils.aoa_to_sheet(e), a = t.map((e, t) => ({ wch: 15 })); e.forEach(e => { e.forEach((e, t) => { const o = e ? String(e).length : 0; if (a[t].wch < o + 2) { const n = 6 === t ? 60 : 40; a[t].wch = Math.min(o + 3, n) } }) }), a[0].wch = Math.max(a[0].wch, 20), a[3].wch = Math.max(a[3].wch, 25), a[6].wch = Math.max(a[6].wch, 30), n["!cols"] = a; const r = window.XLSX.utils.book_new(); window.XLSX.utils.book_append_sheet(r, n, "Reservas"); const s = (new Date).toISOString().split("T")[0]; window.XLSX.writeFile(r, `reservas_${s}.xlsx`), Swal.fire("Exportado", "Datos exportados a Excel correctamente.", "success") } catch (e) { console.error("Error al generar el archivo Excel:", e), Swal.fire("Error", "Ocurrió un error al generar el archivo Excel.", "error") } finally { setExportButtonLoading(!1) } }
+
+        // --- Importar JSON (Unchanged) ---
+        importDataBtn.addEventListener("click", () => { fileInput.click() }); fileInput.addEventListener("change", e => { const t = e.target.files[0]; if (t) { if (!t.name.endsWith(".json") && !t.name.endsWith(".txt")) return Swal.fire("Inválido", "Selecciona un archivo .json o .txt.", "error"), void (fileInput.value = null); const o = new FileReader; o.onload = e => { let t = e.target.result, o; try { if (o = JSON.parse(t), "object" != typeof o || null === o || Array.isArray(o)) throw new Error("El archivo no contiene un objeto JSON válido."); let e = !1, n = 0; for (const a in o) { n++; const r = o[a]; if ("string" != typeof a || -1 === a.indexOf("-") || "object" != typeof r || !r.nombre || !r.horaInicio || !r.tipo) { console.warn(`Entrada inválida (estructura base): ${a}`, r), e = !0; continue } "Grupal" === r.tipo ? (Array.isArray(r.participantes) ? r.participantes.forEach((t, o) => { ("object" != typeof t || !t.nombre || "string" != typeof t.email) && (console.warn(`Participante inválido en ${a} (índice ${o}):`, t), e = !0) }) : (console.warn(`Entrada Grupal (${a}) no tiene array 'participantes':`, r), e = !0), r.email && console.warn(`Entrada Grupal (${a}) tiene campo 'email' inesperado. Se ignorará.`, r)) : ("string" != typeof r.email && null !== r.email && "undefined" != typeof r.email && (console.warn(`Entrada no-Grupal (${a}) tiene 'email' inválido:`, r), e = !0), r.participantes && console.warn(`Entrada no-Grupal (${a}) tiene campo 'participantes' inesperado. Se ignorará.`, r)), r.fechaEspecifica && "string" != typeof r.fechaEspecifica && (console.warn(`Entrada (${a}) tiene 'fechaEspecifica' inválida:`, r), e = !0) } if (0 === n) return Swal.fire("Vacío", "El archivo JSON no contiene reservas.", "info"), void (fileInput.value = null); let a = `${n} reserva(s) encontradas.`; e && (a += "<br><b style='color:orange;'>Advertencia:</b> Algunas entradas tienen formato inesperado (ver consola F12)."), a += "<br>¿Deseas reemplazar <b>TODAS</b> las reservas actuales con las del archivo? <b style='color:red;'>¡Esta acción es irreversible!</b>", Swal.fire({ title: "Confirmar Importación", html: a, icon: e ? "warning" : "question", showCancelButton: !0, confirmButtonColor: "#3085d6", cancelButtonColor: "#d33", confirmButtonText: "Sí, importar y reemplazar", cancelButtonText: "Cancelar" }).then(e => { e.isConfirmed && (reservas = o, guardarReservasEnLocalStorage(), renderCalendar(), Swal.fire("¡Importado!", "Las reservas han sido actualizadas desde el archivo.", "success")) }) } catch (e) { console.error("Error al importar JSON:", e), Swal.fire("Error de Importación", `No se pudo procesar el archivo. Verifica que sea un JSON válido.\nDetalle: ${e.message}`, "error") } finally { fileInput.value = null } }, o.onerror = e => { console.error("Error al leer el archivo:", e), Swal.fire("Error de Lectura", "No se pudo leer el archivo seleccionado.", "error"), fileInput.value = null }, o.readAsText(t) } });
+
+        // --- Carga Inicial y Lógica Back-to-Top (Unchanged) ---
+        document.addEventListener("DOMContentLoaded", () => { cargarReservasDesdeLocalStorage(); if (exportExcelBtn) { exportExcelBtn.addEventListener("click", exportarExcel); "undefined" != typeof window.XLSX ? xlsxScriptLoaded() : console.log("XLSX library not immediately available. Waiting for onload/onerror...") } else console.error("Botón Exportar Excel no encontrado en el DOM."); const e = document.getElementById("backToTopBtn"), t = 200; function o() { (window.scrollY > t || document.documentElement.scrollTop > t) ? e && e.classList.add("show") : e && e.classList.remove("show") } function n() { window.scrollTo({ top: 0, behavior: "smooth" }) } e ? (window.addEventListener("scroll", o), e.addEventListener("click", n)) : console.error("Back to Top button not found.") });
     </script>
+
 </body>
 
 </html>
