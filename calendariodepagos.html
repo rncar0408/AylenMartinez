@@ -10,6 +10,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Mover las definiciones de funciones de callback de XLSX aquí -->
+    <script>
+        function xlsxScriptLoaded() { console.log("Librería XLSX cargada."); }
+        function xlsxScriptFailed() { console.error("Error al cargar XLSX."); if (typeof Swal !== 'undefined') { Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); } else { alert('Error Crítico: No se pudo cargar librería Excel.'); } }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()"
+        onerror="xlsxScriptFailed()"></script>
+    <!-- Elimina integrity si sigue dando problemas para probar -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -18,12 +28,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
-        integrity="sha512-r22gChDnGvCbOBVEEYcvbRPcfTaXflcJrycv5fK7NfYMhAxtQQEz3O4ht6iAnWvSMnCjU/hV9YEr7+5JaK9MAA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()" onerror="xlsxScriptFailed()">
-        </script>
+
     <style>
-        /* --- ESTILOS CSS (sin cambios respecto a la versión anterior) --- */
         body {
             background-color: #dde9ce !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -149,7 +155,6 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            /* Changed from center to flex-start for better alignment */
             padding: 18px 25px;
             margin-bottom: 15px;
             border-radius: 12px;
@@ -168,7 +173,6 @@
             min-width: 200px;
             padding-right: 15px;
             margin-bottom: 10px;
-            /* Add margin for spacing when wrapped */
         }
 
         .payment-status-details {
@@ -176,9 +180,7 @@
             min-width: 170px;
             padding-right: 15px;
             text-align: right;
-            /* Align text right */
             margin-bottom: 10px;
-            /* Add margin for spacing when wrapped */
         }
 
         .payment-actions {
@@ -191,7 +193,6 @@
             align-items: center;
             flex-wrap: wrap;
             margin-bottom: 0;
-            /* Remove bottom margin here */
         }
 
         .payment-actions .btn {
@@ -256,9 +257,7 @@
             font-weight: bold;
             font-size: 0.9rem;
             display: block;
-            /* Ensure it's on a new line within its container */
             margin-bottom: 3px;
-            /* Add slight margin */
         }
 
         .status-paid-full {
@@ -282,11 +281,9 @@
             font-size: 0.8rem;
             color: #6c757d;
             margin-top: 2px;
-            /* Reduce margin */
             display: block;
         }
 
-        /* Align right inside payment-status-details */
         .payment-status-details>span,
         .payment-status-details>div {
             text-align: right;
@@ -356,31 +353,24 @@
         @media (max-width: 991.98px) {
             .student-item {
                 align-items: stretch;
-                /* Ensure children stretch */
             }
 
             .student-info,
             .payment-status-details,
             .payment-actions {
                 flex-basis: 100%;
-                /* Make each section take full width */
                 width: 100%;
                 text-align: left;
-                /* Align text left */
                 padding-right: 0;
                 margin-bottom: 12px;
-                /* Ensure spacing between sections */
             }
 
             .payment-status-details {
                 padding-top: 10px;
-                /* Add some top padding */
                 border-top: 1px solid #eee;
-                /* Separator line */
                 margin-top: 10px;
             }
 
-            /* Reset text align right specifically for these elements */
             .payment-status-details>span,
             .payment-status-details>div,
             .status-paid-full,
@@ -395,11 +385,9 @@
                 text-align: left;
             }
 
-
             .payment-actions {
                 margin-top: 5px;
                 justify-content: flex-start;
-                /* Align buttons left */
                 margin-bottom: 0;
                 flex-wrap: wrap;
             }
@@ -512,7 +500,6 @@
 <body>
     <div class="container py-5">
         <div class="payment-container" id="paymentContainer">
-            <!-- Link Volver al Dashboard -->
             <div class="mb-4">
                 <a href="dashboard.html" class="back-to-dashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -523,10 +510,8 @@
                     Volver al Dashboard
                 </a>
             </div>
-            <!-- Título Principal -->
             <h2 class="text-center mb-4">Control de Pagos Mensuales y Anuales</h2>
 
-            <!-- Sección de Precios -->
             <div class="price-section">
                 <div class="price-display">Indiv 40 min/mes: <span id="price40"></span></div>
                 <div class="price-display">Indiv 60 min/mes: <span id="price60"></span></div>
@@ -539,7 +524,6 @@
                     style="background-color: #f3a391; border-color: #f3a391; color: black;">Editar Precios</button>
             </div>
 
-            <!-- Navegación de Mes -->
             <div class="month-navigation">
                 <button id="prevMonthBtn" class="btn btn-sm"
                     style="background-color: #fae39e; border-color: #fae39e; color: black;"><svg
@@ -558,7 +542,6 @@
                     </svg></button>
             </div>
             <hr>
-            <!-- Botones de Acción Principales -->
             <div class="action-buttons-main">
                 <button id="exportDataBtn" class="btn btn-sm"
                     style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">Exportar Datos
@@ -570,7 +553,6 @@
             </div>
             <hr>
 
-            <!-- Lista de Alumnos -->
             <h4 class="text-center mb-3" id="studentListTitle">Alumnos/Participantes - Pagos de <span
                     id="listCurrentMonth"></span></h4>
             <ul class="student-list" id="studentList">
@@ -579,7 +561,6 @@
         </div>
     </div>
 
-    <!-- Modal Editar Precios (sin cambios estructurales) -->
     <div class="modal fade" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -630,7 +611,6 @@
         </div>
     </div>
 
-    <!-- Modal Registro/Modificación de Pago Mensual (sin cambios estructurales) -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -676,7 +656,6 @@
         </div>
     </div>
 
-    <!-- Modal Comprobante Mensual (sin cambios estructurales) -->
     <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg-receipt">
             <div class="modal-content">
@@ -719,7 +698,6 @@
         </div>
     </div>
 
-    <!-- Botón "Volver Arriba" -->
     <button onclick="scrollToTop()" id="backToTopBtn" title="Volver arriba"
         style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;"> <i class="fas fa-arrow-up"></i>
     </button>
@@ -728,29 +706,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ===============================================================
-        // --- INICIO: Lógica JavaScript para Control de Pagos ---
-        // ===============================================================
+        (function () { emailjs.init({ publicKey: "VeY3vHwsOZrOOSsKI" }); })();
 
-        function xlsxScriptLoaded() { console.log("Librería XLSX cargada."); }
-        function xlsxScriptFailed() { console.error("Error al cargar XLSX."); Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); }
-
-        (function () { emailjs.init({ publicKey: "VeY3vHwsOZrOOSsKI" }); })(); // Reemplaza con tu Public Key de EmailJS
-
-        // --- Referencias DOM (sin cambios) ---
         const studentList = document.getElementById('studentList');
         const monthDisplay = document.getElementById('monthDisplay');
         const listCurrentMonth = document.getElementById('listCurrentMonth');
         const prevMonthBtn = document.getElementById('prevMonthBtn');
         const nextMonthBtn = document.getElementById('nextMonthBtn');
         const paymentForm = document.getElementById('paymentForm');
-        const paymentModalEl = document.getElementById('paymentModal');
-        const paymentModal = new bootstrap.Modal(paymentModalEl);
-        const receiptModalEl = document.getElementById('receiptModal');
-        const receiptModal = new bootstrap.Modal(receiptModalEl);
-        const receiptContentContainer = document.getElementById('receiptContentContainer');
-        const priceModalEl = document.getElementById('priceModal');
-        const priceModal = new bootstrap.Modal(priceModalEl);
+
+        // Declarar variables de modales aquí para que estén en el scope global
+        let paymentModal, receiptModal, priceModal;
+
         const price40Display = document.getElementById('price40');
         const price60Display = document.getElementById('price60');
         const priceGrupalDisplay = document.getElementById('priceGrupal');
@@ -763,17 +730,16 @@
         const downloadReceiptPdfBtn = document.getElementById('downloadReceiptPdfBtn');
         const sendReceiptEmailBtn = document.getElementById('sendReceiptEmailBtn');
 
-        // --- Claves y Datos Globales (sin cambios) ---
         const reservationDataKey_Corrected = 'reservasCalendarioV2_1';
-        const paymentDataKey = 'studentPaymentDataV4'; // Mantenemos V4
+        const paymentDataKey = 'studentPaymentDataV4';
         const defaultPrices = {
             duration40: 50000,
             duration60: 70000,
-            durationGrupal: 50000,
+            durationGrupal: 5000,
             enrollmentFeePreJuly: 10000,
             enrollmentFeePostJune: 5000
         };
-        let students = {}; // Estructura: { ..., enrollmentPaid: { paid: boolean, date: string|null, amount: number|null } }
+        let students = {};
         let basePrices = { ...defaultPrices };
         let currentYear = new Date().getFullYear();
         let currentMonth = new Date().getMonth();
@@ -781,7 +747,6 @@
         const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         let receiptData = {};
 
-        // --- Funciones Utilitarias (sin cambios) ---
         function getYearMonthKey(year, month) { return `${year}-${(month + 1).toString().padStart(2, '0')}`; }
         function formatCurrency(amount) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(amount); }
         function formatDate(dateString) { if (!dateString) return 'N/A'; try { const date = new Date(dateString + 'T00:00:00'); if (isNaN(date.getTime())) throw new Error('Invalid date'); const day = date.getDate().toString().padStart(2, '0'); const month = (date.getMonth() + 1).toString().padStart(2, '0'); const year = date.getFullYear(); return `${day}/${month}/${year}`; } catch (e) { console.warn("Error formatting date:", dateString, e); return dateString; } }
@@ -791,7 +756,6 @@
         function getApplicableEnrollmentFee() { const todayMonth = new Date().getMonth(); return (todayMonth <= 5) ? basePrices.enrollmentFeePreJuly : basePrices.enrollmentFeePostJune; }
         function saveData() { try { const dataToSave = { version: 4, createdAt: new Date().toISOString(), students: students, prices: basePrices }; localStorage.setItem(paymentDataKey, JSON.stringify(dataToSave)); console.log(`Datos guardados en ${paymentDataKey}.`); } catch (error) { console.error("Error guardando:", error); Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error'); } }
 
-        // --- Carga de Datos (sin cambios respecto a V4 anterior) ---
         function loadData() {
             let loadedPaymentStudents = {};
             let loadedPrices = { ...defaultPrices };
@@ -807,16 +771,13 @@
                         }
                     }
                     loadedPrices = { ...defaultPrices, ...(parsedPaymentData.prices || {}) };
-                    console.log(`Datos de pagos previos (v${parsedPaymentData.version || '?'}) cargados desde ${paymentDataKey}.`);
                 } else {
-                    console.log(`No se encontraron datos de pagos previos en ${paymentDataKey}. Usando defaults.`);
                     loadedPrices = { ...defaultPrices };
                 }
 
                 const reservationStoredData = localStorage.getItem(reservationDataKey_Corrected);
                 if (reservationStoredData) {
                     const parsedReservationData = JSON.parse(reservationStoredData);
-                    console.log(`Datos de reservas encontrados en ${reservationDataKey_Corrected}. Procesando...`);
                     for (const key in parsedReservationData) {
                         const reserva = parsedReservationData[key];
                         if (!reserva || typeof reserva !== 'object' || !reserva.nombre || !reserva.horaInicio || !reserva.duracion || !reserva.tipo) { continue; }
@@ -834,30 +795,27 @@
                                     const participantId = `${groupNameNormalized}-${participantNameNormalized}-${dia}-${hora}`;
                                     const participantEntry = {
                                         id: participantId, name: participantName, email: participante.email || '', groupName: groupName, classDay: dia, classTime: hora, duration: 60, classType: "Grupal", specificDate: reserva.fechaEspecifica || null, payments: {},
-                                        enrollmentPaid: { paid: false, date: null, amount: null } // Grupal: siempre default
+                                        enrollmentPaid: { paid: false, date: null, amount: null }
                                     };
                                     if (loadedPaymentStudents[participantId]) {
                                         participantEntry.payments = loadedPaymentStudents[participantId].payments || {};
                                         participantEntry.email = loadedPaymentStudents[participantId].email || participante.email || '';
-                                        // IMPORTANTE: No heredar enrollmentPaid para grupales, siempre resetear a false/null
-                                        // participantEntry.enrollmentPaid = loadedPaymentStudents[participantId].enrollmentPaid || participantEntry.enrollmentPaid;
                                         if (participante.email && participante.email !== loadedPaymentStudents[participantId].email) { participantEntry.email = participante.email; }
                                         delete loadedPaymentStudents[participantId];
                                     } else { participantEntry.email = participante.email || ''; }
                                     processedStudents[participantId] = participantEntry;
                                 });
                             }
-                        } else { // Individuales, Prueba, Recuperación
+                        } else {
                             const studentNameNormalized = groupNameNormalized;
                             const studentId = `${studentNameNormalized}-${dia}-${hora}`;
                             const studentEntry = {
                                 id: studentId, name: groupName, classDay: dia, classTime: hora, duration: reserva.duracion, classType: reserva.tipo, specificDate: reserva.fechaEspecifica || null, email: reserva.email || '', payments: {},
-                                enrollmentPaid: { paid: false, date: null, amount: null } // Inicializar (podría ser sobreescrito)
+                                enrollmentPaid: { paid: false, date: null, amount: null }
                             };
                             if (loadedPaymentStudents[studentId]) {
                                 studentEntry.payments = loadedPaymentStudents[studentId].payments || {};
                                 studentEntry.email = loadedPaymentStudents[studentId].email || reserva.email || '';
-                                // Conservar estado de inscripción si existía PARA INDIVIDUALES
                                 studentEntry.enrollmentPaid = loadedPaymentStudents[studentId].enrollmentPaid || studentEntry.enrollmentPaid;
                                 if (reserva.email && reserva.email !== loadedPaymentStudents[studentId].email) { studentEntry.email = reserva.email; }
                                 delete loadedPaymentStudents[studentId];
@@ -866,34 +824,29 @@
                         }
                     }
                 } else {
-                    console.log(`No se encontraron datos de reservas en ${reservationDataKey_Corrected}... Usando solo datos de pago.`);
-                    processedStudents = loadedPaymentStudents; // Ya tienen enrollmentPaid inicializado arriba
+                    processedStudents = loadedPaymentStudents;
                     for (const id in processedStudents) {
                         if (!processedStudents[id].classType) processedStudents[id].classType = 'Desconocido (Solo Pago)';
                         if (!processedStudents[id].hasOwnProperty('specificDate')) processedStudents[id].specificDate = null;
                         if (!processedStudents[id].hasOwnProperty('duration')) processedStudents[id].duration = 0;
                         if (!processedStudents[id].hasOwnProperty('classDay')) processedStudents[id].classDay = '?';
                         if (!processedStudents[id].hasOwnProperty('classTime')) processedStudents[id].classTime = '?';
-                        // Si es Grupal y vino solo de datos de pago, asegurar que enrollment sea false
                         if (processedStudents[id].classType === 'Grupal') {
                             processedStudents[id].enrollmentPaid = { paid: false, date: null, amount: null };
                         }
                     }
                 }
-                // Añadir estudiantes remanentes que SOLO estaban en datos de pago
                 for (const remainingId in loadedPaymentStudents) {
                     if (!processedStudents[remainingId]) {
-                        console.log(`Añadiendo alumno/participante ${remainingId} que solo estaba en datos de pago (asegurando inicialización).`);
                         const studentData = loadedPaymentStudents[remainingId];
                         if (!studentData.classType) studentData.classType = 'Desconocido (Solo Pago)';
                         if (!studentData.hasOwnProperty('specificDate')) studentData.specificDate = null;
                         if (!studentData.hasOwnProperty('duration')) studentData.duration = 0;
                         if (!studentData.hasOwnProperty('classDay')) studentData.classDay = '?';
                         if (!studentData.hasOwnProperty('classTime')) studentData.classTime = '?';
-                        if (!studentData.enrollmentPaid) { // Asegurar V4
+                        if (!studentData.enrollmentPaid) {
                             studentData.enrollmentPaid = { paid: false, date: null, amount: null };
                         }
-                        // Si es Grupal, forzar enrollment a false
                         if (studentData.classType === 'Grupal') {
                             studentData.enrollmentPaid = { paid: false, date: null, amount: null };
                         }
@@ -905,16 +858,17 @@
                 console.error("Error cargando/parseando datos:", error);
                 processedStudents = {};
                 loadedPrices = { ...defaultPrices };
-                Swal.fire('Advertencia', `Error al cargar datos: ${error.message}. Se usarán valores por defecto si es posible.`, 'warning');
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Advertencia', `Error al cargar datos: ${error.message}. Se usarán valores por defecto si es posible.`, 'warning');
+                } else {
+                    alert(`Error al cargar datos: ${error.message}. Se usarán valores por defecto si es posible.`);
+                }
             }
             students = processedStudents;
             basePrices = loadedPrices;
-            console.log("Datos finales cargados:", { students, basePrices });
             updatePriceDisplay();
         }
 
-
-        // --- Actualiza Displays de Precios (sin cambios) ---
         function updatePriceDisplay() {
             price40Display.textContent = formatCurrency(basePrices.duration40);
             price60Display.textContent = formatCurrency(basePrices.duration60);
@@ -923,7 +877,6 @@
             priceEnrollmentPostJuneDisplay.textContent = formatCurrency(basePrices.enrollmentFeePostJune);
         }
 
-        // --- Renderizado (MODIFICADO para condicional en inscripción) ---
         function renderMonthlyView(year, month) {
             const currentMonthName = monthNames[month];
             monthDisplay.textContent = `${currentMonthName} ${year}`;
@@ -940,12 +893,10 @@
             studentIds.sort((a, b) => students[a].name.localeCompare(students[b].name)).forEach(id => {
                 const student = students[id];
                 if (!student || !student.name || typeof student.duration === 'undefined' || !student.classType || !student.classDay || !student.classTime) {
-                    console.warn(`Datos incompletos para ID: ${id}. Saltando renderizado.`, student);
                     return;
                 }
-                if (!student.enrollmentPaid) { // Parche por si acaso
+                if (!student.enrollmentPaid) {
                     student.enrollmentPaid = { paid: false, date: null, amount: null };
-                    console.warn(`Inicializando enrollmentPaid faltante para ${student.id}`);
                 }
 
                 const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay, student.classType);
@@ -953,13 +904,14 @@
                 const li = document.createElement('li');
                 li.className = 'student-item';
 
-                let statusHTML = ''; // Para pago mensual
-                let actionsHTML = ''; // Para botones pago mensual
-                let paymentDetailsHTML = ''; // Para detalles pago mensual
-                let enrollmentStatusHTML = ''; // Para inscripción
-                let enrollmentActionHTML = ''; // Botón inscripción
+                let statusHTML = '';
+                let actionsHTML = '';
+                let paymentDetailsHTML = '';
+                let enrollmentStatusHTML = '';
+                let enrollmentActionHTML = '';
+                let enrollmentReceiptBtnHTML = '';
 
-                // --- Lógica Pago Mensual (sin cambios) ---
+
                 if (payment) {
                     const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`;
                     paymentDetailsHTML = `<div class="payment-details"> Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)} </div>`;
@@ -981,39 +933,36 @@
                     } else if (student.classType === "Clase de prueba") {
                         statusHTML = `<span class="status-pending">Pago Mensual: Pendiente (Prueba)</span>`;
                         actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Prueba"><i class="fas fa-money-bill-wave"></i> Pagar Prueba</button>`;
-                    } else if (student.classType !== 'Grupal') { // Pendiente para individuales
+                    } else if (student.classType !== 'Grupal') {
                         statusHTML = `<span class="status-pending">Pago Mensual: Pendiente</span>`;
                         actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Mensual"><i class="fas fa-money-bill-wave"></i> Pagar Mes</button>`;
-                    } else { // Pendiente para grupales
+                    } else {
                         statusHTML = `<span class="status-pending">Pago Mensual: Pendiente</span>`;
                         actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Mensual"><i class="fas fa-money-bill-wave"></i> Pagar Mes</button>`;
                     }
                 }
 
-                // --- *** MODIFICADO: Lógica Inscripción SOLO si NO es Grupal *** ---
                 if (student.classType !== 'Grupal') {
                     if (student.enrollmentPaid && student.enrollmentPaid.paid) {
                         const paidDate = formatDate(student.enrollmentPaid.date);
                         const paidAmount = formatCurrency(student.enrollmentPaid.amount || 0);
                         enrollmentStatusHTML = `<span class="enrollment-status enrollment-paid">Inscripción Anual: Pagada <span class="enrollment-paid-date">(${paidDate} - ${paidAmount})</span></span>`;
                         enrollmentActionHTML = `<button class="btn btn-sm cancel-enrollment-btn" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;" data-studentid="${id}" title="Cancelar Pago Inscripción"><i class="fas fa-user-times"></i> Cancelar Inscrip.</button>`;
+                        enrollmentReceiptBtnHTML = `<button class="btn btn-sm view-enrollment-receipt-btn" style="background-color: #a3b7a3; border-color: #a3b7a3; color: black;" data-studentid="${id}" title="Ver Comprobante Inscripción"><i class="fas fa-id-card-alt"></i> Recibo Inscrip.</button>`;
                     } else {
                         enrollmentStatusHTML = `<span class="enrollment-status enrollment-pending">Inscripción Anual: Pendiente</span>`;
                         enrollmentActionHTML = `<button class="btn btn-sm pay-enrollment-btn" style="background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460;" data-studentid="${id}" title="Registrar Pago Inscripción Anual"><i class="fas fa-user-check"></i> Pagar Inscrip.</button>`;
                     }
                 } else {
-                    // Para grupales, no mostrar nada de inscripción
                     enrollmentStatusHTML = '';
                     enrollmentActionHTML = '';
+                    enrollmentReceiptBtnHTML = '';
                 }
-                // --- *** FIN MODIFICACIÓN *** ---
-
 
                 const groupNameHTML = student.groupName ? `<span class="group-name-display">(Grupo: ${student.groupName})</span>` : '';
                 const durationDisplay = student.classType === 'Grupal' ? 60 : student.duration;
                 const specificDateHTML = student.specificDate ? `<span class="class-duration" style="font-style: italic; font-size: 0.8em;">Fecha Esp: ${formatDate(student.specificDate)}</span>` : '';
 
-                // --- Combinar HTML ---
                 li.innerHTML = `
                     <div class="student-info">
                         <span class="student-name">${student.name}</span>
@@ -1022,37 +971,36 @@
                         <span class="class-duration">Duración: ${durationDisplay} min</span>
                         <span class="class-duration" style="font-style: italic;">Tipo: ${student.classType || 'No definido'}</span>
                         ${specificDateHTML}
-                        ${enrollmentStatusHTML} <!-- Mostrar estado inscripción (vacío si es grupal) -->
+                        ${enrollmentStatusHTML}
                     </div>
                     <div class="payment-status-details">
-                        ${statusHTML} <!-- Estado pago mensual -->
-                        ${paymentDetailsHTML} <!-- Detalles pago mensual -->
+                        ${statusHTML}
+                        ${paymentDetailsHTML}
                     </div>
                     <div class="payment-actions">
-                        ${enrollmentActionHTML} <!-- Botón inscripción (vacío si es grupal) -->
-                        ${actionsHTML} <!-- Botones pago mensual -->
+                        ${enrollmentActionHTML}
+                        ${enrollmentReceiptBtnHTML}
+                        ${actionsHTML}
                     </div>`;
                 studentList.appendChild(li);
             });
 
-            // --- Reasignar Event Listeners (sin cambios) ---
             document.querySelectorAll('.register-payment-btn').forEach(button => button.addEventListener('click', handleRegisterPaymentClick));
-            document.querySelectorAll('.view-receipt-btn').forEach(button => button.addEventListener('click', handleViewReceiptClick));
+            document.querySelectorAll('.view-receipt-btn').forEach(button => button.addEventListener('click', handleViewMonthlyReceiptClick));
+            document.querySelectorAll('.view-enrollment-receipt-btn').forEach(button => button.addEventListener('click', handleViewEnrollmentReceiptClick));
             document.querySelectorAll('.cancel-payment-btn').forEach(button => button.addEventListener('click', handleCancelPaymentClick));
             document.querySelectorAll('.pay-enrollment-btn').forEach(button => button.addEventListener('click', handlePayEnrollmentClick));
             document.querySelectorAll('.cancel-enrollment-btn').forEach(button => button.addEventListener('click', handleCancelEnrollmentClick));
         }
 
-        // --- Manejadores y Lógica de Modales (sin cambios funcionales internos) ---
         function handleRegisterPaymentClick(event) { const btn = event.currentTarget; openPaymentModal(btn.dataset.studentid, btn.dataset.yearmonth, parseInt(btn.dataset.duration, 10), btn.dataset.day, btn.dataset.type); }
-        function handleViewReceiptClick(event) { openReceiptModal(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth); }
-        function handlePayEnrollmentClick(event) { // Esta función solo se llamará si el botón existe (no grupales)
+        function handleViewMonthlyReceiptClick(event) { openReceiptModalForMonthly(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth); }
+        function handleViewEnrollmentReceiptClick(event) { const studentId = event.currentTarget.dataset.studentid; openEnrollmentReceiptModal(studentId); }
+
+        function handlePayEnrollmentClick(event) {
             const studentId = event.currentTarget.dataset.studentid;
             const student = students[studentId];
-            if (!student || student.classType === 'Grupal') {
-                console.warn("Intento de pagar inscripción para alumno grupal o no encontrado:", studentId);
-                return; // Doble seguridad
-            }
+            if (!student || student.classType === 'Grupal') { return; }
             const applicableFee = getApplicableEnrollmentFee();
             const feeFormatted = formatCurrency(applicableFee);
             const today = new Date();
@@ -1068,20 +1016,16 @@
                     const paymentDate = result.value;
                     if (students[studentId]) {
                         students[studentId].enrollmentPaid = { paid: true, date: paymentDate, amount: applicableFee };
-                        saveData();
-                        renderMonthlyView(currentYear, currentMonth);
+                        saveData(); renderMonthlyView(currentYear, currentMonth);
                         Swal.fire('¡Registrado!', `Pago de inscripción para ${student.name} registrado con fecha ${formatDate(paymentDate)}.`, 'success');
                     } else { Swal.fire('Error', 'No se encontró al alumno/participante.', 'error'); }
                 }
             });
         }
-        function handleCancelEnrollmentClick(event) { // Esta función solo se llamará si el botón existe (no grupales)
+        function handleCancelEnrollmentClick(event) {
             const studentId = event.currentTarget.dataset.studentid;
             const student = students[studentId];
-            if (!student || student.classType === 'Grupal') {
-                console.warn("Intento de cancelar inscripción para alumno grupal o no encontrado:", studentId);
-                return; // Doble seguridad
-            }
+            if (!student || student.classType === 'Grupal') { return; }
             const paidDate = student.enrollmentPaid?.date ? formatDate(student.enrollmentPaid.date) : 'N/A';
             const paidAmount = student.enrollmentPaid?.amount ? formatCurrency(student.enrollmentPaid.amount) : 'N/A';
             Swal.fire({
@@ -1093,15 +1037,13 @@
                 if (result.isConfirmed) {
                     if (students[studentId]) {
                         students[studentId].enrollmentPaid = { paid: false, date: null, amount: null };
-                        saveData();
-                        renderMonthlyView(currentYear, currentMonth);
+                        saveData(); renderMonthlyView(currentYear, currentMonth);
                         Swal.fire('¡Cancelado!', `El registro de inscripción anual para ${student.name} ha sido eliminado.`, 'success');
                     } else { Swal.fire('Error', 'No se encontró al alumno/participante.', 'error'); }
                 }
             });
         }
 
-        // --- Modales Precios (sin cambios) ---
         function openPriceModal() {
             document.getElementById('basePrice40Input').value = basePrices.duration40;
             document.getElementById('basePrice60Input').value = basePrices.duration60;
@@ -1126,11 +1068,9 @@
             Swal.fire('Éxito', 'Precios actualizados correctamente.', 'success');
         }
 
-        // --- Modal Pago Mensual (sin cambios) ---
         function openPaymentModal(studentId, yearMonth, studentDuration, studentDay, classType) {
             const student = students[studentId];
             if (!student) { Swal.fire('Error', 'No se encontró info del alumno/participante.', 'error'); return; }
-            console.log(`Abriendo modal pago MENSUAL para ID: ${studentId} (${student.name}), Tipo: ${classType}, Mes: ${yearMonth}`);
             const [year, monthNum] = yearMonth.split('-').map(Number);
             const month = monthNum - 1;
             const yearMonthKey = getYearMonthKey(year, month);
@@ -1168,11 +1108,11 @@
                 paymentModalLabel.textContent = "Registrar (Clase de Recuperación - Sin Costo)";
                 selectClasses.innerHTML = '<option value="0" selected>0 clases (Recuperación)</option>'; selectClasses.disabled = true;
                 suggestedAmountDisplay.textContent = formatCurrency(0); paymentAmountInput.value = '0.00';
-                paymentAmountInput.disabled = true; // Recuperación no se paga
+                paymentAmountInput.disabled = true;
                 paymentDateInput.valueAsDate = existingPayment ? new Date(existingPayment.paymentDate + 'T00:00:00') : new Date();
-                savePaymentBtn.disabled = false; // Permitir guardar registro $0
+                savePaymentBtn.disabled = false;
                 selectClasses.onchange = null;
-            } else { // Individuales o Grupales Regulares
+            } else {
                 selectClasses.innerHTML = ''; selectClasses.disabled = false;
                 paymentAmountInput.disabled = false; savePaymentBtn.disabled = false;
                 if (monthlyDetails.classCount > 0) {
@@ -1203,12 +1143,12 @@
                         if (!existingPayment) { paymentAmountInput.value = suggestedAmount.toFixed(2); }
                     };
                     selectClasses.onchange = updateSuggested; updateSuggested();
-                } else { // Mes sin clases programadas
+                } else {
                     paymentModalLabel.textContent = "Registrar Pago Mensual (0 clases este mes)";
                     selectClasses.innerHTML = '<option value="0" selected>0 clases este mes</option>'; selectClasses.disabled = true;
                     suggestedAmountDisplay.textContent = formatCurrency(0); paymentAmountInput.value = '0.00';
                     paymentAmountInput.disabled = true; paymentDateInput.valueAsDate = new Date(); savePaymentBtn.disabled = true;
-                    if (existingPayment) { // Permitir modificar pago $0 raro si existía
+                    if (existingPayment) {
                         paymentModalLabel.textContent = "Modificar Pago Mensual (0 clases este mes)";
                         paymentAmountInput.value = existingPayment.amountPaid.toFixed(2); paymentAmountInput.disabled = false;
                         paymentDateInput.value = existingPayment.paymentDate; savePaymentBtn.disabled = false;
@@ -1219,7 +1159,6 @@
             paymentModal.show();
         }
 
-        // --- Guardar Pago Mensual (sin cambios) ---
         function savePayment() {
             if (!paymentForm.checkValidity()) { paymentForm.classList.add('was-validated'); const firstInvalidField = paymentForm.querySelector(':invalid'); if (firstInvalidField) { firstInvalidField.focus(); } return; }
             const studentId = document.getElementById('paymentStudentId').value; const yearMonth = document.getElementById('paymentYearMonth').value;
@@ -1239,43 +1178,107 @@
             else { console.log("Registro mensual $0 guardado (recuperación/sin clases), sin alerta de éxito."); }
         }
 
-        // --- Modal Comprobante Mensual (sin cambios) ---
-        function openReceiptModal(studentId, yearMonth) {
+        function openGenericReceiptModal() {
+            const modalLabel = document.getElementById('receiptModalLabel');
+            const receiptTitle = document.getElementById('receiptContent').querySelector('h4');
+            const studentNameEl = document.getElementById('receiptStudentName');
+            const periodEl = document.getElementById('receiptMonthYear');
+            const paymentDateEl = document.getElementById('receiptPaymentDate');
+            const amountEl = document.getElementById('receiptAmount');
+            const classCountEl = document.getElementById('receiptClassCount');
+            const emailInput = document.getElementById('receiptEmailInput');
+            const footerEl = document.getElementById('receiptContent').querySelector('.receipt-footer');
+
+            // Obtener los elementos <p> que contienen las etiquetas <strong> para modificarlas
+            const periodParagraphEl = periodEl.closest('p');
+            const classCountParagraphEl = classCountEl.closest('p');
+
+
+            if (receiptData.receiptType === 'enrollment') {
+                modalLabel.textContent = "Comprobante de Inscripción Anual";
+                receiptTitle.textContent = "Comprobante de Inscripción Anual";
+                if (periodParagraphEl) periodParagraphEl.querySelector('strong').textContent = "Concepto:";
+                periodEl.textContent = "Inscripción Anual " + receiptData.year;
+                if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Detalle:";
+                classCountEl.textContent = "Pago único anual";
+                footerEl.textContent = "Gracias por tu inscripción anual.";
+            } else { // 'monthly' o default
+                modalLabel.textContent = "Comprobante de Pago Mensual";
+                receiptTitle.textContent = "Comprobante de Pago Mensual";
+                if (periodParagraphEl) periodParagraphEl.querySelector('strong').textContent = "Mes Abonado:";
+                periodEl.textContent = receiptData.monthYear;
+                if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Clases Abonadas:";
+                classCountEl.textContent = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'})` : `${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'}`;
+                footerEl.textContent = "Gracias por tu pago mensual.";
+            }
+            studentNameEl.textContent = receiptData.studentName;
+            paymentDateEl.textContent = receiptData.paymentDate;
+            amountEl.textContent = receiptData.amountRaw.toFixed(2);
+            emailInput.value = receiptData.studentEmail;
+            receiptModal.show();
+        }
+
+        function openReceiptModalForMonthly(studentId, yearMonth) {
             const student = students[studentId]; const payment = student?.payments?.[yearMonth];
             if (!student || !payment) { Swal.fire('Error', 'No se encontró info de pago mensual.', 'error'); return; }
             const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1];
             const monthlyDetails = calculateMonthlyDetails(year, monthNum - 1, student.duration, student.classDay, student.classType);
-            receiptData = { studentId: studentId, studentName: student.name, studentEmail: student.email || '', monthYear: `${monthName} ${year}`, paymentDate: formatDate(payment.paymentDate), amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid, classCount: payment.isFullMonthPayment ? monthlyDetails.classCount : payment.classesPaid, isFullMonth: payment.isFullMonthPayment, receiptType: 'monthly' };
-            document.getElementById('receiptModalLabel').textContent = "Comprobante de Pago Mensual";
-            document.getElementById('receiptContent').querySelector('h4').textContent = "Comprobante de Pago Mensual";
-            document.getElementById('receiptStudentName').textContent = receiptData.studentName; document.getElementById('receiptMonthYear').textContent = receiptData.monthYear;
-            document.getElementById('receiptPaymentDate').textContent = receiptData.paymentDate; document.getElementById('receiptAmount').textContent = payment.amountPaid.toFixed(2);
-            document.getElementById('receiptClassCount').textContent = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'})` : `${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'}`;
-            document.getElementById('receiptEmailInput').value = receiptData.studentEmail; document.getElementById('receiptContent').querySelector('.receipt-footer').textContent = "Gracias por tu pago mensual.";
-            receiptModal.show();
+            receiptData = {
+                receiptType: 'monthly', studentId: studentId, studentName: student.name, studentEmail: student.email || '',
+                monthYear: `${monthName} ${year}`, year: year, paymentDate: formatDate(payment.paymentDate),
+                amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid,
+                classCount: payment.isFullMonthPayment ? monthlyDetails.classCount : payment.classesPaid,
+                isFullMonth: payment.isFullMonthPayment
+            };
+            openGenericReceiptModal();
         }
 
-        // --- Generación Comprobantes Imagen/PDF (sin cambios) ---
-        async function generateReceiptCanvas() { const el = document.getElementById('receiptContent'); if (!el) { Swal.fire('Error Técnico', 'Elemento recibo no encontrado.', 'error'); return null; } if (typeof window.html2canvas === 'undefined') { Swal.fire('Error Técnico', 'Falta librería html2canvas.', 'error'); return null; } try { const canvas = await window.html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); return canvas; } catch (err) { console.error("Error html2canvas:", err); Swal.fire('Error Imagen', 'Error al generar imagen del recibo.', 'error'); return null; } }
-        async function downloadReceiptAsImage() { const canvas = await generateReceiptCanvas(); if (!canvas) return; try { const img = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = img; const safe = `comprobante_mensual_${receiptData.studentName}_${receiptData.monthYear}`.replace(/[^a-z0-9_-]/gi, '_') + '.png'; link.download = safe; document.body.appendChild(link); link.click(); document.body.removeChild(link); } catch (err) { console.error("Error descarga imagen:", err); Swal.fire('Error Descarga', 'No se pudo descargar la imagen.', 'error'); } }
-        async function downloadReceiptAsPdf() { const canvas = await generateReceiptCanvas(); if (!canvas) return; if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { Swal.fire('Error Técnico', 'Falta librería jsPDF.', 'error'); return; } const { jsPDF } = window.jspdf; try { const img = canvas.toDataURL('image/png'); const pdf = new jsPDF({ o: 'p', u: 'pt', f: 'a5' }); const props = pdf.getImageProperties(img); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const margin = 40; const usableWidth = pdfWidth - 2 * margin; const usableHeight = pdfHeight - 2 * margin; const imgRatio = props.width / props.height; let imgRenderWidth = props.width; let imgRenderHeight = props.height; if (imgRenderWidth > usableWidth) { imgRenderWidth = usableWidth; imgRenderHeight = imgRenderWidth / imgRatio; } if (imgRenderHeight > usableHeight) { imgRenderHeight = usableHeight; imgRenderWidth = imgRenderHeight * imgRatio; } const x = margin + (usableWidth - imgRenderWidth) / 2; const y = margin; pdf.addImage(img, 'PNG', x, y, imgRenderWidth, imgRenderHeight); const safe = `comprobante_mensual_${receiptData.studentName}_${receiptData.monthYear}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf'; pdf.save(safe); } catch (err) { console.error("Error PDF:", err); Swal.fire('Error PDF', 'No se pudo generar/descargar el PDF.', 'error'); } }
+        function openEnrollmentReceiptModal(studentId) {
+            const student = students[studentId];
+            if (!student || !student.enrollmentPaid || !student.enrollmentPaid.paid) {
+                Swal.fire('Error', 'No se encontró información de pago de inscripción para este alumno.', 'error');
+                return;
+            }
+            const enrollmentInfo = student.enrollmentPaid;
+            const paymentYear = new Date(enrollmentInfo.date + 'T00:00:00').getFullYear();
+            receiptData = {
+                receiptType: 'enrollment', studentId: studentId, studentName: student.name, studentEmail: student.email || '',
+                monthYear: "Inscripción Anual", year: paymentYear, paymentDate: formatDate(enrollmentInfo.date),
+                amountFormatted: formatCurrency(enrollmentInfo.amount), amountRaw: enrollmentInfo.amount,
+                classCount: "Pago único", isFullMonth: false
+            };
+            openGenericReceiptModal();
+        }
 
-        // --- Enviar Email Comprobante (sin cambios) ---
+        async function generateReceiptCanvas() { const el = document.getElementById('receiptContent'); if (!el) { Swal.fire('Error Técnico', 'Elemento recibo no encontrado.', 'error'); return null; } if (typeof window.html2canvas === 'undefined') { Swal.fire('Error Técnico', 'Falta librería html2canvas.', 'error'); return null; } try { const canvas = await window.html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); return canvas; } catch (err) { console.error("Error html2canvas:", err); Swal.fire('Error Imagen', 'Error al generar imagen del recibo.', 'error'); return null; } }
+        async function downloadReceiptAsImage() { const canvas = await generateReceiptCanvas(); if (!canvas) return; try { const img = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = img; const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.png'; link.download = safe; document.body.appendChild(link); link.click(); document.body.removeChild(link); } catch (err) { console.error("Error descarga imagen:", err); Swal.fire('Error Descarga', 'No se pudo descargar la imagen.', 'error'); } }
+        async function downloadReceiptAsPdf() { const canvas = await generateReceiptCanvas(); if (!canvas) return; if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { Swal.fire('Error Técnico', 'Falta librería jsPDF.', 'error'); return; } const { jsPDF } = window.jspdf; try { const img = canvas.toDataURL('image/png'); const pdf = new jsPDF({ o: 'p', u: 'pt', f: 'a5' }); const props = pdf.getImageProperties(img); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const margin = 40; const usableWidth = pdfWidth - 2 * margin; const usableHeight = pdfHeight - 2 * margin; const imgRatio = props.width / props.height; let imgRenderWidth = props.width; let imgRenderHeight = props.height; if (imgRenderWidth > usableWidth) { imgRenderWidth = usableWidth; imgRenderHeight = imgRenderWidth / imgRatio; } if (imgRenderHeight > usableHeight) { imgRenderHeight = usableHeight; imgRenderWidth = imgRenderHeight * imgRatio; } const x = margin + (usableWidth - imgRenderWidth) / 2; const y = margin; pdf.addImage(img, 'PNG', x, y, imgRenderWidth, imgRenderHeight); const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf'; pdf.save(safe); } catch (err) { console.error("Error PDF:", err); Swal.fire('Error PDF', 'No se pudo generar/descargar el PDF.', 'error'); } }
+
         async function sendReceiptEmail() {
             const input = document.getElementById('receiptEmailInput'); const email = input.value.trim();
             if (!email) { Swal.fire('Falta Email', 'Ingresa un correo electrónico.', 'warning'); input.focus(); return; }
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Swal.fire('Email Inválido', 'Ingresa una dirección de correo válida.', 'warning'); input.focus(); input.select(); return; }
-            if (receiptData.studentId && students[receiptData.studentId] && email !== students[receiptData.studentId].email) { console.log(`Actualizando email para ${receiptData.studentName} de '${students[receiptData.studentId].email}' a '${email}'`); students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
-            else if (receiptData.studentId && students[receiptData.studentId] && !students[receiptData.studentId].email && email) { console.log(`Guardando email nuevo para ${receiptData.studentName}: '${email}'`); students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
+            if (receiptData.studentId && students[receiptData.studentId] && email !== students[receiptData.studentId].email) { students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
+            else if (receiptData.studentId && students[receiptData.studentId] && !students[receiptData.studentId].email && email) { students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
+
             Swal.fire({ title: 'Enviando Email...', text: `Preparando comprobante para ${email}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
-            try { const title = "Comprobante de Pago Mensual"; const footer = "Gracias por tu pago mensual."; const classesInfo = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount})` : `${receiptData.classCount} clase(s)`; const html = `<div style="font-family: Arial, sans-serif; border: 1px solid #eee; padding: 20px;background-color: #f8f9fa;border-radius:8px;"><h4 style="text-align: center; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 20px; color: #343a40;">${title}</h4><p><strong>Alumno/Participante:</strong> ${receiptData.studentName}</p><p><strong>Periodo Abonado:</strong> ${receiptData.monthYear}</p><p><strong>Fecha de Pago:</strong> ${receiptData.paymentDate}</p><p><strong>Detalle:</strong> ${classesInfo}</p><p><strong>Monto Abonado:</strong> ${receiptData.amountFormatted}</p><p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #6c757d;">${footer}</p></div>`; const serviceID = 'service_h2fm824'; const templateID = 'template_v7gzygn'; const [mName, yStr] = receiptData.monthYear.split(' '); const params = { mes: mName, year: yStr, email: email, recibo: html, to_name: receiptData.studentName }; await emailjs.send(serviceID, templateID, params); Swal.fire('¡Enviado!', `Comprobante mensual enviado a ${email}.`, 'success'); }
+            try {
+                let title = ""; let footer = ""; let periodLabel = ""; let periodValue = ""; let detailLabel = ""; let detailValue = ""; let emailSubjectPrefix = "";
+                if (receiptData.receiptType === 'enrollment') {
+                    title = "Comprobante de Inscripción Anual"; footer = "Gracias por tu inscripción anual."; periodLabel = "Concepto:"; periodValue = "Inscripción Anual " + receiptData.year; detailLabel = "Detalle:"; detailValue = "Pago único anual"; emailSubjectPrefix = "Inscripción Anual";
+                } else {
+                    title = "Comprobante de Pago Mensual"; footer = "Gracias por tu pago mensual."; periodLabel = "Periodo Abonado:"; periodValue = receiptData.monthYear; detailLabel = "Clases Abonadas:"; detailValue = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount})` : `${receiptData.classCount} clase(s)`; emailSubjectPrefix = "Pago Mensual";
+                }
+                const html = `<div style="font-family: Arial, sans-serif; border: 1px solid #eee; padding: 20px;background-color: #f8f9fa;border-radius:8px;"><h4 style="text-align: center; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 20px; color: #343a40;">${title}</h4><p><strong>Alumno/Participante:</strong> ${receiptData.studentName}</p><p><strong>${periodLabel}</strong> ${periodValue}</p><p><strong>Fecha de Pago:</strong> ${receiptData.paymentDate}</p><p><strong>${detailLabel}</strong> ${detailValue}</p><p><strong>Monto Abonado:</strong> ${receiptData.amountFormatted}</p><p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #6c757d;">${footer}</p></div>`;
+                const serviceID = 'service_h2fm824'; const templateID = 'template_v7gzygn';
+                const params = { email: email, recibo: html, to_name: receiptData.studentName, subject_line: `Comprobante de ${emailSubjectPrefix} - ${receiptData.studentName}` };
+                await emailjs.send(serviceID, templateID, params);
+                Swal.fire('¡Enviado!', `Comprobante de ${emailSubjectPrefix.toLowerCase()} enviado a ${email}.`, 'success');
+            }
             catch (error) { console.error('Error enviando email:', error); Swal.fire('Error al Enviar', `No se pudo enviar el email: ${error?.text || error?.message || 'Error desconocido'}`, 'error'); }
         }
 
-        // --- Exportar Datos (sin cambios) ---
         function exportData() { try { const data = { version: 4, createdAt: new Date().toISOString(), students: students, prices: basePrices }; const str = JSON.stringify(data, null, 2); const blob = new Blob([str], { type: 'application/json;charset=utf-8' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; const ts = new Date().toISOString().split('T')[0].replace(/-/g, ''); link.download = `datos_pagos_alumnos_v4_${ts}.json`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); Swal.fire('¡Exportado!', 'Datos (v4) guardados en archivo JSON.', 'success'); } catch (error) { console.error("Error exportando:", error); Swal.fire('Error', 'Error al exportar los datos.', 'error'); } }
-
-        // --- Importar Datos (MODIFICADO para asegurar no inscripción en grupales) ---
         function importData(event) {
             const file = event.target.files[0]; if (!file) return; if (!file.name.toLowerCase().endsWith('.json')) { Swal.fire('Archivo Inválido', 'Por favor, selecciona un archivo .json.', 'error'); fileInput.value = null; return; }
             const reader = new FileReader();
@@ -1285,18 +1288,14 @@
                     const importedStudents = imported.students || {}; const processedImportedStudents = {};
                     for (const id in importedStudents) {
                         const studentData = importedStudents[id]; if (typeof studentData !== 'object' || studentData === null || !studentData.name) { console.warn(`Saltando estudiante inválido con ID ${id} durante la importación.`); continue; }
-                        // *** IMPORTANTE: Resetear enrollment si es Grupal ***
                         let finalEnrollmentPaid = studentData.enrollmentPaid || { paid: false, date: null, amount: null };
                         const finalClassType = studentData.classType || 'Desconocido (Importado)';
                         if (finalClassType === 'Grupal') {
                             finalEnrollmentPaid = { paid: false, date: null, amount: null };
-                            console.log(`Importación: Forzando enrollmentPaid a NO PAGADO para participante grupal ${id}`);
                         }
-                        // *** FIN IMPORTANTE ***
                         processedImportedStudents[id] = {
                             ...studentData, id: id, payments: studentData.payments || {},
-                            enrollmentPaid: finalEnrollmentPaid, // Usar el estado final (reseteado si es grupal)
-                            classType: finalClassType,
+                            enrollmentPaid: finalEnrollmentPaid, classType: finalClassType,
                             specificDate: studentData.specificDate || null,
                             duration: typeof studentData.duration !== 'undefined' ? studentData.duration : 0,
                             classDay: studentData.classDay || '?', classTime: studentData.classTime || '?', email: studentData.email || ''
@@ -1305,31 +1304,45 @@
                     }
                     Swal.fire({
                         title: 'Confirmar Importación', html: `Archivo <strong>${file.name}</strong> (Versión ${imported.version || '?'}).<br>¿Reemplazar <b>TODOS</b> los datos actuales?<br><b style='color:red;'>¡Irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Sí, reemplazar todo', cancelButtonText: 'Cancelar'
-                    }).then((result) => { if (result.isConfirmed) { console.log("Importando datos confirmados..."); students = processedImportedStudents; basePrices = importedPrices; saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Importado!', 'Datos reemplazados correctamente.', 'success'); console.log("Importación completada."); } else { console.log("Importación cancelada."); } });
+                    }).then((result) => { if (result.isConfirmed) { students = processedImportedStudents; basePrices = importedPrices; saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Importado!', 'Datos reemplazados correctamente.', 'success'); } });
                 } catch (error) { console.error("Error procesando JSON importado:", error); Swal.fire('Error de Importación', `No se procesó archivo. ¿JSON válido?\n<br><small>Detalle: ${error.message}</small>`, 'error'); } finally { fileInput.value = null; }
             };
             reader.onerror = (e) => { console.error("Error leyendo archivo:", e); Swal.fire('Error de Lectura', 'Error al leer archivo.', 'error'); fileInput.value = null; }; reader.readAsText(file);
         }
 
-        // --- Cancelar Pago Mensual (sin cambios) ---
         function handleCancelPaymentClick(event) { const btn = event.currentTarget; const studentId = btn.dataset.studentid; const yearMonth = btn.dataset.yearmonth; const studentName = students[studentId]?.name || 'Desconocido'; const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1]; Swal.fire({ title: '¿Cancelar Pago Mensual?', html: `Eliminar registro de pago para <b>${studentName}</b> de <b>${monthName} ${year}</b>?<br>Irreversible.`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Sí, cancelar pago mensual', cancelButtonText: 'No, mantener' }).then((result) => { if (result.isConfirmed) { cancelPayment(studentId, yearMonth); } }); }
-        function cancelPayment(studentId, yearMonthKey) { if (students[studentId]?.payments?.[yearMonthKey]) { console.log(`Cancelando pago mensual para ${studentId} en ${yearMonthKey}`); delete students[studentId].payments[yearMonthKey]; saveData(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Cancelado!', 'Registro de pago mensual eliminado.', 'success'); } else { console.error(`Error al cancelar pago mensual: No se encontró ${studentId}/${yearMonthKey}`); Swal.fire('Error', 'No se pudo encontrar el registro de pago mensual para cancelar.', 'error'); } }
+        function cancelPayment(studentId, yearMonthKey) { if (students[studentId]?.payments?.[yearMonthKey]) { delete students[studentId].payments[yearMonthKey]; saveData(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Cancelado!', 'Registro de pago mensual eliminado.', 'success'); } else { Swal.fire('Error', 'No se pudo encontrar el registro de pago mensual para cancelar.', 'error'); } }
 
-        // --- Event Listeners y Carga Inicial (sin cambios) ---
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM cargado. Iniciando aplicación de pagos."); loadData(); renderMonthlyView(currentYear, currentMonth);
+            // Inicializar instancias de modales aquí
+            const paymentModalEl = document.getElementById('paymentModal');
+            if (paymentModalEl) paymentModal = new bootstrap.Modal(paymentModalEl);
+
+            const receiptModalEl = document.getElementById('receiptModal');
+            if (receiptModalEl) receiptModal = new bootstrap.Modal(receiptModalEl);
+
+            const priceModalEl = document.getElementById('priceModal');
+            if (priceModalEl) priceModal = new bootstrap.Modal(priceModalEl);
+
+
+            loadData();
+            renderMonthlyView(currentYear, currentMonth);
+
             prevMonthBtn.addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderMonthlyView(currentYear, currentMonth); });
             nextMonthBtn.addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderMonthlyView(currentYear, currentMonth); });
-            document.getElementById('editPricesBtn').addEventListener('click', openPriceModal); document.getElementById('savePricesBtn').addEventListener('click', savePrices);
+            document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
+            document.getElementById('savePricesBtn').addEventListener('click', savePrices);
             document.getElementById('savePaymentBtn').addEventListener('click', savePayment);
-            downloadReceiptImageBtn.addEventListener('click', downloadReceiptAsImage); downloadReceiptPdfBtn.addEventListener('click', downloadReceiptAsPdf); sendReceiptEmailBtn.addEventListener('click', sendReceiptEmail);
-            exportDataBtn.addEventListener('click', exportData); importDataBtn.addEventListener('click', () => fileInput.click()); fileInput.addEventListener('change', importData);
+            downloadReceiptImageBtn.addEventListener('click', downloadReceiptAsImage);
+            downloadReceiptPdfBtn.addEventListener('click', downloadReceiptAsPdf);
+            sendReceiptEmailBtn.addEventListener('click', sendReceiptEmail);
+            exportDataBtn.addEventListener('click', exportData);
+            importDataBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', importData);
             initializeBackToTopButton();
-            console.log("Aplicación inicializada.");
         });
 
-        // --- Lógica Botón Volver Arriba (sin cambios) ---
-        let mybutton = null; function scrollFunction() { if (mybutton && (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) { if (mybutton.style.display !== "flex" || mybutton.style.opacity === "0") { mybutton.style.display = "flex"; setTimeout(() => { mybutton.style.opacity = "1"; }, 10); } } else if (mybutton) { if (mybutton.style.opacity !== "0") { mybutton.style.opacity = "0"; } } } function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); } function initializeBackToTopButton() { mybutton = document.getElementById("backToTopBtn"); if (mybutton) { console.log("Botón 'Volver Arriba' OK."); scrollFunction(); window.onscroll = scrollFunction; } else { console.error("#backToTopBtn no encontrado."); } }
+        let mybutton = null; function scrollFunction() { if (mybutton && (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) { if (mybutton.style.display !== "flex" || mybutton.style.opacity === "0") { mybutton.style.display = "flex"; setTimeout(() => { mybutton.style.opacity = "1"; }, 10); } } else if (mybutton) { if (mybutton.style.opacity !== "0") { mybutton.style.opacity = "0"; } } } function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); } function initializeBackToTopButton() { mybutton = document.getElementById("backToTopBtn"); if (mybutton) { scrollFunction(); window.onscroll = scrollFunction; } }
 
     </script>
 </body>
