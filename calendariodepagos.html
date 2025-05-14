@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Mover las definiciones de funciones de callback de XLSX aquí -->
     <script>
         function xlsxScriptLoaded() { console.log("Librería XLSX cargada."); }
         function xlsxScriptFailed() { console.error("Error al cargar XLSX."); if (typeof Swal !== 'undefined') { Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); } else { alert('Error Crítico: No se pudo cargar librería Excel.'); } }
@@ -19,7 +18,6 @@
         integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()"
         onerror="xlsxScriptFailed()"></script>
-    <!-- Elimina integrity si sigue dando problemas para probar -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -308,22 +306,25 @@
         }
 
         #receiptContent {
-            border: 1px dashed #aaa;
+            border: 1px solid #adbfad;
             padding: 30px;
             margin: 20px auto;
             max-width: 550px;
             font-family: 'Consolas', 'Courier New', Courier, monospace;
-            background-color: #fff;
+            background-color: #c0d5c1;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            color: #2c3e50;
+            position: relative;
+            overflow: hidden;
         }
 
         #receiptContent h4 {
             text-align: center;
             margin-bottom: 25px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #adbfad;
             padding-bottom: 15px;
             font-size: 1.3rem;
-            color: #333;
+            color: #2c3e50;
         }
 
         #receiptContent p {
@@ -335,15 +336,45 @@
         #receiptContent p strong {
             display: inline-block;
             min-width: 140px;
+            color: #2c3e50;
         }
 
         #receiptContent .receipt-footer {
             margin-top: 35px;
             text-align: center;
             font-size: 0.85rem;
-            color: #777;
-            border-top: 1px dotted #ccc;
+            color: #495057;
+            border-top: 1px dotted #9aa99a;
             padding-top: 15px;
+        }
+
+        .paid-stamp {
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            transform: rotate(15deg);
+            transform-origin: bottom right;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1;
+            display: none;
+            user-select: none;
+        }
+
+        .stamp-paid-full {
+            color: red;
+            border: 4px solid red;
+            font-size: 2.8em;
+            opacity: 0.3;
+        }
+
+        .stamp-paid-partial {
+            color: orange;
+            border: 4px solid orange;
+            font-size: 2.6em;
+            opacity: 0.4;
         }
 
         .modal-lg-receipt {
@@ -461,6 +492,16 @@
 
             .payment-actions {
                 min-width: 100%;
+            }
+
+            .stamp-paid-full,
+            .stamp-paid-partial {
+                /* Unificamos para pantallas pequeñas */
+                font-size: 2em;
+                border-width: 3px;
+                top: 40px;
+                right: 15px;
+                padding: 3px 10px;
             }
         }
 
@@ -673,6 +714,7 @@
                             <p><strong>Fecha de Pago:</strong> <span id="receiptPaymentDate"></span></p>
                             <p><strong>Clases Abonadas:</strong> <span id="receiptClassCount"></span></p>
                             <p><strong>Monto Abonado:</strong> $<span id="receiptAmount"></span></p>
+                            <div id="receiptPaidStamp" class="paid-stamp"></div>
                             <div class="receipt-footer"> Gracias por tu pago mensual. </div>
                         </div>
                     </div>
@@ -702,7 +744,6 @@
         style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;"> <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -715,7 +756,6 @@
         const nextMonthBtn = document.getElementById('nextMonthBtn');
         const paymentForm = document.getElementById('paymentForm');
 
-        // Declarar variables de modales aquí para que estén en el scope global
         let paymentModal, receiptModal, priceModal;
 
         const price40Display = document.getElementById('price40');
@@ -1188,11 +1228,13 @@
             const classCountEl = document.getElementById('receiptClassCount');
             const emailInput = document.getElementById('receiptEmailInput');
             const footerEl = document.getElementById('receiptContent').querySelector('.receipt-footer');
+            const paidStampEl = document.getElementById('receiptPaidStamp');
 
-            // Obtener los elementos <p> que contienen las etiquetas <strong> para modificarlas
             const periodParagraphEl = periodEl.closest('p');
             const classCountParagraphEl = classCountEl.closest('p');
 
+            let stampText = "";
+            let stampClass = "";
 
             if (receiptData.receiptType === 'enrollment') {
                 modalLabel.textContent = "Comprobante de Inscripción Anual";
@@ -1202,21 +1244,70 @@
                 if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Detalle:";
                 classCountEl.textContent = "Pago único anual";
                 footerEl.textContent = "Gracias por tu inscripción anual.";
-            } else { // 'monthly' o default
+                if (receiptData.amountRaw > 0) {
+                    stampText = "PAGADO";
+                    stampClass = "stamp-paid-full";
+                }
+            } else { // 'monthly'
                 modalLabel.textContent = "Comprobante de Pago Mensual";
                 receiptTitle.textContent = "Comprobante de Pago Mensual";
                 if (periodParagraphEl) periodParagraphEl.querySelector('strong').textContent = "Mes Abonado:";
                 periodEl.textContent = receiptData.monthYear;
                 if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Clases Abonadas:";
+
+                const student = students[receiptData.studentId];
+                let year, monthIndex; // monthIndex será 0-11
+                try {
+                    const parts = receiptData.monthYear.split(" ");
+                    if (parts.length < 2) throw new Error("Invalid monthYear format for receipt modal");
+                    const monthNamePart = parts[0];
+                    const yearStrPart = parts[1];
+                    year = parseInt(yearStrPart);
+                    monthIndex = monthNames.indexOf(monthNamePart);
+                    if (monthIndex === -1 || isNaN(year)) throw new Error("Could not parse month or year for receipt modal");
+                } catch (e) {
+                    console.warn("Could not parse year/month from receiptData.monthYear in openGenericReceiptModal:", receiptData.monthYear, e);
+                    const d = new Date(); year = d.getFullYear(); monthIndex = d.getMonth(); // Fallback
+                }
+
+                let totalClassesInMonth = 0;
+                if (student && student.classDay && !isNaN(year) && monthIndex !== -1) {
+                    totalClassesInMonth = calculateMonthlyDetails(year, monthIndex, student.duration, student.classDay, student.classType).classCount;
+                } else {
+                    totalClassesInMonth = receiptData.classCount;
+                }
+
                 classCountEl.textContent = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'})` : `${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'}`;
                 footerEl.textContent = "Gracias por tu pago mensual.";
+
+                if (receiptData.amountRaw > 0) {
+                    if (receiptData.isFullMonth || (totalClassesInMonth > 0 && receiptData.classCount >= totalClassesInMonth)) {
+                        stampText = "PAGADO";
+                        stampClass = "stamp-paid-full";
+                    } else {
+                        stampText = "PAGO PARCIAL";
+                        stampClass = "stamp-paid-partial";
+                    }
+                }
             }
             studentNameEl.textContent = receiptData.studentName;
             paymentDateEl.textContent = receiptData.paymentDate;
             amountEl.textContent = receiptData.amountRaw.toFixed(2);
             emailInput.value = receiptData.studentEmail;
+
+            if (paidStampEl) {
+                paidStampEl.className = "paid-stamp";
+                if (receiptData.amountRaw > 0 && stampText) {
+                    paidStampEl.textContent = stampText;
+                    paidStampEl.classList.add(stampClass);
+                    paidStampEl.style.display = 'block';
+                } else {
+                    paidStampEl.style.display = 'none';
+                }
+            }
             receiptModal.show();
         }
+
 
         function openReceiptModalForMonthly(studentId, yearMonth) {
             const student = students[studentId]; const payment = student?.payments?.[yearMonth];
@@ -1250,9 +1341,25 @@
             openGenericReceiptModal();
         }
 
-        async function generateReceiptCanvas() { const el = document.getElementById('receiptContent'); if (!el) { Swal.fire('Error Técnico', 'Elemento recibo no encontrado.', 'error'); return null; } if (typeof window.html2canvas === 'undefined') { Swal.fire('Error Técnico', 'Falta librería html2canvas.', 'error'); return null; } try { const canvas = await window.html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); return canvas; } catch (err) { console.error("Error html2canvas:", err); Swal.fire('Error Imagen', 'Error al generar imagen del recibo.', 'error'); return null; } }
-        async function downloadReceiptAsImage() { const canvas = await generateReceiptCanvas(); if (!canvas) return; try { const img = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = img; const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.png'; link.download = safe; document.body.appendChild(link); link.click(); document.body.removeChild(link); } catch (err) { console.error("Error descarga imagen:", err); Swal.fire('Error Descarga', 'No se pudo descargar la imagen.', 'error'); } }
-        async function downloadReceiptAsPdf() { const canvas = await generateReceiptCanvas(); if (!canvas) return; if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { Swal.fire('Error Técnico', 'Falta librería jsPDF.', 'error'); return; } const { jsPDF } = window.jspdf; try { const img = canvas.toDataURL('image/png'); const pdf = new jsPDF({ o: 'p', u: 'pt', f: 'a5' }); const props = pdf.getImageProperties(img); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const margin = 40; const usableWidth = pdfWidth - 2 * margin; const usableHeight = pdfHeight - 2 * margin; const imgRatio = props.width / props.height; let imgRenderWidth = props.width; let imgRenderHeight = props.height; if (imgRenderWidth > usableWidth) { imgRenderWidth = usableWidth; imgRenderHeight = imgRenderWidth / imgRatio; } if (imgRenderHeight > usableHeight) { imgRenderHeight = usableHeight; imgRenderWidth = imgRenderHeight * imgRatio; } const x = margin + (usableWidth - imgRenderWidth) / 2; const y = margin; pdf.addImage(img, 'PNG', x, y, imgRenderWidth, imgRenderHeight); const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf'; pdf.save(safe); } catch (err) { console.error("Error PDF:", err); Swal.fire('Error PDF', 'No se pudo generar/descargar el PDF.', 'error'); } }
+        async function generateReceiptCanvas() {
+            const el = document.getElementById('receiptContent');
+            if (!el) { Swal.fire('Error Técnico', 'Elemento recibo no encontrado.', 'error'); return null; }
+            if (typeof window.html2canvas === 'undefined') { Swal.fire('Error Técnico', 'Falta librería html2canvas.', 'error'); return null; }
+            try {
+                const canvas = await window.html2canvas(el, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#c0d5c1'
+                });
+                return canvas;
+            } catch (err) {
+                console.error("Error html2canvas:", err);
+                Swal.fire('Error Imagen', 'Error al generar imagen del recibo.', 'error');
+                return null;
+            }
+        }
+        async function downloadReceiptAsImage() { const canvas = await generateReceiptCanvas(); if (!canvas) return; try { const img = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = img; const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear.replace(/\s+/g, '_'); const safe = `comprobante_${typeText}_${receiptData.studentName.replace(/\s+/g, '_')}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.png'; link.download = safe; document.body.appendChild(link); link.click(); document.body.removeChild(link); } catch (err) { console.error("Error descarga imagen:", err); Swal.fire('Error Descarga', 'No se pudo descargar la imagen.', 'error'); } }
+        async function downloadReceiptAsPdf() { const canvas = await generateReceiptCanvas(); if (!canvas) return; if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { Swal.fire('Error Técnico', 'Falta librería jsPDF.', 'error'); return; } const { jsPDF } = window.jspdf; try { const img = canvas.toDataURL('image/png'); const pdf = new jsPDF({ o: 'p', u: 'pt', f: 'a5' }); const props = pdf.getImageProperties(img); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const margin = 40; const usableWidth = pdfWidth - 2 * margin; const usableHeight = pdfHeight - 2 * margin; const imgRatio = props.width / props.height; let imgRenderWidth = props.width; let imgRenderHeight = props.height; if (imgRenderWidth > usableWidth) { imgRenderWidth = usableWidth; imgRenderHeight = imgRenderWidth / imgRatio; } if (imgRenderHeight > usableHeight) { imgRenderHeight = usableHeight; imgRenderWidth = imgRenderHeight * imgRatio; } const x = margin + (usableWidth - imgRenderWidth) / 2; const y = margin; pdf.addImage(img, 'PNG', x, y, imgRenderWidth, imgRenderHeight); const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear.replace(/\s+/g, '_'); const safe = `comprobante_${typeText}_${receiptData.studentName.replace(/\s+/g, '_')}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf'; pdf.save(safe); } catch (err) { console.error("Error PDF:", err); Swal.fire('Error PDF', 'No se pudo generar/descargar el PDF.', 'error'); } }
 
         async function sendReceiptEmail() {
             const input = document.getElementById('receiptEmailInput'); const email = input.value.trim();
@@ -1264,12 +1371,79 @@
             Swal.fire({ title: 'Enviando Email...', text: `Preparando comprobante para ${email}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
             try {
                 let title = ""; let footer = ""; let periodLabel = ""; let periodValue = ""; let detailLabel = ""; let detailValue = ""; let emailSubjectPrefix = "";
+                let stampText = "";
+                let stampStyle = "";
+
+
                 if (receiptData.receiptType === 'enrollment') {
                     title = "Comprobante de Inscripción Anual"; footer = "Gracias por tu inscripción anual."; periodLabel = "Concepto:"; periodValue = "Inscripción Anual " + receiptData.year; detailLabel = "Detalle:"; detailValue = "Pago único anual"; emailSubjectPrefix = "Inscripción Anual";
-                } else {
-                    title = "Comprobante de Pago Mensual"; footer = "Gracias por tu pago mensual."; periodLabel = "Periodo Abonado:"; periodValue = receiptData.monthYear; detailLabel = "Clases Abonadas:"; detailValue = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount})` : `${receiptData.classCount} clase(s)`; emailSubjectPrefix = "Pago Mensual";
+                    if (receiptData.amountRaw > 0) {
+                        stampText = "PAGADO";
+                        stampStyle = "color: red; border: 3px solid red; font-size: 24px; opacity: 0.35;";
+                    }
+                } else { // 'monthly'
+                    title = "Comprobante de Pago Mensual"; footer = "Gracias por tu pago mensual."; periodLabel = "Periodo Abonado:"; periodValue = receiptData.monthYear; detailLabel = "Clases Abonadas:";
+                    detailValue = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} clase${receiptData.classCount !== 1 ? 's' : ''})` : `${receiptData.classCount} clase${receiptData.classCount !== 1 ? 's' : ''}`;
+                    emailSubjectPrefix = "Pago Mensual";
+
+                    const student = students[receiptData.studentId];
+                    let year, monthIndex; // monthIndex será 0-11
+                    try {
+                        const parts = receiptData.monthYear.split(" ");
+                        if (parts.length < 2) throw new Error("Invalid monthYear format for email");
+                        const monthNamePart = parts[0];
+                        const yearStrPart = parts[1];
+                        year = parseInt(yearStrPart);
+                        monthIndex = monthNames.indexOf(monthNamePart);
+                        if (monthIndex === -1 || isNaN(year)) throw new Error("Could not parse month or year for email");
+                    } catch (e) {
+                        console.warn("Could not parse year/month from receiptData.monthYear in sendReceiptEmail:", receiptData.monthYear, e);
+                        const d = new Date(); year = d.getFullYear(); monthIndex = d.getMonth(); // Fallback
+                    }
+
+                    let totalClassesInMonth = 0;
+                    if (student && student.classDay && !isNaN(year) && monthIndex !== -1) {
+                        totalClassesInMonth = calculateMonthlyDetails(year, monthIndex, student.duration, student.classDay, student.classType).classCount;
+                    } else {
+                        totalClassesInMonth = receiptData.classCount;
+                    }
+
+                    if (receiptData.amountRaw > 0) {
+                        if (receiptData.isFullMonth || (totalClassesInMonth > 0 && receiptData.classCount >= totalClassesInMonth)) {
+                            stampText = "PAGADO";
+                            stampStyle = "color: red; border: 3px solid red; font-size: 24px; opacity: 0.35;";
+                        } else {
+                            stampText = "PAGO PARCIAL";
+                            stampStyle = "color: orange; border: 3px solid orange; font-size: 20px; opacity: 0.4;";
+                        }
+                    }
                 }
-                const html = `<div style="font-family: Arial, sans-serif; border: 1px solid #eee; padding: 20px;background-color: #f8f9fa;border-radius:8px;"><h4 style="text-align: center; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 20px; color: #343a40;">${title}</h4><p><strong>Alumno/Participante:</strong> ${receiptData.studentName}</p><p><strong>${periodLabel}</strong> ${periodValue}</p><p><strong>Fecha de Pago:</strong> ${receiptData.paymentDate}</p><p><strong>${detailLabel}</strong> ${detailValue}</p><p><strong>Monto Abonado:</strong> ${receiptData.amountFormatted}</p><p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #6c757d;">${footer}</p></div>`;
+
+                let paidStampHTML = '';
+                if (stampText) {
+                    paidStampHTML = `
+                    <div style="position: absolute; top: 50px; right: 20px;
+                                font-weight: bold; 
+                                padding: 3px 8px; border-radius: 6px; text-align: center; z-index:10;
+                                ${stampStyle}
+                                transform: rotate(15deg); -webkit-transform: rotate(15deg); -ms-transform: rotate(15deg);
+                                transform-origin: bottom right; -webkit-transform-origin: bottom right; -ms-transform-origin: bottom right;">
+                        ${stampText}
+                    </div>`;
+                }
+
+                const html = `<div style="font-family: Arial, sans-serif; border: 1px solid #adbfad; padding: 20px; background-color: #c0d5c1; border-radius:8px; color: #2c3e50; position: relative; overflow: hidden;">
+                    ${paidStampHTML}
+                    <div style="position:relative; z-index:1;">
+                        <h4 style="text-align: center; border-bottom: 1px solid #adbfad; padding-bottom: 10px; margin-bottom: 20px; color: #2c3e50;">${title}</h4>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Alumno/Participante:</strong> ${receiptData.studentName}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">${periodLabel}</strong> ${periodValue}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Fecha de Pago:</strong> ${receiptData.paymentDate}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">${detailLabel}</strong> ${detailValue}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Monto Abonado:</strong> ${receiptData.amountFormatted}</p>
+                        <p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #495057; border-top: 1px dotted #9aa99a; padding-top: 10px;">${footer}</p>
+                    </div>
+                </div>`;
                 const serviceID = 'service_h2fm824'; const templateID = 'template_v7gzygn';
                 const params = { email: email, recibo: html, to_name: receiptData.studentName, subject_line: `Comprobante de ${emailSubjectPrefix} - ${receiptData.studentName}` };
                 await emailjs.send(serviceID, templateID, params);
@@ -1314,7 +1488,6 @@
         function cancelPayment(studentId, yearMonthKey) { if (students[studentId]?.payments?.[yearMonthKey]) { delete students[studentId].payments[yearMonthKey]; saveData(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Cancelado!', 'Registro de pago mensual eliminado.', 'success'); } else { Swal.fire('Error', 'No se pudo encontrar el registro de pago mensual para cancelar.', 'error'); } }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar instancias de modales aquí
             const paymentModalEl = document.getElementById('paymentModal');
             if (paymentModalEl) paymentModal = new bootstrap.Modal(paymentModalEl);
 
@@ -1323,7 +1496,6 @@
 
             const priceModalEl = document.getElementById('priceModal');
             if (priceModalEl) priceModal = new bootstrap.Modal(priceModalEl);
-
 
             loadData();
             renderMonthlyView(currentYear, currentMonth);
