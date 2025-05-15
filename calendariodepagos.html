@@ -10,6 +10,1433 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Mover las definiciones de funciones de callback de XLSX aquí -->
+    <script>
+        function xlsxScriptLoaded() { console.log("Librería XLSX cargada."); }
+        function xlsxScriptFailed() { console.error("Error al cargar XLSX."); if (typeof Swal !== 'undefined') { Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); } else { alert('Error Crítico: No se pudo cargar librería Excel.'); } }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" onload="xlsxScriptLoaded()"
+        onerror="xlsxScriptFailed()"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+
+    <style>
+        body {
+            background-color: #dde9ce !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container.py-5 {
+            padding-top: 2rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .payment-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .back-to-dashboard {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .back-to-dashboard:hover {
+            color: #0a58ca;
+            text-decoration: underline;
+        }
+
+        .back-to-dashboard svg {
+            margin-bottom: 2px;
+        }
+
+        .price-section {
+            background-color: #f0f4f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid #ced4da;
+            gap: 15px;
+        }
+
+        .price-display {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            flex: 1 1 150px;
+        }
+
+        .price-display span {
+            font-weight: bold;
+            color: #0d6efd;
+            font-size: 1rem;
+            display: block;
+            margin-top: 2px;
+        }
+
+        #editPricesBtn {
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .month-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .month-navigation .btn {
+            padding: 0.375rem 0.75rem;
+        }
+
+        .month-display {
+            font-size: 1.6rem;
+            font-weight: 500;
+            min-width: 200px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        hr {
+            border-top: 1px solid #ccc;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .action-buttons-main {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 15px;
+            padding: 0 15px;
+        }
+
+        .action-buttons-main .btn {
+            margin: 6px 10px;
+            font-weight: 500;
+        }
+
+        #studentListTitle {
+            color: #34495e;
+            font-weight: 600;
+        }
+
+        .student-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .student-item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: 1px solid #d5dce5;
+            background-color: #fdfdfe;
+            transition: box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .student-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border-color: #adb5bd;
+        }
+
+        .student-info {
+            flex: 1 1 40%;
+            min-width: 200px;
+            padding-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        .payment-status-details {
+            flex: 1 1 30%;
+            min-width: 170px;
+            padding-right: 15px;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .payment-actions {
+            flex: 1 1 25%;
+            min-width: 180px;
+            text-align: right;
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+
+        .payment-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .student-info span {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .student-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .group-name-display {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: -2px;
+            margin-bottom: 4px !important;
+        }
+
+        .class-slot,
+        .class-duration {
+            font-size: 0.9rem;
+            color: #5a6a7a;
+        }
+
+        .enrollment-status {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .enrollment-paid {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .enrollment-pending {
+            color: #dc3545;
+            font-style: italic;
+        }
+
+        .enrollment-paid-date {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-left: 5px;
+        }
+
+        .status-paid-full,
+        .status-paid-partial,
+        .status-pending,
+        .status-recovery {
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .status-paid-full {
+            color: #198754;
+        }
+
+        .status-paid-partial {
+            color: #ffc107;
+        }
+
+        .status-pending {
+            color: #dc3545;
+        }
+
+        .status-recovery {
+            font-style: italic;
+            color: #0d6efd;
+        }
+
+        .payment-details {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .payment-status-details>span,
+        .payment-status-details>div {
+            text-align: right;
+        }
+
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-header .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .modal-body p strong {
+            color: #333;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+
+        #receiptContent {
+            border: 1px solid #adbfad;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 550px;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background-color: #c0d5c1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            color: #2c3e50;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #receiptContent h4 {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #adbfad;
+            padding-bottom: 15px;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        #receiptContent p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        #receiptContent p strong {
+            display: inline-block;
+            min-width: 140px;
+            color: #2c3e50;
+        }
+
+        #receiptContent .receipt-footer {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #495057;
+            border-top: 1px dotted #9aa99a;
+            padding-top: 15px;
+        }
+
+        .paid-stamp {
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            transform: rotate(15deg);
+            transform-origin: bottom right;
+            color: red;
+            font-size: 2.8em;
+            font-weight: bold;
+            border: 4px solid red;
+            padding: 5px 15px;
+            border-radius: 10px;
+            opacity: 0.3;
+            text-align: center;
+            z-index: 1;
+            display: none;
+            user-select: none;
+        }
+
+        .modal-lg-receipt {
+            max-width: 700px;
+        }
+
+        @media (max-width: 991.98px) {
+            .student-item {
+                align-items: stretch;
+            }
+
+            .student-info,
+            .payment-status-details,
+            .payment-actions {
+                flex-basis: 100%;
+                width: 100%;
+                text-align: left;
+                padding-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .payment-status-details {
+                padding-top: 10px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+            }
+
+            .payment-status-details>span,
+            .payment-status-details>div,
+            .status-paid-full,
+            .status-paid-partial,
+            .status-pending,
+            .status-recovery,
+            .payment-details {
+                text-align: left;
+            }
+
+            .enrollment-status {
+                text-align: left;
+            }
+
+            .payment-actions {
+                margin-top: 5px;
+                justify-content: flex-start;
+                margin-bottom: 0;
+                flex-wrap: wrap;
+            }
+        }
+
+
+        @media (max-width: 767.98px) {
+            .price-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .price-display {
+                text-align: left;
+                padding-left: 10px;
+                flex-basis: auto;
+            }
+
+            #editPricesBtn {
+                align-self: center;
+                margin-top: 10px;
+            }
+
+            .month-display {
+                font-size: 1.4rem;
+                min-width: 150px;
+            }
+
+            .month-navigation {
+                gap: 10px;
+            }
+
+            .modal-lg-receipt {
+                max-width: 95%;
+            }
+
+            #receiptContent {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .payment-container {
+                padding: 20px;
+            }
+
+            .student-name {
+                font-size: 1.05rem;
+            }
+
+            .payment-actions .btn {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+
+            .action-buttons-main .btn {
+                display: block;
+                width: 90%;
+                margin: 8px auto;
+            }
+
+            .container.py-5 {
+                padding-top: 1.5rem !important;
+            }
+
+            .payment-actions {
+                min-width: 100%;
+            }
+
+            .paid-stamp {
+                font-size: 2em;
+                border-width: 3px;
+                top: 40px;
+                right: 15px;
+            }
+        }
+
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #0d6efd;
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, background-color 0.2s ease;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #backToTopBtn:hover {
+            background-color: #0a58ca;
+        }
+
+        #backToTopBtn[style*="opacity: 0"] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5">
+        <div class="payment-container" id="paymentContainer">
+            <div class="mb-4">
+                <a href="dashboard.html" class="back-to-dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                    </svg>
+                    Volver al Dashboard
+                </a>
+            </div>
+            <h2 class="text-center mb-4">Control de Pagos Mensuales y Anuales</h2>
+
+            <div class="price-section">
+                <div class="price-display">Indiv 40 min/mes: <span id="price40"></span></div>
+                <div class="price-display">Indiv 60 min/mes: <span id="price60"></span></div>
+                <div class="price-display">Grupal 60 min/mes: <span id="priceGrupal"></span></div>
+                <div class="price-display">Inscrip. Anual (Ene-Jun / Indiv): <span id="priceEnrollmentPreJuly"></span>
+                </div>
+                <div class="price-display">Inscrip. Anual (Jul-Dic / Indiv): <span id="priceEnrollmentPostJune"></span>
+                </div>
+                <button id="editPricesBtn" class="btn btn-sm"
+                    style="background-color: #f3a391; border-color: #f3a391; color: black;">Editar Precios</button>
+            </div>
+
+            <div class="month-navigation">
+                <button id="prevMonthBtn" class="btn btn-sm"
+                    style="background-color: #fae39e; border-color: #fae39e; color: black;"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg> Anterior</button>
+                <span id="monthDisplay" class="month-display">Cargando...</span>
+                <button id="nextMonthBtn" class="btn btn-sm"
+                    style="background-color: #fae39e; border-color: #fae39e; color: black;">Siguiente <svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                    </svg></button>
+            </div>
+            <hr>
+            <div class="action-buttons-main">
+                <button id="exportDataBtn" class="btn btn-sm"
+                    style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">Exportar Datos
+                    (JSON)</button>
+                <button id="importDataBtn" class="btn btn-sm"
+                    style="background-color: #96a5c0; border-color: #96a5c0; color: black;">Importar Datos
+                    (JSON)</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;" />
+            </div>
+            <hr>
+
+            <h4 class="text-center mb-3" id="studentListTitle">Alumnos/Participantes - Pagos de <span
+                    id="listCurrentMonth"></span></h4>
+            <ul class="student-list" id="studentList">
+                <li class="text-center p-4">Cargando alumnos y pagos...</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal fade" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
+                    <h5 class="modal-title" id="priceModalLabel">Editar Precios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="priceForm">
+                        <h6>Precios Mensuales (Clases)</h6>
+                        <div class="mb-3">
+                            <label for="basePrice40Input" class="form-label">Individual 40 min</label>
+                            <input type="number" id="basePrice40Input" class="form-control" required min="0" step="any">
+                        </div>
+                        <div class="mb-3">
+                            <label for="basePrice60Input" class="form-label">Individual 60 min</label>
+                            <input type="number" id="basePrice60Input" class="form-control" required min="0" step="any">
+                        </div>
+                        <div class="mb-3">
+                            <label for="basePriceGrupalInput" class="form-label">Grupal 60 min (x Part.)</label>
+                            <input type="number" id="basePriceGrupalInput" class="form-control" required min="0"
+                                step="any">
+                        </div>
+                        <hr>
+                        <h6>Inscripción Anual Única (Solo Alumnos Individuales)</h6>
+                        <div class="mb-3">
+                            <label for="enrollmentFeePreJulyInput" class="form-label">Precio Inscripción (Pago
+                                Ene-Jun)</label>
+                            <input type="number" id="enrollmentFeePreJulyInput" class="form-control" required min="0"
+                                step="any">
+                        </div>
+                        <div class="mb-3">
+                            <label for="enrollmentFeePostJuneInput" class="form-label">Precio Inscripción (Pago
+                                Jul-Dic)</label>
+                            <input type="number" id="enrollmentFeePostJuneInput" class="form-control" required min="0"
+                                step="any">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
+                        id="savePricesBtn">Guardar Precios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
+                    <h5 class="modal-title" id="paymentModalLabel">Registrar Pago Mensual</h5> <button type="button"
+                        class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm" novalidate>
+                        <input type="hidden" id="paymentStudentId" />
+                        <input type="hidden" id="paymentYearMonth" />
+                        <input type="hidden" id="paymentClassType" />
+                        <div class="mb-2"> <label class="form-label">Alumno/Participante:</label>
+                            <p><strong id="paymentStudentName"></strong></p>
+                        </div>
+                        <div class="mb-2"> <label class="form-label">Mes a Pagar:</label>
+                            <p><strong id="paymentMonthYearDisplay"></strong> (<span
+                                    id="paymentClassCountDisplay"></span> clases)</p>
+                        </div>
+                        <div class="mb-3"> <label for="paymentClassesPaid" class="form-label">Clases a Pagar</label>
+                            <select id="paymentClassesPaid" class="form-select" required></select>
+                            <div class="invalid-feedback">Selecciona una opción de clases.</div>
+                        </div>
+                        <div class="mb-3"> <label class="form-label">Monto Sugerido:</label>
+                            <p><strong id="suggestedAmountDisplay"></strong></p>
+                        </div>
+                        <div class="mb-3"> <label for="paymentAmount" class="form-label">Monto Pagado
+                                Efectivamente</label> <input type="number" id="paymentAmount" class="form-control"
+                                required min="0" step="0.01" />
+                            <div class="invalid-feedback">Ingresa un monto válido (número positivo).</div>
+                        </div>
+                        <div class="mb-3"> <label for="paymentDate" class="form-label">Fecha de Pago</label> <input
+                                type="date" id="paymentDate" class="form-control" required />
+                            <div class="invalid-feedback">Selecciona una fecha válida.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"> <button type="button" class="btn" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
+                        id="savePaymentBtn">Guardar Pago</button> </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg-receipt">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;">
+                    <h5 class="modal-title" id="receiptModalLabel">Comprobante de Pago Mensual</h5> <button
+                        type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="receiptContentContainer">
+                        <div id="receiptContent">
+                            <h4>Comprobante de Pago Mensual</h4>
+                            <p><strong>Alumno/Participante:</strong> <span id="receiptStudentName"></span></p>
+                            <p><strong>Mes Abonado:</strong> <span id="receiptMonthYear"></span></p>
+                            <p><strong>Fecha de Pago:</strong> <span id="receiptPaymentDate"></span></p>
+                            <p><strong>Clases Abonadas:</strong> <span id="receiptClassCount"></span></p>
+                            <p><strong>Monto Abonado:</strong> $<span id="receiptAmount"></span></p>
+                            <div id="receiptPaidStamp" class="paid-stamp">PAGADO</div>
+                            <div class="receipt-footer"> Gracias por tu pago mensual. </div>
+                        </div>
+                    </div>
+                    <div class="mt-3"> <label for="receiptEmailInput" class="form-label">Enviar a Email:</label> <input
+                            type="email" class="form-control" id="receiptEmailInput"
+                            placeholder="Ingresa el email del destinatario"> </div>
+                </div>
+                <div class="modal-footer justify-content-center flex-wrap">
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #96a5c0; border-color: #96a5c0; color: black;"
+                        id="downloadReceiptImageBtn"><i class="fas fa-image me-1"></i> Imagen</button>
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #fae39e; border-color: #fae39e; color: black;"
+                        id="downloadReceiptPdfBtn"><i class="fas fa-file-pdf me-1"></i> PDF</button>
+                    <button type="button" class="btn btn-sm"
+                        style="background-color: #d9e6cc; border-color: #d9e6cc; color: black;"
+                        id="sendReceiptEmailBtn"><i class="fas fa-envelope me-1"></i> Enviar
+                        Email</button>
+                    <button type="button" class="btn btn-sm" style="background-color: #f3a391;"
+                        data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="scrollToTop()" id="backToTopBtn" title="Volver arriba"
+        style="background-color: #5b7d2b; border-color: #5b7d2b; color: black;"> <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        (function () { emailjs.init({ publicKey: "VeY3vHwsOZrOOSsKI" }); })();
+
+        const studentList = document.getElementById('studentList');
+        const monthDisplay = document.getElementById('monthDisplay');
+        const listCurrentMonth = document.getElementById('listCurrentMonth');
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
+        const paymentForm = document.getElementById('paymentForm');
+
+        // Declarar variables de modales aquí para que estén en el scope global
+        let paymentModal, receiptModal, priceModal;
+
+        const price40Display = document.getElementById('price40');
+        const price60Display = document.getElementById('price60');
+        const priceGrupalDisplay = document.getElementById('priceGrupal');
+        const priceEnrollmentPreJulyDisplay = document.getElementById('priceEnrollmentPreJuly');
+        const priceEnrollmentPostJuneDisplay = document.getElementById('priceEnrollmentPostJune');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataBtn = document.getElementById('importDataBtn');
+        const fileInput = document.getElementById('fileInput');
+        const downloadReceiptImageBtn = document.getElementById('downloadReceiptImageBtn');
+        const downloadReceiptPdfBtn = document.getElementById('downloadReceiptPdfBtn');
+        const sendReceiptEmailBtn = document.getElementById('sendReceiptEmailBtn');
+
+        const reservationDataKey_Corrected = 'reservasCalendarioV2_1';
+        const paymentDataKey = 'studentPaymentDataV4';
+        const defaultPrices = {
+            duration40: 50000,
+            duration60: 70000,
+            durationGrupal: 5000,
+            enrollmentFeePreJuly: 10000,
+            enrollmentFeePostJune: 5000
+        };
+        let students = {};
+        let basePrices = { ...defaultPrices };
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        let receiptData = {};
+
+        function getYearMonthKey(year, month) { return `${year}-${(month + 1).toString().padStart(2, '0')}`; }
+        function formatCurrency(amount) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(amount); }
+        function formatDate(dateString) { if (!dateString) return 'N/A'; try { const date = new Date(dateString + 'T00:00:00'); if (isNaN(date.getTime())) throw new Error('Invalid date'); const day = date.getDate().toString().padStart(2, '0'); const month = (date.getMonth() + 1).toString().padStart(2, '0'); const year = date.getFullYear(); return `${day}/${month}/${year}`; } catch (e) { console.warn("Error formatting date:", dateString, e); return dateString; } }
+        function getCurrentDateString() { const today = new Date(); const year = today.getFullYear(); const month = (today.getMonth() + 1).toString().padStart(2, '0'); const day = today.getDate().toString().padStart(2, '0'); return `${year}-${month}-${day}`; }
+        function countWeekdaysInMonth(year, month, targetDayName) { const targetDayIndex = dayNames.indexOf(targetDayName); if (targetDayIndex === -1) return 0; let count = 0; const date = new Date(Date.UTC(year, month, 1)); const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate(); for (let day = 1; day <= daysInMonth; day++) { date.setUTCDate(day); if (date.getUTCDay() === targetDayIndex) { count++; } } return count; }
+        function calculateMonthlyDetails(year, month, studentDuration, studentDay, classType = 'Individual') { let basePrice = 0; if (classType === 'Grupal') { basePrice = basePrices.durationGrupal; studentDuration = 60; } else { basePrice = studentDuration === 60 ? basePrices.duration60 : basePrices.duration40; } const classCount = countWeekdaysInMonth(year, month, studentDay); const perClassPrice = classCount > 0 ? Math.round(basePrice / classCount) : basePrice; return { basePrice, classCount, perClassPrice }; }
+        function getApplicableEnrollmentFee() { const todayMonth = new Date().getMonth(); return (todayMonth <= 5) ? basePrices.enrollmentFeePreJuly : basePrices.enrollmentFeePostJune; }
+        function saveData() { try { const dataToSave = { version: 4, createdAt: new Date().toISOString(), students: students, prices: basePrices }; localStorage.setItem(paymentDataKey, JSON.stringify(dataToSave)); console.log(`Datos guardados en ${paymentDataKey}.`); } catch (error) { console.error("Error guardando:", error); Swal.fire('Error', 'No se pudieron guardar los cambios.', 'error'); } }
+
+        function loadData() {
+            let loadedPaymentStudents = {};
+            let loadedPrices = { ...defaultPrices };
+            let processedStudents = {};
+            try {
+                const paymentStoredData = localStorage.getItem(paymentDataKey);
+                if (paymentStoredData) {
+                    const parsedPaymentData = JSON.parse(paymentStoredData);
+                    loadedPaymentStudents = parsedPaymentData.students || {};
+                    for (const id in loadedPaymentStudents) {
+                        if (!loadedPaymentStudents[id].enrollmentPaid) {
+                            loadedPaymentStudents[id].enrollmentPaid = { paid: false, date: null, amount: null };
+                        }
+                    }
+                    loadedPrices = { ...defaultPrices, ...(parsedPaymentData.prices || {}) };
+                } else {
+                    loadedPrices = { ...defaultPrices };
+                }
+
+                const reservationStoredData = localStorage.getItem(reservationDataKey_Corrected);
+                if (reservationStoredData) {
+                    const parsedReservationData = JSON.parse(reservationStoredData);
+                    for (const key in parsedReservationData) {
+                        const reserva = parsedReservationData[key];
+                        if (!reserva || typeof reserva !== 'object' || !reserva.nombre || !reserva.horaInicio || !reserva.duracion || !reserva.tipo) { continue; }
+                        const dia = key.substring(0, key.lastIndexOf('-'));
+                        const hora = reserva.horaInicio;
+                        const groupName = reserva.nombre;
+                        const groupNameNormalized = groupName.toLowerCase().replace(/\s+/g, '');
+
+                        if (reserva.tipo === "Grupal") {
+                            if (Array.isArray(reserva.participantes) && reserva.participantes.length > 0) {
+                                reserva.participantes.forEach((participante) => {
+                                    if (!participante || !participante.nombre) return;
+                                    const participantName = participante.nombre;
+                                    const participantNameNormalized = participantName.toLowerCase().replace(/\s+/g, '');
+                                    const participantId = `${groupNameNormalized}-${participantNameNormalized}-${dia}-${hora}`;
+                                    const participantEntry = {
+                                        id: participantId, name: participantName, email: participante.email || '', groupName: groupName, classDay: dia, classTime: hora, duration: 60, classType: "Grupal", specificDate: reserva.fechaEspecifica || null, payments: {},
+                                        enrollmentPaid: { paid: false, date: null, amount: null }
+                                    };
+                                    if (loadedPaymentStudents[participantId]) {
+                                        participantEntry.payments = loadedPaymentStudents[participantId].payments || {};
+                                        participantEntry.email = loadedPaymentStudents[participantId].email || participante.email || '';
+                                        if (participante.email && participante.email !== loadedPaymentStudents[participantId].email) { participantEntry.email = participante.email; }
+                                        delete loadedPaymentStudents[participantId];
+                                    } else { participantEntry.email = participante.email || ''; }
+                                    processedStudents[participantId] = participantEntry;
+                                });
+                            }
+                        } else {
+                            const studentNameNormalized = groupNameNormalized;
+                            const studentId = `${studentNameNormalized}-${dia}-${hora}`;
+                            const studentEntry = {
+                                id: studentId, name: groupName, classDay: dia, classTime: hora, duration: reserva.duracion, classType: reserva.tipo, specificDate: reserva.fechaEspecifica || null, email: reserva.email || '', payments: {},
+                                enrollmentPaid: { paid: false, date: null, amount: null }
+                            };
+                            if (loadedPaymentStudents[studentId]) {
+                                studentEntry.payments = loadedPaymentStudents[studentId].payments || {};
+                                studentEntry.email = loadedPaymentStudents[studentId].email || reserva.email || '';
+                                studentEntry.enrollmentPaid = loadedPaymentStudents[studentId].enrollmentPaid || studentEntry.enrollmentPaid;
+                                if (reserva.email && reserva.email !== loadedPaymentStudents[studentId].email) { studentEntry.email = reserva.email; }
+                                delete loadedPaymentStudents[studentId];
+                            } else { studentEntry.email = reserva.email || ''; }
+                            processedStudents[studentId] = studentEntry;
+                        }
+                    }
+                } else {
+                    processedStudents = loadedPaymentStudents;
+                    for (const id in processedStudents) {
+                        if (!processedStudents[id].classType) processedStudents[id].classType = 'Desconocido (Solo Pago)';
+                        if (!processedStudents[id].hasOwnProperty('specificDate')) processedStudents[id].specificDate = null;
+                        if (!processedStudents[id].hasOwnProperty('duration')) processedStudents[id].duration = 0;
+                        if (!processedStudents[id].hasOwnProperty('classDay')) processedStudents[id].classDay = '?';
+                        if (!processedStudents[id].hasOwnProperty('classTime')) processedStudents[id].classTime = '?';
+                        if (processedStudents[id].classType === 'Grupal') {
+                            processedStudents[id].enrollmentPaid = { paid: false, date: null, amount: null };
+                        }
+                    }
+                }
+                for (const remainingId in loadedPaymentStudents) {
+                    if (!processedStudents[remainingId]) {
+                        const studentData = loadedPaymentStudents[remainingId];
+                        if (!studentData.classType) studentData.classType = 'Desconocido (Solo Pago)';
+                        if (!studentData.hasOwnProperty('specificDate')) studentData.specificDate = null;
+                        if (!studentData.hasOwnProperty('duration')) studentData.duration = 0;
+                        if (!studentData.hasOwnProperty('classDay')) studentData.classDay = '?';
+                        if (!studentData.hasOwnProperty('classTime')) studentData.classTime = '?';
+                        if (!studentData.enrollmentPaid) {
+                            studentData.enrollmentPaid = { paid: false, date: null, amount: null };
+                        }
+                        if (studentData.classType === 'Grupal') {
+                            studentData.enrollmentPaid = { paid: false, date: null, amount: null };
+                        }
+                        processedStudents[remainingId] = studentData;
+                    }
+                }
+
+            } catch (error) {
+                console.error("Error cargando/parseando datos:", error);
+                processedStudents = {};
+                loadedPrices = { ...defaultPrices };
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Advertencia', `Error al cargar datos: ${error.message}. Se usarán valores por defecto si es posible.`, 'warning');
+                } else {
+                    alert(`Error al cargar datos: ${error.message}. Se usarán valores por defecto si es posible.`);
+                }
+            }
+            students = processedStudents;
+            basePrices = loadedPrices;
+            updatePriceDisplay();
+        }
+
+        function updatePriceDisplay() {
+            price40Display.textContent = formatCurrency(basePrices.duration40);
+            price60Display.textContent = formatCurrency(basePrices.duration60);
+            priceGrupalDisplay.textContent = formatCurrency(basePrices.durationGrupal);
+            priceEnrollmentPreJulyDisplay.textContent = formatCurrency(basePrices.enrollmentFeePreJuly);
+            priceEnrollmentPostJuneDisplay.textContent = formatCurrency(basePrices.enrollmentFeePostJune);
+        }
+
+        function renderMonthlyView(year, month) {
+            const currentMonthName = monthNames[month];
+            monthDisplay.textContent = `${currentMonthName} ${year}`;
+            listCurrentMonth.textContent = `${currentMonthName} ${year}`;
+            studentList.innerHTML = '';
+            const yearMonthKey = getYearMonthKey(year, month);
+            const studentIds = Object.keys(students);
+
+            if (studentIds.length === 0) {
+                studentList.innerHTML = '<li class="text-center text-muted p-4">No hay alumnos/participantes cargados.</li>';
+                return;
+            }
+
+            studentIds.sort((a, b) => students[a].name.localeCompare(students[b].name)).forEach(id => {
+                const student = students[id];
+                if (!student || !student.name || typeof student.duration === 'undefined' || !student.classType || !student.classDay || !student.classTime) {
+                    return;
+                }
+                if (!student.enrollmentPaid) {
+                    student.enrollmentPaid = { paid: false, date: null, amount: null };
+                }
+
+                const monthlyDetails = calculateMonthlyDetails(year, month, student.duration, student.classDay, student.classType);
+                const payment = student.payments?.[yearMonthKey];
+                const li = document.createElement('li');
+                li.className = 'student-item';
+
+                let statusHTML = '';
+                let actionsHTML = '';
+                let paymentDetailsHTML = '';
+                let enrollmentStatusHTML = '';
+                let enrollmentActionHTML = '';
+                let enrollmentReceiptBtnHTML = '';
+
+
+                if (payment) {
+                    const paidClassesText = payment.isFullMonthPayment ? `Mes Completo` : `${payment.classesPaid} clase(s)`;
+                    paymentDetailsHTML = `<div class="payment-details"> Pagó ${formatCurrency(payment.amountPaid)} (${paidClassesText}) el ${formatDate(payment.paymentDate)} </div>`;
+                    if (payment.isFullMonthPayment || (monthlyDetails.classCount > 0 && payment.classesPaid >= monthlyDetails.classCount)) {
+                        statusHTML = `<span class="status-paid-full">Pago Mensual: Completo</span>`;
+                    } else {
+                        const classCountText = monthlyDetails.classCount > 0 ? `/${monthlyDetails.classCount}` : '';
+                        statusHTML = `<span class="status-paid-partial">Pago Mensual: Parcial (${payment.classesPaid}${classCountText})</span>`;
+                    }
+                    actionsHTML += `
+                        <button class="btn btn-sm view-receipt-btn" style="background-color: #96a5c0; border-color: #96a5c0; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" title="Ver Comprobante Mensual"><i class="fas fa-receipt"></i> Recibo Mes</button>
+                        <button class="btn btn-sm register-payment-btn" style="background-color: #fae39e; border-color: #fae39e; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Modificar Pago Mensual"><i class="fas fa-pencil-alt"></i> Modificar Mes</button>
+                        <button class="btn btn-sm cancel-payment-btn" style="background-color: #f3a391; border-color: #f3a391; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" title="Cancelar Pago Mensual"><i class="fas fa-times-circle"></i> Cancelar Mes</button>
+                    `;
+                } else {
+                    if (student.classType === "Clase de recuperación") {
+                        let fechaTexto = student.specificDate ? ` (${formatDate(student.specificDate)})` : ' (Fecha no especificada)';
+                        statusHTML = `<span class="status-recovery">Clase de recuperación${fechaTexto}</span>`;
+                    } else if (student.classType === "Clase de prueba") {
+                        statusHTML = `<span class="status-pending">Pago Mensual: Pendiente (Prueba)</span>`;
+                        actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Prueba"><i class="fas fa-money-bill-wave"></i> Pagar Prueba</button>`;
+                    } else if (student.classType !== 'Grupal') {
+                        statusHTML = `<span class="status-pending">Pago Mensual: Pendiente</span>`;
+                        actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Mensual"><i class="fas fa-money-bill-wave"></i> Pagar Mes</button>`;
+                    } else {
+                        statusHTML = `<span class="status-pending">Pago Mensual: Pendiente</span>`;
+                        actionsHTML += `<button class="btn btn-sm register-payment-btn" style="background-color: #c0d5c1; border-color: #c0d5c1; color: black;" data-studentid="${id}" data-yearmonth="${yearMonthKey}" data-duration="${student.duration}" data-day="${student.classDay}" data-type="${student.classType}" title="Registrar Pago Mensual"><i class="fas fa-money-bill-wave"></i> Pagar Mes</button>`;
+                    }
+                }
+
+                if (student.classType !== 'Grupal') {
+                    if (student.enrollmentPaid && student.enrollmentPaid.paid) {
+                        const paidDate = formatDate(student.enrollmentPaid.date);
+                        const paidAmount = formatCurrency(student.enrollmentPaid.amount || 0);
+                        enrollmentStatusHTML = `<span class="enrollment-status enrollment-paid">Inscripción Anual: Pagada <span class="enrollment-paid-date">(${paidDate} - ${paidAmount})</span></span>`;
+                        enrollmentActionHTML = `<button class="btn btn-sm cancel-enrollment-btn" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;" data-studentid="${id}" title="Cancelar Pago Inscripción"><i class="fas fa-user-times"></i> Cancelar Inscrip.</button>`;
+                        enrollmentReceiptBtnHTML = `<button class="btn btn-sm view-enrollment-receipt-btn" style="background-color: #a3b7a3; border-color: #a3b7a3; color: black;" data-studentid="${id}" title="Ver Comprobante Inscripción"><i class="fas fa-id-card-alt"></i> Recibo Inscrip.</button>`;
+                    } else {
+                        enrollmentStatusHTML = `<span class="enrollment-status enrollment-pending">Inscripción Anual: Pendiente</span>`;
+                        enrollmentActionHTML = `<button class="btn btn-sm pay-enrollment-btn" style="background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460;" data-studentid="${id}" title="Registrar Pago Inscripción Anual"><i class="fas fa-user-check"></i> Pagar Inscrip.</button>`;
+                    }
+                } else {
+                    enrollmentStatusHTML = '';
+                    enrollmentActionHTML = '';
+                    enrollmentReceiptBtnHTML = '';
+                }
+
+                const groupNameHTML = student.groupName ? `<span class="group-name-display">(Grupo: ${student.groupName})</span>` : '';
+                const durationDisplay = student.classType === 'Grupal' ? 60 : student.duration;
+                const specificDateHTML = student.specificDate ? `<span class="class-duration" style="font-style: italic; font-size: 0.8em;">Fecha Esp: ${formatDate(student.specificDate)}</span>` : '';
+
+                li.innerHTML = `
+                    <div class="student-info">
+                        <span class="student-name">${student.name}</span>
+                        ${groupNameHTML}
+                        <span class="class-slot">Clase: ${student.classDay} ${student.classTime}</span>
+                        <span class="class-duration">Duración: ${durationDisplay} min</span>
+                        <span class="class-duration" style="font-style: italic;">Tipo: ${student.classType || 'No definido'}</span>
+                        ${specificDateHTML}
+                        ${enrollmentStatusHTML}
+                    </div>
+                    <div class="payment-status-details">
+                        ${statusHTML}
+                        ${paymentDetailsHTML}
+                    </div>
+                    <div class="payment-actions">
+                        ${enrollmentActionHTML}
+                        ${enrollmentReceiptBtnHTML}
+                        ${actionsHTML}
+                    </div>`;
+                studentList.appendChild(li);
+            });
+
+            document.querySelectorAll('.register-payment-btn').forEach(button => button.addEventListener('click', handleRegisterPaymentClick));
+            document.querySelectorAll('.view-receipt-btn').forEach(button => button.addEventListener('click', handleViewMonthlyReceiptClick));
+            document.querySelectorAll('.view-enrollment-receipt-btn').forEach(button => button.addEventListener('click', handleViewEnrollmentReceiptClick));
+            document.querySelectorAll('.cancel-payment-btn').forEach(button => button.addEventListener('click', handleCancelPaymentClick));
+            document.querySelectorAll('.pay-enrollment-btn').forEach(button => button.addEventListener('click', handlePayEnrollmentClick));
+            document.querySelectorAll('.cancel-enrollment-btn').forEach(button => button.addEventListener('click', handleCancelEnrollmentClick));
+        }
+
+        function handleRegisterPaymentClick(event) { const btn = event.currentTarget; openPaymentModal(btn.dataset.studentid, btn.dataset.yearmonth, parseInt(btn.dataset.duration, 10), btn.dataset.day, btn.dataset.type); }
+        function handleViewMonthlyReceiptClick(event) { openReceiptModalForMonthly(event.currentTarget.dataset.studentid, event.currentTarget.dataset.yearmonth); }
+        function handleViewEnrollmentReceiptClick(event) { const studentId = event.currentTarget.dataset.studentid; openEnrollmentReceiptModal(studentId); }
+
+        function handlePayEnrollmentClick(event) {
+            const studentId = event.currentTarget.dataset.studentid;
+            const student = students[studentId];
+            if (!student || student.classType === 'Grupal') { return; }
+            const applicableFee = getApplicableEnrollmentFee();
+            const feeFormatted = formatCurrency(applicableFee);
+            const today = new Date();
+            const currentMonthName = monthNames[today.getMonth()];
+            Swal.fire({
+                title: 'Confirmar Pago de Inscripción',
+                html: `Registrar pago de inscripción anual para <b>${student.name}</b>?<br>Monto aplicable (pago en ${currentMonthName}): <b>${feeFormatted}</b>.<br><br>Fecha de Pago:`,
+                icon: 'question', input: 'date', inputValue: getCurrentDateString(), showCancelButton: true,
+                confirmButtonText: 'Sí, Registrar Pago', cancelButtonText: 'Cancelar', confirmButtonColor: '#28a745', cancelButtonColor: '#6c757d',
+                inputValidator: (value) => { if (!value) { return 'Debes seleccionar una fecha' } }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    const paymentDate = result.value;
+                    if (students[studentId]) {
+                        students[studentId].enrollmentPaid = { paid: true, date: paymentDate, amount: applicableFee };
+                        saveData(); renderMonthlyView(currentYear, currentMonth);
+                        Swal.fire('¡Registrado!', `Pago de inscripción para ${student.name} registrado con fecha ${formatDate(paymentDate)}.`, 'success');
+                    } else { Swal.fire('Error', 'No se encontró al alumno/participante.', 'error'); }
+                }
+            });
+        }
+        function handleCancelEnrollmentClick(event) {
+            const studentId = event.currentTarget.dataset.studentid;
+            const student = students[studentId];
+            if (!student || student.classType === 'Grupal') { return; }
+            const paidDate = student.enrollmentPaid?.date ? formatDate(student.enrollmentPaid.date) : 'N/A';
+            const paidAmount = student.enrollmentPaid?.amount ? formatCurrency(student.enrollmentPaid.amount) : 'N/A';
+            Swal.fire({
+                title: '¿Cancelar Inscripción Anual?',
+                html: `Estás a punto de eliminar el registro de pago de inscripción anual para <b>${student.name}</b>.<br>(Registrado el ${paidDate} por ${paidAmount})<br><b>Esta acción no se puede deshacer.</b>`,
+                icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, cancelar inscripción', cancelButtonText: 'No, mantener'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (students[studentId]) {
+                        students[studentId].enrollmentPaid = { paid: false, date: null, amount: null };
+                        saveData(); renderMonthlyView(currentYear, currentMonth);
+                        Swal.fire('¡Cancelado!', `El registro de inscripción anual para ${student.name} ha sido eliminado.`, 'success');
+                    } else { Swal.fire('Error', 'No se encontró al alumno/participante.', 'error'); }
+                }
+            });
+        }
+
+        function openPriceModal() {
+            document.getElementById('basePrice40Input').value = basePrices.duration40;
+            document.getElementById('basePrice60Input').value = basePrices.duration60;
+            document.getElementById('basePriceGrupalInput').value = basePrices.durationGrupal;
+            document.getElementById('enrollmentFeePreJulyInput').value = basePrices.enrollmentFeePreJuly;
+            document.getElementById('enrollmentFeePostJuneInput').value = basePrices.enrollmentFeePostJune;
+            priceModal.show();
+        }
+        function savePrices() {
+            const price40 = parseFloat(document.getElementById('basePrice40Input').value);
+            const price60 = parseFloat(document.getElementById('basePrice60Input').value);
+            const priceGrupal = parseFloat(document.getElementById('basePriceGrupalInput').value);
+            const priceEnrollmentPre = parseFloat(document.getElementById('enrollmentFeePreJulyInput').value);
+            const priceEnrollmentPost = parseFloat(document.getElementById('enrollmentFeePostJuneInput').value);
+            if (isNaN(price40) || isNaN(price60) || isNaN(priceGrupal) || isNaN(priceEnrollmentPre) || isNaN(priceEnrollmentPost) ||
+                price40 < 0 || price60 < 0 || priceGrupal < 0 || priceEnrollmentPre < 0 || priceEnrollmentPost < 0) {
+                Swal.fire('Error', 'Ingresa precios válidos (números positivos) para todos los campos.', 'error'); return;
+            }
+            basePrices.duration40 = price40; basePrices.duration60 = price60; basePrices.durationGrupal = priceGrupal;
+            basePrices.enrollmentFeePreJuly = priceEnrollmentPre; basePrices.enrollmentFeePostJune = priceEnrollmentPost;
+            saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); priceModal.hide();
+            Swal.fire('Éxito', 'Precios actualizados correctamente.', 'success');
+        }
+
+        function openPaymentModal(studentId, yearMonth, studentDuration, studentDay, classType) {
+            const student = students[studentId];
+            if (!student) { Swal.fire('Error', 'No se encontró info del alumno/participante.', 'error'); return; }
+            const [year, monthNum] = yearMonth.split('-').map(Number);
+            const month = monthNum - 1;
+            const yearMonthKey = getYearMonthKey(year, month);
+            const monthName = monthNames[month];
+            const monthlyDetails = calculateMonthlyDetails(year, month, studentDuration, studentDay, classType);
+            const existingPayment = student.payments?.[yearMonthKey];
+            const paymentModalLabel = document.getElementById('paymentModalLabel');
+            const paymentStudentName = document.getElementById('paymentStudentName');
+            const paymentMonthYearDisplay = document.getElementById('paymentMonthYearDisplay');
+            const paymentClassCountDisplay = document.getElementById('paymentClassCountDisplay');
+            const selectClasses = document.getElementById('paymentClassesPaid');
+            const suggestedAmountDisplay = document.getElementById('suggestedAmountDisplay');
+            const paymentAmountInput = document.getElementById('paymentAmount');
+            const paymentDateInput = document.getElementById('paymentDate');
+            const savePaymentBtn = document.getElementById('savePaymentBtn');
+            document.getElementById('paymentStudentId').value = studentId;
+            document.getElementById('paymentYearMonth').value = yearMonthKey;
+            document.getElementById('paymentClassType').value = classType;
+            paymentStudentName.textContent = student.name + (student.groupName ? ` (Grupo: ${student.groupName})` : '');
+            paymentMonthYearDisplay.textContent = `${monthName} ${year}`;
+            paymentClassCountDisplay.textContent = monthlyDetails.classCount > 0 ? monthlyDetails.classCount : '0';
+            paymentForm.classList.remove('was-validated');
+            savePaymentBtn.disabled = false;
+
+            if (classType === "Clase de prueba") {
+                paymentModalLabel.textContent = "Registrar Pago Mensual (Clase de Prueba)";
+                selectClasses.innerHTML = '<option value="1" selected>1 clase (Prueba)</option>'; selectClasses.disabled = true;
+                const oneClassPrice = monthlyDetails.classCount > 0 ? monthlyDetails.perClassPrice : basePrices.duration40;
+                suggestedAmountDisplay.textContent = formatCurrency(oneClassPrice);
+                paymentAmountInput.value = existingPayment ? existingPayment.amountPaid.toFixed(2) : oneClassPrice.toFixed(2);
+                paymentAmountInput.disabled = false;
+                paymentDateInput.valueAsDate = existingPayment ? new Date(existingPayment.paymentDate + 'T00:00:00') : new Date();
+                selectClasses.onchange = null;
+            } else if (classType === "Clase de recuperación") {
+                paymentModalLabel.textContent = "Registrar (Clase de Recuperación - Sin Costo)";
+                selectClasses.innerHTML = '<option value="0" selected>0 clases (Recuperación)</option>'; selectClasses.disabled = true;
+                suggestedAmountDisplay.textContent = formatCurrency(0); paymentAmountInput.value = '0.00';
+                paymentAmountInput.disabled = true;
+                paymentDateInput.valueAsDate = existingPayment ? new Date(existingPayment.paymentDate + 'T00:00:00') : new Date();
+                savePaymentBtn.disabled = false;
+                selectClasses.onchange = null;
+            } else {
+                selectClasses.innerHTML = ''; selectClasses.disabled = false;
+                paymentAmountInput.disabled = false; savePaymentBtn.disabled = false;
+                if (monthlyDetails.classCount > 0) {
+                    for (let i = 1; i <= monthlyDetails.classCount; i++) {
+                        const option = document.createElement('option'); option.value = i;
+                        const price = i * monthlyDetails.perClassPrice;
+                        option.textContent = `${i} clase(s) (${formatCurrency(price)})`; selectClasses.appendChild(option);
+                    }
+                    const fullMonthOption = document.createElement('option'); fullMonthOption.value = 'full';
+                    fullMonthOption.textContent = `Mes Completo (${monthlyDetails.classCount} clases) (${formatCurrency(monthlyDetails.basePrice)})`;
+                    selectClasses.appendChild(fullMonthOption);
+                    if (existingPayment) {
+                        paymentModalLabel.textContent = "Modificar Pago Mensual" + (classType === 'Grupal' ? " (Grupal)" : "");
+                        paymentAmountInput.value = existingPayment.amountPaid.toFixed(2); paymentDateInput.value = existingPayment.paymentDate;
+                        if (existingPayment.hasOwnProperty('isFullMonthPayment') && existingPayment.hasOwnProperty('classesPaid')) {
+                            selectClasses.value = existingPayment.isFullMonthPayment ? 'full' : existingPayment.classesPaid.toString();
+                        } else { selectClasses.value = 'full'; }
+                    } else {
+                        paymentModalLabel.textContent = "Registrar Pago Mensual" + (classType === 'Grupal' ? " (Grupal)" : "");
+                        selectClasses.value = 'full'; paymentAmountInput.value = monthlyDetails.basePrice.toFixed(2);
+                        paymentDateInput.valueAsDate = new Date();
+                    }
+                    const updateSuggested = () => {
+                        const selectedValue = selectClasses.value; let suggestedAmount = 0;
+                        if (selectedValue === 'full') { suggestedAmount = monthlyDetails.basePrice; }
+                        else { const numClasses = parseInt(selectedValue, 10); suggestedAmount = (numClasses > 0 && monthlyDetails.perClassPrice > 0) ? numClasses * monthlyDetails.perClassPrice : 0; }
+                        suggestedAmountDisplay.textContent = formatCurrency(suggestedAmount);
+                        if (!existingPayment) { paymentAmountInput.value = suggestedAmount.toFixed(2); }
+                    };
+                    selectClasses.onchange = updateSuggested; updateSuggested();
+                } else {
+                    paymentModalLabel.textContent = "Registrar Pago Mensual (0 clases este mes)";
+                    selectClasses.innerHTML = '<option value="0" selected>0 clases este mes</option>'; selectClasses.disabled = true;
+                    suggestedAmountDisplay.textContent = formatCurrency(0); paymentAmountInput.value = '0.00';
+                    paymentAmountInput.disabled = true; paymentDateInput.valueAsDate = new Date(); savePaymentBtn.disabled = true;
+                    if (existingPayment) {
+                        paymentModalLabel.textContent = "Modificar Pago Mensual (0 clases este mes)";
+                        paymentAmountInput.value = existingPayment.amountPaid.toFixed(2); paymentAmountInput.disabled = false;
+                        paymentDateInput.value = existingPayment.paymentDate; savePaymentBtn.disabled = false;
+                    }
+                    selectClasses.onchange = null;
+                }
+            }
+            paymentModal.show();
+        }
+
+        function savePayment() {
+            if (!paymentForm.checkValidity()) { paymentForm.classList.add('was-validated'); const firstInvalidField = paymentForm.querySelector(':invalid'); if (firstInvalidField) { firstInvalidField.focus(); } return; }
+            const studentId = document.getElementById('paymentStudentId').value; const yearMonth = document.getElementById('paymentYearMonth').value;
+            const amountPaidInput = document.getElementById('paymentAmount'); const amountPaid = parseFloat(amountPaidInput.value);
+            const paymentDate = document.getElementById('paymentDate').value; const selectClasses = document.getElementById('paymentClassesPaid');
+            const classesPaidSelection = selectClasses.value; const classType = document.getElementById('paymentClassType').value;
+            if (isNaN(amountPaid) || amountPaid < 0 || !paymentDate || !yearMonth || !studentId) { Swal.fire('Datos Inválidos', 'Verifica monto y fecha.', 'warning'); paymentForm.classList.add('was-validated'); return; }
+            const isFullMonthPayment = classesPaidSelection === 'full';
+            const classCountSpan = document.getElementById('paymentClassCountDisplay'); let monthClassCount = 0;
+            if (classCountSpan) { monthClassCount = parseInt(classCountSpan.textContent, 10); if (isNaN(monthClassCount)) monthClassCount = 0; }
+            let classesPaidCount = 0; if (isFullMonthPayment) { classesPaidCount = monthClassCount; } else { classesPaidCount = parseInt(classesPaidSelection, 10); if (isNaN(classesPaidCount)) classesPaidCount = 0; }
+            if (!students[studentId]) { Swal.fire('Error Interno', 'No se encontró el alumno/participante.', 'error'); return; }
+            if (!students[studentId].payments) { students[studentId].payments = {}; }
+            const paymentObject = { amountPaid: amountPaid, paymentDate: paymentDate, classesPaid: classesPaidCount, isFullMonthPayment: isFullMonthPayment, recordedAt: new Date().toISOString() };
+            students[studentId].payments[yearMonth] = paymentObject; saveData(); renderMonthlyView(currentYear, currentMonth); paymentModal.hide();
+            if (!(amountPaid === 0 && (classType === "Clase de recuperación" || classesPaidCount === 0))) { Swal.fire('¡Guardado!', 'Pago mensual registrado/actualizado.', 'success'); }
+            else { console.log("Registro mensual $0 guardado (recuperación/sin clases), sin alerta de éxito."); }
+        }
+
+        function openGenericReceiptModal() {
+            const modalLabel = document.getElementById('receiptModalLabel');
+            const receiptTitle = document.getElementById('receiptContent').querySelector('h4');
+            const studentNameEl = document.getElementById('receiptStudentName');
+            const periodEl = document.getElementById('receiptMonthYear');
+            const paymentDateEl = document.getElementById('receiptPaymentDate');
+            const amountEl = document.getElementById('receiptAmount');
+            const classCountEl = document.getElementById('receiptClassCount');
+            const emailInput = document.getElementById('receiptEmailInput');
+            const footerEl = document.getElementById('receiptContent').querySelector('.receipt-footer');
+            const paidStampEl = document.getElementById('receiptPaidStamp');
+
+            const periodParagraphEl = periodEl.closest('p');
+            const classCountParagraphEl = classCountEl.closest('p');
+
+            if (receiptData.receiptType === 'enrollment') {
+                modalLabel.textContent = "Comprobante de Inscripción Anual";
+                receiptTitle.textContent = "Comprobante de Inscripción Anual";
+                if (periodParagraphEl) periodParagraphEl.querySelector('strong').textContent = "Concepto:";
+                periodEl.textContent = "Inscripción Anual " + receiptData.year;
+                if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Detalle:";
+                classCountEl.textContent = "Pago único anual";
+                footerEl.textContent = "Gracias por tu inscripción anual.";
+            } else { // 'monthly' o default
+                modalLabel.textContent = "Comprobante de Pago Mensual";
+                receiptTitle.textContent = "Comprobante de Pago Mensual";
+                if (periodParagraphEl) periodParagraphEl.querySelector('strong').textContent = "Mes Abonado:";
+                periodEl.textContent = receiptData.monthYear;
+                if (classCountParagraphEl) classCountParagraphEl.querySelector('strong').textContent = "Clases Abonadas:";
+                classCountEl.textContent = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'})` : `${receiptData.classCount} ${receiptData.classCount === 1 ? 'clase' : 'clases'}`;
+                footerEl.textContent = "Gracias por tu pago mensual.";
+            }
+            studentNameEl.textContent = receiptData.studentName;
+            paymentDateEl.textContent = receiptData.paymentDate;
+            amountEl.textContent = receiptData.amountRaw.toFixed(2);
+            emailInput.value = receiptData.studentEmail;
+
+            if (paidStampEl) {
+                if (receiptData.amountRaw > 0) {
+                    paidStampEl.style.display = 'block';
+                } else {
+                    paidStampEl.style.display = 'none';
+                }
+            }
+
+            receiptModal.show();
+        }
+
+        function openReceiptModalForMonthly(studentId, yearMonth) {
+            const student = students[studentId]; const payment = student?.payments?.[yearMonth];
+            if (!student || !payment) { Swal.fire('Error', 'No se encontró info de pago mensual.', 'error'); return; }
+            const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1];
+            const monthlyDetails = calculateMonthlyDetails(year, monthNum - 1, student.duration, student.classDay, student.classType);
+            receiptData = {
+                receiptType: 'monthly', studentId: studentId, studentName: student.name, studentEmail: student.email || '',
+                monthYear: `${monthName} ${year}`, year: year, paymentDate: formatDate(payment.paymentDate),
+                amountFormatted: formatCurrency(payment.amountPaid), amountRaw: payment.amountPaid,
+                classCount: payment.isFullMonthPayment ? monthlyDetails.classCount : payment.classesPaid,
+                isFullMonth: payment.isFullMonthPayment
+            };
+            openGenericReceiptModal();
+        }
+
+        function openEnrollmentReceiptModal(studentId) {
+            const student = students[studentId];
+            if (!student || !student.enrollmentPaid || !student.enrollmentPaid.paid) {
+                Swal.fire('Error', 'No se encontró información de pago de inscripción para este alumno.', 'error');
+                return;
+            }
+            const enrollmentInfo = student.enrollmentPaid;
+            const paymentYear = new Date(enrollmentInfo.date + 'T00:00:00').getFullYear();
+            receiptData = {
+                receiptType: 'enrollment', studentId: studentId, studentName: student.name, studentEmail: student.email || '',
+                monthYear: "Inscripción Anual", year: paymentYear, paymentDate: formatDate(enrollmentInfo.date),
+                amountFormatted: formatCurrency(enrollmentInfo.amount), amountRaw: enrollmentInfo.amount,
+                classCount: "Pago único", isFullMonth: false
+            };
+            openGenericReceiptModal();
+        }
+
+        async function generateReceiptCanvas() {
+            const el = document.getElementById('receiptContent');
+            if (!el) { Swal.fire('Error Técnico', 'Elemento recibo no encontrado.', 'error'); return null; }
+            if (typeof window.html2canvas === 'undefined') { Swal.fire('Error Técnico', 'Falta librería html2canvas.', 'error'); return null; }
+            try {
+                const canvas = await window.html2canvas(el, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#c0d5c1'
+                });
+                return canvas;
+            } catch (err) {
+                console.error("Error html2canvas:", err);
+                Swal.fire('Error Imagen', 'Error al generar imagen del recibo.', 'error');
+                return null;
+            }
+        }
+        async function downloadReceiptAsImage() { const canvas = await generateReceiptCanvas(); if (!canvas) return; try { const img = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = img; const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.png'; link.download = safe; document.body.appendChild(link); link.click(); document.body.removeChild(link); } catch (err) { console.error("Error descarga imagen:", err); Swal.fire('Error Descarga', 'No se pudo descargar la imagen.', 'error'); } }
+        async function downloadReceiptAsPdf() { const canvas = await generateReceiptCanvas(); if (!canvas) return; if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { Swal.fire('Error Técnico', 'Falta librería jsPDF.', 'error'); return; } const { jsPDF } = window.jspdf; try { const img = canvas.toDataURL('image/png'); const pdf = new jsPDF({ o: 'p', u: 'pt', f: 'a5' }); const props = pdf.getImageProperties(img); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const margin = 40; const usableWidth = pdfWidth - 2 * margin; const usableHeight = pdfHeight - 2 * margin; const imgRatio = props.width / props.height; let imgRenderWidth = props.width; let imgRenderHeight = props.height; if (imgRenderWidth > usableWidth) { imgRenderWidth = usableWidth; imgRenderHeight = imgRenderWidth / imgRatio; } if (imgRenderHeight > usableHeight) { imgRenderHeight = usableHeight; imgRenderWidth = imgRenderHeight * imgRatio; } const x = margin + (usableWidth - imgRenderWidth) / 2; const y = margin; pdf.addImage(img, 'PNG', x, y, imgRenderWidth, imgRenderHeight); const typeText = receiptData.receiptType === 'enrollment' ? 'inscripcion' : 'mensual'; const periodText = receiptData.receiptType === 'enrollment' ? receiptData.year : receiptData.monthYear; const safe = `comprobante_${typeText}_${receiptData.studentName}_${periodText}`.replace(/[^a-z0-9_-]/gi, '_') + '.pdf'; pdf.save(safe); } catch (err) { console.error("Error PDF:", err); Swal.fire('Error PDF', 'No se pudo generar/descargar el PDF.', 'error'); } }
+
+        async function sendReceiptEmail() {
+            const input = document.getElementById('receiptEmailInput'); const email = input.value.trim();
+            if (!email) { Swal.fire('Falta Email', 'Ingresa un correo electrónico.', 'warning'); input.focus(); return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Swal.fire('Email Inválido', 'Ingresa una dirección de correo válida.', 'warning'); input.focus(); input.select(); return; }
+            if (receiptData.studentId && students[receiptData.studentId] && email !== students[receiptData.studentId].email) { students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
+            else if (receiptData.studentId && students[receiptData.studentId] && !students[receiptData.studentId].email && email) { students[receiptData.studentId].email = email; receiptData.studentEmail = email; saveData(); }
+
+            Swal.fire({ title: 'Enviando Email...', text: `Preparando comprobante para ${email}`, allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+            try {
+                let title = ""; let footer = ""; let periodLabel = ""; let periodValue = ""; let detailLabel = ""; let detailValue = ""; let emailSubjectPrefix = "";
+                if (receiptData.receiptType === 'enrollment') {
+                    title = "Comprobante de Inscripción Anual"; footer = "Gracias por tu inscripción anual."; periodLabel = "Concepto:"; periodValue = "Inscripción Anual " + receiptData.year; detailLabel = "Detalle:"; detailValue = "Pago único anual"; emailSubjectPrefix = "Inscripción Anual";
+                } else {
+                    title = "Comprobante de Pago Mensual"; footer = "Gracias por tu pago mensual."; periodLabel = "Periodo Abonado:"; periodValue = receiptData.monthYear; detailLabel = "Clases Abonadas:"; detailValue = receiptData.isFullMonth ? `Mes Completo (${receiptData.classCount} clase${receiptData.classCount !== 1 ? 's' : ''})` : `${receiptData.classCount} clase${receiptData.classCount !== 1 ? 's' : ''}`; emailSubjectPrefix = "Pago Mensual";
+                }
+
+                let paidStampHTML = '';
+                if (receiptData.amountRaw > 0) {
+                    paidStampHTML = `
+                    <div style="position: absolute; top: 50px; right: 20px;
+                                color: red; font-size: 24px; font-weight: bold; border: 3px solid red; 
+                                padding: 3px 8px; border-radius: 6px; opacity: 0.35; text-align: center; z-index:10;
+                                transform: rotate(15deg); -webkit-transform: rotate(15deg); -ms-transform: rotate(15deg);
+                                transform-origin: bottom right; -webkit-transform-origin: bottom right; -ms-transform-origin: bottom right;">
+                        PAGADO
+                    </div>`;
+                }
+
+                const html = `<div style="font-family: Arial, sans-serif; border: 1px solid #adbfad; padding: 20px; background-color: #c0d5c1; border-radius:8px; color: #2c3e50; position: relative; overflow: hidden;">
+                    ${paidStampHTML}
+                    <div style="position:relative; z-index:1;">
+                        <h4 style="text-align: center; border-bottom: 1px solid #adbfad; padding-bottom: 10px; margin-bottom: 20px; color: #2c3e50;">${title}</h4>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Alumno/Participante:</strong> ${receiptData.studentName}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">${periodLabel}</strong> ${periodValue}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Fecha de Pago:</strong> ${receiptData.paymentDate}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">${detailLabel}</strong> ${detailValue}</p>
+                        <p><strong style="color: #2c3e50; display: inline-block; min-width: 140px;">Monto Abonado:</strong> ${receiptData.amountFormatted}</p>
+                        <p style="margin-top: 30px; text-align: center; font-size: 0.9em; color: #495057; border-top: 1px dotted #9aa99a; padding-top: 10px;">${footer}</p>
+                    </div>
+                </div>`;
+                const serviceID = 'service_h2fm824'; const templateID = 'template_v7gzygn';
+                const params = { email: email, recibo: html, to_name: receiptData.studentName, subject_line: `Comprobante de ${emailSubjectPrefix} - ${receiptData.studentName}` };
+                await emailjs.send(serviceID, templateID, params);
+                Swal.fire('¡Enviado!', `Comprobante de ${emailSubjectPrefix.toLowerCase()} enviado a ${email}.`, 'success');
+            }
+            catch (error) { console.error('Error enviando email:', error); Swal.fire('Error al Enviar', `No se pudo enviar el email: ${error?.text || error?.message || 'Error desconocido'}`, 'error'); }
+        }
+
+        function exportData() { try { const data = { version: 4, createdAt: new Date().toISOString(), students: students, prices: basePrices }; const str = JSON.stringify(data, null, 2); const blob = new Blob([str], { type: 'application/json;charset=utf-8' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; const ts = new Date().toISOString().split('T')[0].replace(/-/g, ''); link.download = `datos_pagos_alumnos_v4_${ts}.json`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); Swal.fire('¡Exportado!', 'Datos (v4) guardados en archivo JSON.', 'success'); } catch (error) { console.error("Error exportando:", error); Swal.fire('Error', 'Error al exportar los datos.', 'error'); } }
+        function importData(event) {
+            const file = event.target.files[0]; if (!file) return; if (!file.name.toLowerCase().endsWith('.json')) { Swal.fire('Archivo Inválido', 'Por favor, selecciona un archivo .json.', 'error'); fileInput.value = null; return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result; try {
+                    const imported = JSON.parse(content); if (typeof imported !== 'object' || imported === null) throw new Error("El archivo JSON está vacío o no es un objeto."); if (!imported.students || typeof imported.students !== 'object') throw new Error("La estructura del JSON es inválida: falta o es incorrecto el objeto 'students'."); const importedPrices = { ...defaultPrices, ...(imported.prices || {}) }; if (isNaN(importedPrices.duration40) || isNaN(importedPrices.duration60) || isNaN(importedPrices.durationGrupal) || isNaN(importedPrices.enrollmentFeePreJuly) || isNaN(importedPrices.enrollmentFeePostJune)) { throw new Error("Uno o más precios base (mensuales o de inscripción) son inválidos o faltan."); }
+                    const importedStudents = imported.students || {}; const processedImportedStudents = {};
+                    for (const id in importedStudents) {
+                        const studentData = importedStudents[id]; if (typeof studentData !== 'object' || studentData === null || !studentData.name) { console.warn(`Saltando estudiante inválido con ID ${id} durante la importación.`); continue; }
+                        let finalEnrollmentPaid = studentData.enrollmentPaid || { paid: false, date: null, amount: null };
+                        const finalClassType = studentData.classType || 'Desconocido (Importado)';
+                        if (finalClassType === 'Grupal') {
+                            finalEnrollmentPaid = { paid: false, date: null, amount: null };
+                        }
+                        processedImportedStudents[id] = {
+                            ...studentData, id: id, payments: studentData.payments || {},
+                            enrollmentPaid: finalEnrollmentPaid, classType: finalClassType,
+                            specificDate: studentData.specificDate || null,
+                            duration: typeof studentData.duration !== 'undefined' ? studentData.duration : 0,
+                            classDay: studentData.classDay || '?', classTime: studentData.classTime || '?', email: studentData.email || ''
+                        };
+                        if (processedImportedStudents[id].classType === 'Grupal') { processedImportedStudents[id].duration = 60; }
+                    }
+                    Swal.fire({
+                        title: 'Confirmar Importación', html: `Archivo <strong>${file.name}</strong> (Versión ${imported.version || '?'}).<br>¿Reemplazar <b>TODOS</b> los datos actuales?<br><b style='color:red;'>¡Irreversible!</b>`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Sí, reemplazar todo', cancelButtonText: 'Cancelar'
+                    }).then((result) => { if (result.isConfirmed) { students = processedImportedStudents; basePrices = importedPrices; saveData(); updatePriceDisplay(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Importado!', 'Datos reemplazados correctamente.', 'success'); } });
+                } catch (error) { console.error("Error procesando JSON importado:", error); Swal.fire('Error de Importación', `No se procesó archivo. ¿JSON válido?\n<br><small>Detalle: ${error.message}</small>`, 'error'); } finally { fileInput.value = null; }
+            };
+            reader.onerror = (e) => { console.error("Error leyendo archivo:", e); Swal.fire('Error de Lectura', 'Error al leer archivo.', 'error'); fileInput.value = null; }; reader.readAsText(file);
+        }
+
+        function handleCancelPaymentClick(event) { const btn = event.currentTarget; const studentId = btn.dataset.studentid; const yearMonth = btn.dataset.yearmonth; const studentName = students[studentId]?.name || 'Desconocido'; const [year, monthNum] = yearMonth.split('-').map(Number); const monthName = monthNames[monthNum - 1]; Swal.fire({ title: '¿Cancelar Pago Mensual?', html: `Eliminar registro de pago para <b>${studentName}</b> de <b>${monthName} ${year}</b>?<br>Irreversible.`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Sí, cancelar pago mensual', cancelButtonText: 'No, mantener' }).then((result) => { if (result.isConfirmed) { cancelPayment(studentId, yearMonth); } }); }
+        function cancelPayment(studentId, yearMonthKey) { if (students[studentId]?.payments?.[yearMonthKey]) { delete students[studentId].payments[yearMonthKey]; saveData(); renderMonthlyView(currentYear, currentMonth); Swal.fire('¡Cancelado!', 'Registro de pago mensual eliminado.', 'success'); } else { Swal.fire('Error', 'No se pudo encontrar el registro de pago mensual para cancelar.', 'error'); } }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const paymentModalEl = document.getElementById('paymentModal');
+            if (paymentModalEl) paymentModal = new bootstrap.Modal(paymentModalEl);
+
+            const receiptModalEl = document.getElementById('receiptModal');
+            if (receiptModalEl) receiptModal = new bootstrap.Modal(receiptModalEl);
+
+            const priceModalEl = document.getElementById('priceModal');
+            if (priceModalEl) priceModal = new bootstrap.Modal(priceModalEl);
+
+            loadData();
+            renderMonthlyView(currentYear, currentMonth);
+
+            prevMonthBtn.addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderMonthlyView(currentYear, currentMonth); });
+            nextMonthBtn.addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderMonthlyView(currentYear, currentMonth); });
+            document.getElementById('editPricesBtn').addEventListener('click', openPriceModal);
+            document.getElementById('savePricesBtn').addEventListener('click', savePrices);
+            document.getElementById('savePaymentBtn').addEventListener('click', savePayment);
+            downloadReceiptImageBtn.addEventListener('click', downloadReceiptAsImage);
+            downloadReceiptPdfBtn.addEventListener('click', downloadReceiptAsPdf);
+            sendReceiptEmailBtn.addEventListener('click', sendReceiptEmail);
+            exportDataBtn.addEventListener('click', exportData);
+            importDataBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', importData);
+            initializeBackToTopButton();
+        });
+
+        let mybutton = null; function scrollFunction() { if (mybutton && (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) { if (mybutton.style.display !== "flex" || mybutton.style.opacity === "0") { mybutton.style.display = "flex"; setTimeout(() => { mybutton.style.opacity = "1"; }, 10); } } else if (mybutton) { if (mybutton.style.opacity !== "0") { mybutton.style.opacity = "0"; } } } function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); } function initializeBackToTopButton() { mybutton = document.getElementById("backToTopBtn"); if (mybutton) { scrollFunction(); window.onscroll = scrollFunction; } }
+
+    </script>
+</body>
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Calendario de Pagos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
         function xlsxScriptLoaded() { console.log("Librería XLSX cargada."); }
         function xlsxScriptFailed() { console.error("Error al cargar XLSX."); if (typeof Swal !== 'undefined') { Swal.fire('Error Crítico', 'No se pudo cargar librería Excel.', 'error'); } else { alert('Error Crítico: No se pudo cargar librería Excel.'); } }
@@ -1519,4 +2946,4 @@
     </script>
 </body>
 
-</html>
+</html> -->
